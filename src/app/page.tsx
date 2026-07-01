@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { HeroPortal } from "@/components/hero/HeroPortal";
-import { BrandFullscreenSection } from "@/components/sections/BrandFullscreenSection";
+import { BrandSceneSection } from "@/components/sections/BrandSceneSection";
 import { RotiGroupSection } from "@/components/sections/RotiGroupSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { brands } from "@/data/brands";
@@ -11,8 +11,8 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroPortal brands={brands} />
-        {brands.map((brand) => (
-          <BrandFullscreenSection key={brand.id} brand={brand} />
+        {brands.map((brand, index) => (
+          <BrandSceneSection key={brand.id} brand={brand} index={index} />
         ))}
         <RotiGroupSection brands={brands} />
         <FinalCTA brands={brands} />
