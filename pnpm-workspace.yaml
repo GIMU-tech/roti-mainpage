@@ -1,0 +1,10 @@
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+publicHoistPattern:
+  - eslint-plugin-react
+  - eslint-plugin-react-hooks
+  - eslint-plugin-jsx-a11y
+  - eslint-plugin-import
+  - '@next/eslint-plugin-next'
+  - '@typescript-eslint/*'
