@@ -152,24 +152,8 @@ button {
 }
 
 .hero-portal::after {
-  position: absolute;
-  inset: auto -8vw 0;
-  z-index: -2;
-  height: 34vh;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025) 18%, rgba(0, 0, 0, 0.86) 72%),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.035) 0,
-      rgba(255, 255, 255, 0.035) 1px,
-      transparent 1px,
-      transparent 16px
-    );
+  display: none;
   content: "";
-  filter: blur(0.2px);
-  opacity: 0.58;
-  transform: perspective(700px) rotateX(62deg);
-  transform-origin: bottom;
 }
 
 .hero-portal__ambient {
@@ -271,8 +255,21 @@ button {
   touch-action: manipulation;
 }
 
+.hero-card-lab-stage {
+  position: absolute;
+  inset: -2.2rem -4.5rem -4.8rem;
+  z-index: 4;
+  display: block;
+  width: calc(100% + 9rem);
+  height: calc(100% + 7rem);
+  overflow: visible;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
 .hero-glass-stage__canvas,
-.hero-glass-stage__css-layer {
+.hero-glass-stage__css-layer,
+.hero-card-lab-stage__canvas {
   position: absolute;
   inset: 0;
   display: block;
@@ -281,6 +278,11 @@ button {
 }
 
 .hero-glass-stage__canvas {
+  z-index: 1;
+  cursor: pointer;
+}
+
+.hero-card-lab-stage__canvas {
   z-index: 1;
   cursor: pointer;
 }
@@ -296,17 +298,8 @@ button {
 }
 
 .brand-carousel__stage::after {
-  position: absolute;
-  inset: 78% 19% auto;
-  z-index: 1;
-  height: 22vh;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 70%);
+  display: none;
   content: "";
-  filter: blur(8px);
-  opacity: 0.22;
-  pointer-events: none;
-  transform: perspective(700px) rotateX(68deg);
-  transform-origin: top;
 }
 
 .brand-carousel__meta {
@@ -717,16 +710,7 @@ button {
 }
 
 .hero-portal__floor {
-  position: absolute;
-  inset: auto 11vw 7vh;
-  z-index: -1;
-  height: 11vh;
-  background:
-    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.15), transparent 54%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.055), transparent);
-  filter: blur(14px);
-  opacity: 0.44;
-  pointer-events: none;
+  display: none;
 }
 
 .hero-portal__footer {
@@ -1443,26 +1427,92 @@ button {
   }
 
   .hero-portal {
-    gap: var(--space-4);
-    padding-top: 5.5rem;
-    padding-bottom: 5rem;
+    gap: var(--space-3);
+    padding-top: 5.15rem;
+    padding-bottom: 4.35rem;
   }
 
   .hero-portal__title {
-    font-size: clamp(2rem, 8.4vw, 2.9rem);
+    font-size: clamp(1.86rem, 7.4vw, 2.45rem);
+    line-height: 1.16;
   }
 
   .hero-portal__copy {
-    font-size: 0.96rem;
+    max-width: 19rem;
+    font-size: 0.9rem;
+    line-height: 1.48;
   }
 
   .brand-carousel__stage {
     width: 100%;
-    min-height: clamp(22.5rem, 48vh, 26.5rem);
+    min-height: clamp(24rem, 58svh, 31rem);
   }
 
   .brand-carousel {
-    transform: translateY(0);
+    transform: translateY(-0.35rem);
+  }
+
+  .hero-glass-stage {
+    inset: -1rem -3.4rem -4rem;
+    width: calc(100% + 6.8rem);
+    height: calc(100% + 5.2rem);
+  }
+
+  .hero-card-lab-stage {
+    inset: -1rem -3.4rem -4rem;
+    width: calc(100% + 6.8rem);
+    height: calc(100% + 5.2rem);
+  }
+
+  .glb-css-card-face {
+    border-radius: 13px;
+  }
+
+  .glb-css-card-face[data-active="false"],
+  .glb-css-card-side[data-active="false"] {
+    filter: brightness(0.86) saturate(0.96);
+  }
+
+  .glb-css-card-face[data-active="false"] {
+    box-shadow:
+      inset 9px 0 20px rgba(255, 255, 255, 0.065),
+      inset -9px 0 18px rgba(255, 255, 255, 0.04),
+      inset 0 -34px 48px rgba(0, 0, 0, 0.7),
+      0 0 24px rgba(255, 255, 255, 0.035);
+  }
+
+  .glb-css-card-side {
+    width: 32px;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08) 34%, rgba(255, 255, 255, 0.18)),
+      var(--card-scene-image),
+      linear-gradient(180deg, #242727 0%, #0d0e0e 48%, #030303 100%);
+    box-shadow:
+      inset 5px 0 12px rgba(255, 255, 255, 0.18),
+      inset -5px 0 12px rgba(0, 0, 0, 0.5),
+      0 0 18px rgba(255, 255, 255, 0.05);
+  }
+
+  .glb-css-card-face__copy {
+    gap: 10px;
+    padding: 82px 46px 0;
+  }
+
+  .glb-css-card-face__copy span {
+    font-size: 12px;
+  }
+
+  .glb-css-card-face__copy strong {
+    margin-top: 16px;
+    font-size: 34px;
+  }
+
+  .glb-css-card-face__copy p {
+    font-size: 15px;
+  }
+
+  .glb-css-card-face__copy small {
+    font-size: 12px;
   }
 
   .brand-carousel__stage::before {
@@ -1506,6 +1556,7 @@ button {
   .hero-portal__footer {
     grid-template-columns: 1fr;
     justify-items: center;
+    bottom: 0.65rem;
   }
 
   .hero-portal__copyright {

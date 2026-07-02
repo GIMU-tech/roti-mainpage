@@ -89,12 +89,12 @@ function createGlassHighlights(isActive: boolean) {
   const bright = new THREE.MeshBasicMaterial({
     color: "#ffffff",
     transparent: true,
-    opacity: isActive ? 0.2 : 0.11,
+    opacity: isActive ? 0.22 : 0.17,
     blending: THREE.AdditiveBlending,
     depthWrite: false
   });
   const muted = bright.clone();
-  muted.opacity = isActive ? 0.09 : 0.045;
+  muted.opacity = isActive ? 0.11 : 0.075;
 
   const leftEdge = new THREE.Mesh(new THREE.BoxGeometry(0.011, CARD_HEIGHT * 0.9, 0.01), bright);
   leftEdge.position.set(-CARD_WIDTH / 2 + 0.028, 0.01, CARD_DEPTH / 2 + 0.024);
@@ -107,6 +107,10 @@ function createGlassHighlights(isActive: boolean) {
   const topEdge = new THREE.Mesh(new THREE.BoxGeometry(CARD_WIDTH * 0.82, 0.01, 0.01), muted);
   topEdge.position.set(0.02, CARD_HEIGHT / 2 - 0.032, CARD_DEPTH / 2 + 0.026);
   group.add(topEdge);
+
+  const bottomEdge = new THREE.Mesh(new THREE.BoxGeometry(CARD_WIDTH * 0.78, 0.01, 0.01), muted);
+  bottomEdge.position.set(0, -CARD_HEIGHT / 2 + 0.032, CARD_DEPTH / 2 + 0.026);
+  group.add(bottomEdge);
 
   return group;
 }
@@ -122,7 +126,7 @@ function createWebGlCard(isActive: boolean) {
     new THREE.LineBasicMaterial({
       color: "#ffffff",
       transparent: true,
-      opacity: isActive ? 0.21 : 0.11
+      opacity: isActive ? 0.24 : 0.17
     })
   );
   group.add(edge);
@@ -232,7 +236,31 @@ function createCssCard(brand: Brand, isActive: boolean) {
   return { group, elements };
 }
 
-function getCardTransform(slot: HeroCardSlot) {
+function getCardTransform(slot: HeroCardSlot, isCompact = false) {
+  if (isCompact) {
+    if (slot === "center") {
+      return {
+        position: new THREE.Vector3(0, -0.02, 0.34),
+        rotationY: 0,
+        scale: 1.16
+      };
+    }
+
+    if (slot === "left") {
+      return {
+        position: new THREE.Vector3(-1.28, -0.05, -0.1),
+        rotationY: 0.58,
+        scale: 0.92
+      };
+    }
+
+    return {
+      position: new THREE.Vector3(1.28, -0.05, -0.1),
+      rotationY: -0.58,
+      scale: 0.92
+    };
+  }
+
   if (slot === "center") {
     return {
       position: new THREE.Vector3(0, 0.04, 0.36),
@@ -307,12 +335,13 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const targetScale = new THREE.Vector3();
+    let isCompact = renderBox.getBoundingClientRect().width < 640 || window.innerWidth < 640;
     const cards: CardRuntime[] = brands.map((brand) => {
       const isActive = brand.id === activeBrandIdRef.current;
       const webgl = createWebGlCard(isActive);
       const css = createCssCard(brand, isActive);
       const slot = cardStatesRef.current.find((state) => state.brandId === brand.id)?.slot ?? "center";
-      const transform = getCardTransform(slot);
+      const transform = getCardTransform(slot, isCompact);
 
       webgl.group.position.copy(transform.position);
       webgl.group.rotation.y = transform.rotationY;
@@ -341,7 +370,7 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
 
-    cssRenderer.domElement.className = "hero-glass-stage__css-layer glb-preview__css-layer";
+    cssRenderer.domElement.className = "hero-glass-stage__css-layer";
     cssRenderer.domElement.setAttribute("aria-hidden", "true");
     renderBox.appendChild(cssRenderer.domElement);
 
@@ -365,10 +394,13 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
       const rect = renderBox.getBoundingClientRect();
       const width = Math.max(1, Math.floor(rect.width));
       const height = Math.max(1, Math.floor(rect.height));
+      isCompact = width < 640 || window.innerWidth < 640;
 
       renderer.setSize(width, height, false);
       cssRenderer.setSize(width, height);
+      camera.fov = isCompact ? 36 : 32;
       camera.aspect = width / height;
+      camera.position.set(0, isCompact ? 0.04 : 0.02, isCompact ? 6.85 : 6.45);
       camera.updateProjectionMatrix();
     };
 
@@ -399,7 +431,7 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
       cards.forEach((card) => {
         const slot = cardStatesRef.current.find((state) => state.brandId === card.brandId)?.slot ?? "center";
         const isActive = card.brandId === activeBrandIdRef.current;
-        const transform = getCardTransform(slot);
+        const transform = getCardTransform(slot, isCompact);
         const ease = prefersReducedMotion ? 1 : 0.12;
 
         card.body.position.lerp(transform.position, ease);
