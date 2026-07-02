@@ -1202,24 +1202,27 @@ button {
   --card-surface-top: #1a1d1d;
   --card-surface-mid: #090b0b;
   --card-surface-bottom: #020303;
+  --card-scene-image: url("/images/test/roti-camp-landscape-test.png");
 }
 
 .glb-css-card-face--homesys {
   --card-surface-top: #202323;
   --card-surface-mid: #0e1010;
   --card-surface-bottom: #020303;
+  --card-scene-image: url("/images/test/roti-camp-landscape-test.png");
 }
 
 .glb-css-card-face--leel {
   --card-surface-top: #171717;
   --card-surface-mid: #0b0b0b;
   --card-surface-bottom: #020202;
+  --card-scene-image: url("/images/test/roti-camp-landscape-test.png");
 }
 
 .glb-css-card-side--camp,
 .glb-css-card-side--homesys,
 .glb-css-card-side--leel {
-  --card-scene-image: linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 42%, rgba(0, 0, 0, 0.68));
+  --card-scene-image: url("/images/test/roti-camp-landscape-test.png");
 }
 
 .glb-css-card-side {

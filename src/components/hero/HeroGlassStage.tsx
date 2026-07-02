@@ -117,12 +117,13 @@ function createGlassHighlights(isActive: boolean) {
 
 function createWebGlCard(isActive: boolean) {
   const group = new THREE.Group();
-  const body = new THREE.Mesh(createCardGeometry(), createBlackGlassMaterial(isActive));
+  const geometry = createCardGeometry();
+  const body = new THREE.Mesh(geometry, createBlackGlassMaterial(isActive));
   body.name = "ROTI thin black glass card body";
   group.add(body);
 
   const edge = new THREE.LineSegments(
-    new THREE.EdgesGeometry(createCardGeometry(), 16),
+    new THREE.EdgesGeometry(geometry, 16),
     new THREE.LineBasicMaterial({
       color: "#ffffff",
       transparent: true,
@@ -368,7 +369,7 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1;
     renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isCompact ? 1.25 : 1.5));
 
     cssRenderer.domElement.className = "hero-glass-stage__css-layer";
     cssRenderer.domElement.setAttribute("aria-hidden", "true");
@@ -398,6 +399,7 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
 
       renderer.setSize(width, height, false);
       cssRenderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isCompact ? 1.25 : 1.5));
       camera.fov = isCompact ? 36 : 32;
       camera.aspect = width / height;
       camera.position.set(0, isCompact ? 0.04 : 0.02, isCompact ? 6.85 : 6.45);
