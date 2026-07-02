@@ -28,8 +28,8 @@
   --shadow-soft: 0 2rem 5rem rgba(0, 0, 0, 0.36);
   --shadow-red-restraint: 0 1.4rem 4rem rgba(180, 19, 7, 0.18);
 
-  --hero-stage-perspective: 1600px;
+  --hero-stage-perspective: 1900px;
   --hero-card-transition: 620ms cubic-bezier(0.2, 0.8, 0.18, 1);
-  --hero-card-width: clamp(17rem, 24vw, 25rem);
-  --hero-card-height: clamp(24rem, 52vh, 35rem);
+  --hero-card-width: clamp(17rem, 23.4vw, 25rem);
+  --hero-card-height: clamp(24rem, 51vh, 35rem);
 }

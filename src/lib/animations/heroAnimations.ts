@@ -11,24 +11,24 @@ export type HeroCardState = {
 export const heroCardMotion = {
   center: {
     x: "0%",
-    z: "120px",
+    z: "150px",
     rotateY: "0deg",
-    scale: 1,
+    scale: 1.04,
     opacity: 1
   },
   left: {
-    x: "-112%",
+    x: "-104%",
     z: "0px",
-    rotateY: "13deg",
+    rotateY: "32deg",
     scale: 0.78,
-    opacity: 0.58
+    opacity: 0.96
   },
   right: {
-    x: "112%",
+    x: "104%",
     z: "0px",
-    rotateY: "-13deg",
+    rotateY: "-32deg",
     scale: 0.78,
-    opacity: 0.58
+    opacity: 0.96
   }
 } satisfies Record<HeroCardSlot, Record<string, string | number>>;
 

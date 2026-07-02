@@ -1,5 +1,6 @@
 import type { Brand } from "@/types/brand";
 import { BrandCarousel } from "./BrandCarousel";
+import { HeroScrollCue } from "./HeroScrollCue";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 type HeroPortalProps = {
@@ -25,10 +26,7 @@ export function HeroPortal({ brands }: HeroPortalProps) {
       <div className="hero-portal__floor" aria-hidden="true" />
       <div className="hero-portal__footer">
         <p className="hero-portal__copyright">© ROTI. All rights reserved.</p>
-        <p className="hero-portal__scroll-note">
-          <span aria-hidden="true" />
-          SCROLL
-        </p>
+        <HeroScrollCue />
       </div>
     </section>
   );

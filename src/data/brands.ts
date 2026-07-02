@@ -17,7 +17,7 @@ export const brands: Brand[] = [
       status: "pending",
       focalPoint: "center bottom"
     },
-    visualTagline: "자연과 연결되는 장면",
+    visualTagline: "밖으로 나가는 생활",
     visualMaterial: "smoked mountain / matte gear",
     visualScene: "캠핑 · 이동 · 수납",
     scene: {
@@ -44,7 +44,7 @@ export const brands: Brand[] = [
       status: "pending",
       focalPoint: "center center"
     },
-    visualTagline: "집을 더 효율적으로 쓰는 방식",
+    visualTagline: "정리되는 집",
     visualMaterial: "warm interior / charcoal structure",
     visualScene: "수납 · 이동 · 생활동선",
     scene: {
@@ -71,7 +71,7 @@ export const brands: Brand[] = [
       status: "pending",
       focalPoint: "center center"
     },
-    visualTagline: "공간의 밀도를 낮추는 감각",
+    visualTagline: "차분한 주방과 리빙",
     visualMaterial: "dark stone / brushed steel",
     visualScene: "주방 · 소재 · 여백",
     scene: {
