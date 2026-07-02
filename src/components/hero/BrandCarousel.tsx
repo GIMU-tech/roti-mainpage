@@ -14,6 +14,11 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
   return (
     <div className="brand-carousel" aria-label="ROTI 브랜드 선택">
       <div className="brand-carousel__stage" aria-label="브랜드 카드를 클릭해 중앙으로 이동">
+        <div className="brand-carousel__contact-shadows" aria-hidden="true">
+          <span className="brand-carousel__contact-shadow brand-carousel__contact-shadow--left" />
+          <span className="brand-carousel__contact-shadow brand-carousel__contact-shadow--center" />
+          <span className="brand-carousel__contact-shadow brand-carousel__contact-shadow--right" />
+        </div>
         <HeroGlassStage
           brands={brands}
           activeBrandId={activeBrandId}
