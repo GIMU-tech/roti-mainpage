@@ -21,6 +21,8 @@ type CardRuntime = {
   brandId: BrandId;
   body: THREE.Group;
   css: THREE.Group;
+  shadow: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>;
+  reflection: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>;
   hitArea: THREE.Mesh;
   faceElements: HTMLElement[];
 };
@@ -144,6 +146,60 @@ function createWebGlCard(isActive: boolean) {
   return { group, hitArea };
 }
 
+function createSoftEllipseTexture({
+  size = 512,
+  innerAlpha,
+  midAlpha,
+  outerAlpha
+}: {
+  size?: number;
+  innerAlpha: number;
+  midAlpha: number;
+  outerAlpha: number;
+}) {
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  context.clearRect(0, 0, size, size);
+  context.scale(1, 0.34);
+  const centerY = size / 0.68;
+  const gradient = context.createRadialGradient(size / 2, centerY, size * 0.03, size / 2, centerY, size * 0.48);
+  gradient.addColorStop(0, `rgba(255, 255, 255, ${innerAlpha})`);
+  gradient.addColorStop(0.36, `rgba(255, 255, 255, ${midAlpha})`);
+  gradient.addColorStop(1, `rgba(255, 255, 255, ${outerAlpha})`);
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, size, size / 0.34);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function createFloorMesh(texture: THREE.Texture, color: string, opacity: number, blending?: THREE.Blending) {
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    color,
+    transparent: true,
+    opacity,
+    depthWrite: false,
+    depthTest: false,
+    blending,
+    toneMapped: false
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+  mesh.renderOrder = -10;
+  return mesh;
+}
+
 function createTextElement(tagName: keyof HTMLElementTagNameMap, className: string, text: string) {
   const element = document.createElement(tagName);
   element.className = className;
@@ -237,7 +293,7 @@ function createCssCard(brand: Brand, isActive: boolean) {
   return { group, elements };
 }
 
-function getCardTransform(slot: HeroCardSlot, isCompact = false) {
+function getCardTransform(slot: HeroCardSlot, isCompact = false, isShortViewport = false) {
   if (isCompact) {
     if (slot === "center") {
       return {
@@ -259,6 +315,30 @@ function getCardTransform(slot: HeroCardSlot, isCompact = false) {
       position: new THREE.Vector3(1.28, -0.05, -0.1),
       rotationY: -0.58,
       scale: 0.92
+    };
+  }
+
+  if (isShortViewport) {
+    if (slot === "center") {
+      return {
+        position: new THREE.Vector3(0, 0.08, 0.34),
+        rotationY: 0,
+        scale: 1.02
+      };
+    }
+
+    if (slot === "left") {
+      return {
+        position: new THREE.Vector3(-2.04, -0.03, -0.58),
+        rotationY: 0.62,
+        scale: 0.8
+      };
+    }
+
+    return {
+      position: new THREE.Vector3(2.04, -0.03, -0.58),
+      rotationY: -0.62,
+      scale: 0.8
     };
   }
 
@@ -333,16 +413,24 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     const environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+    const shadowTexture = createSoftEllipseTexture({ innerAlpha: 0.96, midAlpha: 0.5, outerAlpha: 0 });
+    const reflectionTexture = createSoftEllipseTexture({ innerAlpha: 0.48, midAlpha: 0.18, outerAlpha: 0 });
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
+    const targetPosition = new THREE.Vector3();
     const targetScale = new THREE.Vector3();
+    const targetFloorScale = new THREE.Vector3();
     let isCompact = renderBox.getBoundingClientRect().width < 640 || window.innerWidth < 640;
+    let isShortViewport = window.innerHeight < 780;
     const cards: CardRuntime[] = brands.map((brand) => {
       const isActive = brand.id === activeBrandIdRef.current;
       const webgl = createWebGlCard(isActive);
       const css = createCssCard(brand, isActive);
+      const shadow = createFloorMesh(shadowTexture, "#030303", isActive ? 0.5 : 0.24);
+      const reflection = createFloorMesh(reflectionTexture, "#b9c1c1", isActive ? 0.2 : 0.075, THREE.AdditiveBlending);
       const slot = cardStatesRef.current.find((state) => state.brandId === brand.id)?.slot ?? "center";
-      const transform = getCardTransform(slot, isCompact);
+      const transform = getCardTransform(slot, isCompact, isShortViewport);
+      const floorY = transform.position.y - CARD_HEIGHT * transform.scale * 0.48;
 
       webgl.group.position.copy(transform.position);
       webgl.group.rotation.y = transform.rotationY;
@@ -351,7 +439,15 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
       css.group.position.copy(transform.position);
       css.group.rotation.y = transform.rotationY;
       css.group.scale.setScalar(transform.scale);
+      shadow.position.set(transform.position.x, floorY - 0.08, transform.position.z - 0.18);
+      reflection.position.set(transform.position.x, floorY + 0.02, transform.position.z - 0.16);
+      shadow.scale.set(isActive ? 2.74 : 1.76, isActive ? 0.5 : 0.32, 1);
+      reflection.scale.set(isActive ? 2.32 : 1.42, isActive ? 0.36 : 0.2, 1);
+      shadow.rotation.z = slot === "left" ? -0.08 : slot === "right" ? 0.08 : 0;
+      reflection.rotation.z = shadow.rotation.z;
 
+      scene.add(shadow);
+      scene.add(reflection);
       scene.add(webgl.group);
       cssScene.add(css.group);
 
@@ -359,6 +455,8 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
         brandId: brand.id,
         body: webgl.group,
         css: css.group,
+        shadow,
+        reflection,
         hitArea: webgl.hitArea,
         faceElements: css.elements
       };
@@ -396,6 +494,7 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
       const width = Math.max(1, Math.floor(rect.width));
       const height = Math.max(1, Math.floor(rect.height));
       isCompact = width < 640 || window.innerWidth < 640;
+      isShortViewport = !isCompact && window.innerHeight < 780;
 
       renderer.setSize(width, height, false);
       cssRenderer.setSize(width, height);
@@ -433,8 +532,16 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
       cards.forEach((card) => {
         const slot = cardStatesRef.current.find((state) => state.brandId === card.brandId)?.slot ?? "center";
         const isActive = card.brandId === activeBrandIdRef.current;
-        const transform = getCardTransform(slot, isCompact);
+        const transform = getCardTransform(slot, isCompact, isShortViewport);
         const ease = prefersReducedMotion ? 1 : 0.12;
+        const floorY = transform.position.y - CARD_HEIGHT * transform.scale * (isCompact ? 0.485 : 0.49);
+        const shadowWidth = (slot === "center" ? 3.46 : 2.36) * transform.scale;
+        const shadowHeight = (slot === "center" ? 0.76 : 0.48) * transform.scale;
+        const reflectionWidth = (slot === "center" ? 3.06 : 1.88) * transform.scale;
+        const reflectionHeight = (slot === "center" ? 0.56 : 0.32) * transform.scale;
+        const shadowOpacity = isActive ? (isCompact ? 0.56 : 0.84) : isCompact ? 0.28 : 0.46;
+        const reflectionOpacity = isActive ? (isCompact ? 0.18 : 0.36) : isCompact ? 0.08 : 0.16;
+        const floorRotation = slot === "left" ? -0.1 : slot === "right" ? 0.1 : 0;
 
         card.body.position.lerp(transform.position, ease);
         card.css.position.lerp(transform.position, ease);
@@ -443,6 +550,18 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
         targetScale.setScalar(transform.scale);
         card.body.scale.lerp(targetScale, ease);
         card.css.scale.lerp(targetScale, ease);
+        targetPosition.set(transform.position.x, floorY - 0.07, transform.position.z - 0.2);
+        card.shadow.position.lerp(targetPosition, ease);
+        targetFloorScale.set(shadowWidth, shadowHeight, 1);
+        card.shadow.scale.lerp(targetFloorScale, ease);
+        card.shadow.rotation.z = THREE.MathUtils.lerp(card.shadow.rotation.z, floorRotation, ease);
+        card.shadow.material.opacity = THREE.MathUtils.lerp(card.shadow.material.opacity, shadowOpacity, ease);
+        targetPosition.set(transform.position.x, floorY + 0.065, transform.position.z - 0.18);
+        card.reflection.position.lerp(targetPosition, ease);
+        targetFloorScale.set(reflectionWidth, reflectionHeight, 1);
+        card.reflection.scale.lerp(targetFloorScale, ease);
+        card.reflection.rotation.z = card.shadow.rotation.z;
+        card.reflection.material.opacity = THREE.MathUtils.lerp(card.reflection.material.opacity, reflectionOpacity, ease);
         card.faceElements.forEach((element) => {
           element.dataset.active = String(isActive);
         });
@@ -461,6 +580,8 @@ export function HeroGlassStage({ brands, activeBrandId, cardStates, onSelectBran
       canvas.removeEventListener("pointerup", handlePointerUp);
       cssRenderer.domElement.remove();
       disposeObject(scene);
+      shadowTexture.dispose();
+      reflectionTexture.dispose();
       environment.dispose();
       pmremGenerator.dispose();
       renderer.dispose();
