@@ -20,6 +20,8 @@ export type Brand = {
   id: BrandId;
   name: string;
   shortName: string;
+  logoSrc: string;
+  logoAlt: string;
   headline: string;
   description: string;
   mood: string[];

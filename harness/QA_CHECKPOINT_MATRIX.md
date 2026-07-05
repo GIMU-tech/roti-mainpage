@@ -68,7 +68,7 @@
 - [ ] Hero title/subtitle 배치
 - [ ] 3개 브랜드 카드 정적 배치
 - [ ] 중앙 카드가 가장 선명함
-- [ ] 좌우 화살표 없음
+- [ ] 좌우 화살표가 절제된 Hero 카드 회전 컨트롤로 배치됨
 - [ ] 모바일에서 첫 화면 주요 요소 확인 가능
 
 ### 디자인 체크
@@ -82,8 +82,9 @@
 ## Gate 3. 3D Card Interaction
 
 ### 확인 항목
-- [ ] 카드 클릭으로 active brand 변경
-- [ ] 클릭 카드가 중앙으로 이동
+- [ ] 좌우 화살표로 active brand 변경
+- [ ] 화살표 조작 시 선택 카드가 중앙으로 이동
+- [ ] 카드 클릭 시 해당 브랜드 섹션으로 부드럽게 이동
 - [ ] rotateY / scale / opacity / z-index 위계 적용
 - [ ] hover tilt 구현
 - [ ] 키보드 focus 가능
@@ -91,7 +92,7 @@
 - [ ] 좌측 index가 현재 브랜드와 동기화
 
 ### 디자인 체크
-- [ ] 화살표 UI 없음
+- [ ] 화살표 UI가 상품 캐러셀처럼 과하지 않음
 - [ ] turntable / carousel depth 느낌
 - [ ] active card red glow 과하지 않음
 

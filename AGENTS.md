@@ -122,7 +122,8 @@ Before planning or editing code, read these files in this order:
 - The main accent is ROTI Ember Red `#B41307`.
 - Green must not be used as the main hero accent.
 - Hero must contain three brand cards.
-- Brand switching must be done by clicking cards, not by left/right arrows.
+- Brand switching must be done by restrained left/right arrow controls, matching the approved visual mockup direction.
+- Brand card click/tap must smoothly scroll down to that brand's fullscreen section.
 - Clicked cards must rotate in 3D and move to the center.
 - After Hero, each brand section must appear as a fullscreen one-brand-per-screen experience.
 - ROTI CAMP, ROTI HOMESYS, and LEEL must each have their own section.
@@ -130,7 +131,7 @@ Before planning or editing code, read these files in this order:
 - Any design or interaction change must be checked against `Design.md`.
 
 ## Explicitly Forbidden
-- Do not add arrow carousel controls.
+- Do not use commerce-style carousel controls; restrained Hero arrow controls are allowed for card rotation.
 - Do not turn the Hero into a normal product grid.
 - Do not add product prices, discounts, reviews, or commerce-heavy elements to the main Hero.
 - Do not use green as the primary highlight color.
@@ -178,8 +179,8 @@ Use this exact checklist:
 - [ ] Dark premium tone maintained
 - [ ] Red accent used with restraint
 - [ ] No green primary hero accent
-- [ ] No arrow carousel controls
-- [ ] Click-to-rotate card structure preserved
+- [ ] Restrained arrow card-rotation controls preserved
+- [ ] Card-click-to-brand-section scroll preserved
 - [ ] One-brand-per-screen scroll structure preserved
 - [ ] ROTI CAMP / HOMESYS / LEEL all represented
 - [ ] No unverified marketing claims added

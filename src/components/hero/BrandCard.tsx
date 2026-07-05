@@ -1,6 +1,7 @@
 import type { Brand } from "@/types/brand";
 import type { HeroCardMotion, HeroCardSlot } from "@/lib/animations/heroAnimations";
 import type { CSSProperties, KeyboardEvent } from "react";
+import Image from "next/image";
 
 type BrandCardProps = {
   brand: Brand;
@@ -47,8 +48,8 @@ export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSe
     <button
       className="brand-card"
       type="button"
-      aria-label={`${brand.name} 선택`}
-      aria-pressed={isActive}
+      aria-label={`${brand.name} 섹션으로 이동`}
+      aria-current={isActive ? "true" : undefined}
       data-brand={brand.id}
       data-slot={slot}
       data-active={isActive}
@@ -67,7 +68,9 @@ export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSe
       <span className="brand-card__sheen" aria-hidden="true" />
       <span className="brand-card__content">
         <span className="brand-card__eyebrow">ROTI BRAND PORTAL</span>
-        <strong className="brand-card__title">{brand.name}</strong>
+        <strong className="brand-card__title">
+          <Image src={brand.logoSrc} alt={brand.logoAlt} width={690} height={320} sizes="(max-width: 768px) 9rem, 13rem" />
+        </strong>
         <span className="brand-card__line" aria-hidden="true" />
         <span className="brand-card__description">{brand.visualTagline}</span>
         <span className="brand-card__scene">{brand.visualScene}</span>
@@ -76,7 +79,6 @@ export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSe
       <span className="brand-card__side brand-card__side--right" aria-hidden="true" />
       <span className="brand-card__glass-edge brand-card__glass-edge--left" aria-hidden="true" />
       <span className="brand-card__glass-edge brand-card__glass-edge--right" aria-hidden="true" />
-      <span className="brand-card__floor-reflection" aria-hidden="true" />
     </button>
   );
 }

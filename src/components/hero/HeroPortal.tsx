@@ -17,13 +17,10 @@ export function HeroPortal({ brands }: HeroPortalProps) {
         <h1 id="hero-title" className="hero-portal__title">
           일상을 위한 세 가지 방식
         </h1>
-        <p className="hero-portal__copy">
-          이동, 정리, 휴식을 위한 서로 다른 해석
-        </p>
+        <p className="hero-portal__copy">이동, 정리, 휴식을 위한 서로 다른 해석</p>
       </div>
       <BrandCarousel brands={brands} />
       <div className="hero-portal__footer">
-        <p className="hero-portal__copyright">© ROTI. All rights reserved.</p>
         <HeroScrollCue />
       </div>
     </section>

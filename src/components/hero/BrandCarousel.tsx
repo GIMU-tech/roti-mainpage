@@ -2,9 +2,10 @@
 
 import type { Brand } from "@/types/brand";
 import type { HeroCardMotion } from "@/lib/animations/heroAnimations";
-import type { CSSProperties } from "react";
+import type { CSSProperties, MouseEvent } from "react";
 import { BrandCard } from "./BrandCard";
 import { useBrandCarousel } from "@/hooks/useBrandCarousel";
+import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 type BrandCarouselProps = {
   brands: Brand[];
@@ -16,10 +17,6 @@ type StageLayerStyle = CSSProperties & {
   "--card-rotate-y": string;
   "--card-scale": number;
   "--card-opacity": number;
-  "--reflection-y": string;
-  "--reflection-z": string;
-  "--reflection-scale-y": number;
-  "--reflection-opacity": number;
   "--shadow-y": string;
   "--shadow-scale-x": number;
   "--shadow-opacity": number;
@@ -36,10 +33,6 @@ function createStageLayerStyle(brand: Brand, motion: HeroCardMotion): StageLayer
     "--card-rotate-y": motion.rotateY,
     "--card-scale": motion.scale,
     "--card-opacity": motion.opacity,
-    "--reflection-y": motion.reflectionY,
-    "--reflection-z": motion.reflectionZ,
-    "--reflection-scale-y": motion.reflectionScaleY,
-    "--reflection-opacity": motion.reflectionOpacity,
     "--shadow-y": motion.shadowY,
     "--shadow-scale-x": motion.shadowScaleX,
     "--shadow-opacity": motion.shadowOpacity,
@@ -53,30 +46,75 @@ function createStageLayerStyle(brand: Brand, motion: HeroCardMotion): StageLayer
 }
 
 export function BrandCarousel({ brands }: BrandCarouselProps) {
-  const { activeBrand, cardStates, isTransitioning, selectBrand } = useBrandCarousel(brands);
+  const { activeBrand, cardStates, isTransitioning, selectNextBrand, selectPreviousBrand } = useBrandCarousel(brands);
   const displayCards = cardStates.flatMap((state) => {
     const brand = brands.find((candidate) => candidate.id === state.brandId);
 
     return brand ? [{ ...state, brand }] : [];
   });
+  const scrollToBrand = (brandId: Brand["id"]) => {
+    scrollToTarget(brandId, {
+      duration: 1.15,
+      lock: true
+    });
+  };
+  const handleCardsLayerClick = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+
+    if (target.closest(".brand-card")) {
+      return;
+    }
+
+    const candidates = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".brand-card"))
+      .map((card) => {
+        const rect = card.getBoundingClientRect();
+        const brandId = card.dataset.brand as Brand["id"] | undefined;
+        const isInside =
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom;
+        const distanceFromCenter = Math.hypot(
+          event.clientX - (rect.left + rect.width / 2),
+          event.clientY - (rect.top + rect.height / 2)
+        );
+
+        return { brandId, distanceFromCenter, isInside };
+      })
+      .filter((candidate): candidate is { brandId: Brand["id"]; distanceFromCenter: number; isInside: boolean } =>
+        Boolean(candidate.brandId && candidate.isInside)
+      )
+      .sort((first, second) => first.distanceFromCenter - second.distanceFromCenter);
+
+    const selectedBrandId = candidates[0]?.brandId;
+
+    if (selectedBrandId) {
+      scrollToBrand(selectedBrandId);
+    }
+  };
 
   return (
     <div className="brand-carousel" aria-label="ROTI 브랜드 선택">
-      <div className="brand-carousel__stage" aria-label="브랜드 카드를 클릭해 중앙으로 이동">
-        <div className="brand-carousel__floor-plane" aria-hidden="true" />
-        <div className="brand-carousel__reflections" aria-hidden="true">
-          {displayCards.map(({ brand, isActive, slot, motion }) => (
-            <span
-              key={`${brand.id}-reflection`}
-              className="brand-card-reflection"
-              data-brand={brand.id}
-              data-slot={slot}
-              data-active={isActive}
-              data-transitioning={isTransitioning}
-              style={createStageLayerStyle(brand, motion)}
-            />
-          ))}
+      <div className="brand-carousel__stage" aria-label="화살표로 브랜드 카드를 회전하고 카드를 클릭하면 섹션으로 이동">
+        <div className="brand-carousel__controls" aria-label="브랜드 카드 회전">
+          <button
+            className="brand-carousel__arrow brand-carousel__arrow--previous"
+            type="button"
+            aria-label="이전 브랜드 카드 보기"
+            onClick={selectPreviousBrand}
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <button
+            className="brand-carousel__arrow brand-carousel__arrow--next"
+            type="button"
+            aria-label="다음 브랜드 카드 보기"
+            onClick={selectNextBrand}
+          >
+            <span aria-hidden="true">›</span>
+          </button>
         </div>
+        <div className="brand-carousel__floor-plane" aria-hidden="true" />
         <div className="brand-carousel__contact-shadows" aria-hidden="true">
           {displayCards.map(({ brand, isActive, slot, motion }) => (
             <span
@@ -90,7 +128,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
             />
           ))}
         </div>
-        <div className="brand-carousel__cards">
+        <div className="brand-carousel__cards" onClick={handleCardsLayerClick}>
           {displayCards.map(({ brand, isActive, slot, motion }) => (
             <BrandCard
               key={brand.id}
@@ -99,7 +137,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
               isTransitioning={isTransitioning}
               slot={slot}
               motion={motion}
-              onSelect={() => selectBrand(brand.id)}
+              onSelect={() => scrollToBrand(brand.id)}
             />
           ))}
         </div>

@@ -1,22 +1,21 @@
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { HeroPortal } from "@/components/hero/HeroPortal";
-import { BrandSceneSection } from "@/components/sections/BrandSceneSection";
-import { RotiGroupSection } from "@/components/sections/RotiGroupSection";
-import { FinalCTA } from "@/components/sections/FinalCTA";
+import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
+import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
+import { HakjisaBusinessReplicaSection } from "@/components/sections/HakjisaBusinessReplicaSection";
 import { brands } from "@/data/brands";
 
 export default function HomePage() {
   return (
-    <>
+    <SmoothScrollProvider>
       <Header />
-      <main>
+      <main id="top">
         <HeroPortal brands={brands} />
-        {brands.map((brand, index) => (
-          <BrandSceneSection key={brand.id} brand={brand} index={index} />
-        ))}
-        <RotiGroupSection brands={brands} />
-        <FinalCTA brands={brands} />
+        <BrandSlideStack brands={brands} />
+        <HakjisaBusinessReplicaSection />
+        <Footer />
       </main>
-    </>
+    </SmoothScrollProvider>
   );
 }

@@ -59,11 +59,31 @@ export function useBrandCarousel(brands: Brand[]) {
     [activeBrandId]
   );
 
+  const selectBrandByOffset = useCallback(
+    (offset: number) => {
+      if (!brands.length) {
+        return;
+      }
+
+      const currentIndex = brands.findIndex((brand) => brand.id === activeBrandId);
+      const safeCurrentIndex = currentIndex >= 0 ? currentIndex : 0;
+      const nextIndex = (safeCurrentIndex + offset + brands.length) % brands.length;
+      const nextBrand = brands[nextIndex];
+
+      if (nextBrand) {
+        selectBrand(nextBrand.id);
+      }
+    },
+    [activeBrandId, brands, selectBrand]
+  );
+
   return {
     activeBrand,
     activeBrandId,
     cardStates,
     isTransitioning,
-    selectBrand
+    selectBrand,
+    selectNextBrand: () => selectBrandByOffset(1),
+    selectPreviousBrand: () => selectBrandByOffset(-1)
   };
 }

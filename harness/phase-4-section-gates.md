@@ -41,7 +41,7 @@ All items below must be checked before Phase 4 can be considered commit-ready.
 - [ ] `pnpm typecheck` passes.
 - [ ] `pnpm build` passes.
 - [ ] Mobile 390px view is checked.
-- [ ] Card click/touch interaction is preserved.
+- [ ] Card click/touch scrolls to the matching brand fullscreen section.
 - [ ] Reduced-motion handling is preserved.
 
 ## Performance Gate

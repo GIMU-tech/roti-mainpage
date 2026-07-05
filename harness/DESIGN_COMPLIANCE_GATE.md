@@ -18,12 +18,13 @@ Codex가 `Design.md`를 단순히 “읽었다”고 말하는 데서 끝나지 
 아래 항목 중 하나라도 발생하면 해당 작업은 FAIL이다.
 
 ### P1 Blockers
-- Hero에 좌우 화살표 캐러셀을 추가함
+- Hero 화살표가 상품 슬라이더처럼 과하거나 commerce UI처럼 보임
 - Hero를 상품 나열형 쇼핑몰 구조로 바꿈
 - 녹색을 메인 히어로 포인트로 사용함
 - `Design.md`와 충돌하는 밝은 화이트 중심 테마로 변경함
 - ROTI CAMP / ROTI HOMESYS / LEEL 중 하나가 누락됨
-- 카드 클릭 전환 구조가 사라짐
+- 화살표 기반 카드 회전 구조가 사라짐
+- 카드 클릭 시 브랜드 섹션으로 이동하지 않음
 - 스크롤 one-brand-per-screen 구조가 사라짐
 - 빌드가 실패함
 - 모바일에서 주요 콘텐츠가 보이지 않음
@@ -52,8 +53,8 @@ Codex가 `Design.md`를 단순히 “읽었다”고 말하는 데서 끝나지 
 - [ ] Dark premium tone maintained
 - [ ] Red accent used with restraint
 - [ ] No green primary hero accent
-- [ ] No arrow carousel controls
-- [ ] Click-to-rotate card structure preserved
+- [ ] Restrained arrow card-rotation controls preserved
+- [ ] Card-click-to-brand-section scroll preserved
 - [ ] One-brand-per-screen scroll structure preserved
 - [ ] ROTI CAMP / HOMESYS / LEEL all represented
 - [ ] No unverified marketing claims added

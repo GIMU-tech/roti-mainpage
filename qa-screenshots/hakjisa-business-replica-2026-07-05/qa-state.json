@@ -1,0 +1,22 @@
+{
+  "desktop": {
+    "activeTab": "Platform business division",
+    "background": "rgb(255, 255, 255)",
+    "contentTitle": "플랫폼사업 부문",
+    "headerTheme": "light",
+    "sectionHeight": 900,
+    "sectionTop": 0,
+    "tabCount": 4,
+    "title": "HCG 학지사 콘텐츠 그룹"
+  },
+  "mobile": {
+    "headerTheme": "light",
+    "imageHeight": 306,
+    "sectionTop": 88,
+    "tabDisplay": "none",
+    "title": "HCG 학지사 콘텐츠 그룹"
+  },
+  "desktopForcedScroll": {
+    "targetY": 5922
+  }
+}

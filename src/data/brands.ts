@@ -1,11 +1,15 @@
 import type { Brand } from "@/types/brand";
 
+const ROTI_SHOP_URL = "https://www.lotteon.com/m/display/seller/sellerShop/LD470389";
+
 export const brands: Brand[] = [
   {
     id: "roti-camp",
     name: "ROTI CAMP",
     shortName: "CAMP",
-    headline: "밖으로 나가는 생활",
+    logoSrc: "/images/logos/roti-camp-logo.png",
+    logoAlt: "ROTI CAMP",
+    headline: "밖으로 향하는 생활",
     description: "캠핑과 이동을 위한 실용 브랜드",
     mood: ["outdoor", "movement", "nature", "rest"],
     keywords: ["캠핑", "이동", "수납"],
@@ -13,29 +17,32 @@ export const brands: Brand[] = [
     sectionImage: "/images/sections/camp-bg.jpg",
     heroAsset: {
       src: "/images/brands/camp-hero.jpg",
-      alt: "ROTI CAMP 어두운 야외와 장비 실루엣 장면",
+      alt: "ROTI CAMP 어두운 야외와 장비 분위기의 장면",
       status: "ready",
       focalPoint: "center bottom"
     },
-    visualTagline: "밖으로 나가는 생활",
+    visualTagline: "밖으로 향하는 생활",
     visualMaterial: "smoked mountain / matte gear",
     visualScene: "캠핑 · 이동 · 수납",
     scene: {
-      title: "밖으로 나가는 생활",
+      title: "밖으로 향하는 생활",
       copy: "캠핑과 이동을 위한 실용 브랜드",
-      direction: "어두운 야외, 산 능선, 장비 실루엣, 낮은 조도",
+      direction: "어두운 야외, 이동선, 장비 실루엣, 낮은 조도",
       align: "left"
     },
-    brandUrl: "/brands/roti-camp"
+    brandUrl: "/brands/roti-camp",
+    shopUrl: ROTI_SHOP_URL
   },
   {
     id: "roti-homesys",
     name: "ROTI HOMESYS",
     shortName: "HOMESYS",
+    logoSrc: "/images/logos/roti-homesys-logo.png",
+    logoAlt: "ROTI HOMESYS",
     headline: "정리되는 집",
-    description: "수납과 이동을 돕는 홈 시스템 브랜드",
+    description: "수납과 이동을 정돈하는 홈 시스템 브랜드",
     mood: ["organize", "move", "utility", "efficiency"],
-    keywords: ["수납", "이동", "생활동선"],
+    keywords: ["수납", "이동", "생활 동선"],
     heroImage: "/images/brands/homesys-hero.jpg",
     sectionImage: "/images/sections/homesys-bg.jpg",
     heroAsset: {
@@ -46,19 +53,22 @@ export const brands: Brand[] = [
     },
     visualTagline: "정리되는 집",
     visualMaterial: "warm interior / charcoal structure",
-    visualScene: "수납 · 이동 · 생활동선",
+    visualScene: "수납 · 이동 · 생활 동선",
     scene: {
       title: "정리되는 집",
-      copy: "수납과 이동을 돕는 홈 시스템 브랜드",
+      copy: "수납과 이동을 정돈하는 홈 시스템 브랜드",
       direction: "정돈된 실내, 수납 구조, 따뜻한 실내 조명",
       align: "right"
     },
-    brandUrl: "/brands/roti-homesys"
+    brandUrl: "/brands/roti-homesys",
+    shopUrl: ROTI_SHOP_URL
   },
   {
     id: "leel",
     name: "LEEL",
     shortName: "LEEL",
+    logoSrc: "/images/logos/leel-logo.png",
+    logoAlt: "LEEL",
     headline: "차분한 주방과 리빙",
     description: "주방과 생활 공간을 정갈하게 제안하는 브랜드",
     mood: ["kitchen", "clean", "density", "calm"],
@@ -80,6 +90,7 @@ export const brands: Brand[] = [
       direction: "주방, 스틸, 스톤, 조용한 빛, 여백",
       align: "left"
     },
-    brandUrl: "/brands/leel"
+    brandUrl: "/brands/leel",
+    shopUrl: ROTI_SHOP_URL
   }
 ];

@@ -68,6 +68,7 @@ Users should understand quickly:
 - Hero card bottom red glow / red strip / red floor reflection
 - Hero card top red tint
 - Green as the primary Hero accent
+- Commerce-style carousel controls or product slider UI
 - Unverified claims such as No. 1, certified, supplied to, awarded, or sales numbers
 
 ---
@@ -163,8 +164,9 @@ Users should understand quickly:
 - Three brand cards are arranged like a central stage.
 - The center card is the largest and sharpest.
 - Left and right cards move backward and appear slightly darker.
-- Do not use left/right arrow carousel controls.
-- Brand selection happens by clicking the cards.
+- Use restrained left/right arrow controls to rotate the hero cards, matching the approved visual mockup direction.
+- Arrow controls rotate the cards only; they must not turn the Hero into a commerce carousel.
+- Brand card click/tap moves smoothly down to that brand's fullscreen section.
 - The background prioritizes dynamic smoke / mist / soft spotlight rather than a static image.
 - Smoke / mist should move very slowly and subtly.
 - Cards must feel grounded on the floor with natural contact shadows.
@@ -177,6 +179,9 @@ Users should understand quickly:
 - One brand per screen.
 - ROTI CAMP, ROTI HOMESYS, and LEEL each require their own fullscreen section.
 - Sections should feel cinematic, not like repeated empty black text blocks.
+- Brand sections should follow a PLAN-AZ-style pinned visual slide structure: a full-bleed brand scene first fills the viewport, then scroll progress turns it into a lifted/rounded/tilted card while the next brand scene rises from below.
+- The reference behavior is the vertical card-stack transition, not the PLAN-AZ project portfolio content, copy, logo, or brand identity.
+- Brand copy remains lower-centered over the scene image with a restrained dark overlay.
 - Each brand may have a distinct scene mood and CTA while keeping a consistent system.
 
 ---
@@ -184,9 +189,9 @@ Users should understand quickly:
 ## 7. Interaction Rules
 
 ### Hero Card Switching
-- Arrow carousel controls are forbidden.
-- Brand cards switch by direct click.
-- A clicked card rotates in 3D and moves to the center.
+- Left/right arrow controls are the primary way to switch the active Hero card.
+- The active card rotates in 3D and moves to the center when changed by arrow controls.
+- Clicking a brand card does not rotate the Hero; it scrolls to the matching brand fullscreen section.
 - Keep a 3D turntable / carousel feeling.
 - Keyboard access must remain available through accessible controls.
 
@@ -203,6 +208,8 @@ Users should understand quickly:
 - Slightly slow-in, smooth-out
 - No aggressive bounce
 - No gimmicky shake
+- Hero card arrows should feel restrained and editorial, not like a shopping carousel.
+- Hero-to-brand-section movement should feel like a fullscreen slide transition.
 
 ### Micro Interactions
 - Hover may use subtle tilt or brightness.
@@ -304,10 +311,12 @@ Must not include:
 ## 11. Do / Don't
 
 ### Do
-- Keep click-based card exploration.
+- Keep arrow-based hero card rotation.
+- Keep card-click movement into the matching brand section.
 - Keep a shared layout system while giving each brand a distinct mood.
 - Use Ember Red sparingly.
 - Emphasize connected scroll transitions.
+- Use PLAN-AZ-style fullscreen visual slides for the brand scenes while keeping ROTI assets, copy, and color rules.
 - Allow desktop Hero bottom-right nav in the initial view.
 - Move nav naturally to top on scroll.
 - Create natural contact shadows so cards feel grounded.
@@ -315,7 +324,8 @@ Must not include:
 - Check all changes against this file.
 
 ### Don't
-- Use arrow carousel controls.
+- Use commerce-style carousel controls, product-slider chrome, or auto-advancing sales carousel behavior.
+- Make card click rotate the Hero; card click should move to the brand section.
 - Add product prices, reviews, discounts, cart, checkout, member, order, or payment UI.
 - Add a separate product-listing shop page feel to the Hero.
 - Add unapproved third-party brand names or logos.
@@ -336,7 +346,8 @@ Any design or interaction change must follow this order:
 3. Check whether the change preserves:
    - Brand portal identity
    - Dark premium tone
-   - Click-to-rotate card structure
+   - Arrow-to-rotate Hero card structure
+   - Card-click-to-brand-section movement
    - One-brand-per-screen scroll structure
    - Red accent restraint
    - Hero nav bottom-to-top transition
@@ -348,8 +359,10 @@ Any design or interaction change must follow this order:
 - [ ] In desktop Hero initial state, does bottom-right nav avoid disturbing the Hero?
 - [ ] After scroll, does nav move naturally to the top header area?
 - [ ] Is mobile nav simplified rather than forced into the bottom?
-- [ ] Is card-click rotation preserved?
+- [ ] Is arrow-based card rotation preserved?
+- [ ] Does card click/tap move to the matching brand section?
 - [ ] Is one-brand-per-screen section intent preserved?
+- [ ] Do brand sections use fullscreen visual slide structure without becoming a project portfolio clone?
 - [ ] Is red limited to small accents?
 - [ ] Is Hero card bottom red glow / red strip / red reflection removed?
 - [ ] Is Hero card top red tint absent?
@@ -365,7 +378,8 @@ Any design or interaction change must follow this order:
 The mainpage first pass can be considered complete when:
 
 - The first screen shows three brand cards in a premium stage.
-- Brand switching works by card click without arrows.
+- Brand switching works through restrained left/right arrow controls.
+- Card click/tap scrolls to the matching brand fullscreen section.
 - Hero background has subtle smoke / mist motion, not a static smoke image.
 - Hero cards have natural contact shadows.
 - Hero card bottom red glow / red strip / red floor reflection are absent.
@@ -373,6 +387,7 @@ The mainpage first pass can be considered complete when:
 - Desktop Hero initial nav can appear bottom-right and moves naturally to top after scroll.
 - Mobile does not force bottom nav.
 - Brand fullscreen sections appear one brand per screen.
+- Brand fullscreen sections use full-bleed scene imagery with lower-centered copy and smooth slide continuity.
 - Each brand has a clear CTA.
 - Logo, menu icon, nav transition, card system, color, and motion are consistent.
 - Changes can be reviewed against this `Design.md`.
