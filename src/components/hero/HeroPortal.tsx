@@ -1,6 +1,5 @@
 import type { Brand } from "@/types/brand";
 import { BrandCarousel } from "./BrandCarousel";
-import { HeroSmokeShader } from "./HeroSmokeShader";
 import { HeroScrollCue } from "./HeroScrollCue";
 
 type HeroPortalProps = {
@@ -12,7 +11,8 @@ export function HeroPortal({ brands }: HeroPortalProps) {
     <section className="section-shell hero-portal" aria-labelledby="hero-title">
       <div className="hero-portal__stage-bg" aria-hidden="true" />
       <div className="hero-portal__ambient" aria-hidden="true" />
-      <HeroSmokeShader className="hero-smoke-shader" />
+      <div className="hero-portal__mist hero-portal__mist--back" aria-hidden="true" />
+      <div className="hero-portal__mist hero-portal__mist--front" aria-hidden="true" />
       <div className="hero-portal__intro">
         <h1 id="hero-title" className="hero-portal__title">
           일상을 위한 세 가지 방식
@@ -22,7 +22,6 @@ export function HeroPortal({ brands }: HeroPortalProps) {
         </p>
       </div>
       <BrandCarousel brands={brands} />
-      <div className="hero-portal__floor" aria-hidden="true" />
       <div className="hero-portal__footer">
         <p className="hero-portal__copyright">© ROTI. All rights reserved.</p>
         <HeroScrollCue />

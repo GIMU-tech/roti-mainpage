@@ -14,7 +14,7 @@ export const brands: Brand[] = [
     heroAsset: {
       src: "/images/brands/camp-hero.jpg",
       alt: "ROTI CAMP 어두운 야외와 장비 실루엣 장면",
-      status: "pending",
+      status: "ready",
       focalPoint: "center bottom"
     },
     visualTagline: "밖으로 나가는 생활",
@@ -41,7 +41,7 @@ export const brands: Brand[] = [
     heroAsset: {
       src: "/images/brands/homesys-hero.jpg",
       alt: "ROTI HOMESYS 정돈된 실내와 수납 구조 장면",
-      status: "pending",
+      status: "ready",
       focalPoint: "center center"
     },
     visualTagline: "정리되는 집",
@@ -68,7 +68,7 @@ export const brands: Brand[] = [
     heroAsset: {
       src: "/images/brands/leel-hero.jpg",
       alt: "LEEL 조용한 주방과 리빙 오브젝트 장면",
-      status: "pending",
+      status: "ready",
       focalPoint: "center center"
     },
     visualTagline: "차분한 주방과 리빙",

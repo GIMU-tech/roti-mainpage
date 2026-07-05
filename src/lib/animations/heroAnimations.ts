@@ -8,29 +8,65 @@ export type HeroCardState = {
   slot: HeroCardSlot;
 };
 
+export type HeroCardMotion = {
+  x: string;
+  z: string;
+  rotateY: string;
+  scale: number;
+  opacity: number;
+  reflectionY: string;
+  reflectionZ: string;
+  reflectionScaleY: number;
+  reflectionOpacity: number;
+  shadowY: string;
+  shadowScaleX: number;
+  shadowOpacity: number;
+};
+
 export const heroCardMotion = {
   center: {
     x: "0%",
-    z: "150px",
+    z: "170px",
     rotateY: "0deg",
-    scale: 1.04,
-    opacity: 1
+    scale: 1.08,
+    opacity: 1,
+    reflectionY: "clamp(27rem, 54vh, 33rem)",
+    reflectionZ: "38px",
+    reflectionScaleY: 0.42,
+    reflectionOpacity: 0.9,
+    shadowY: "clamp(13.4rem, 30vh, 17.3rem)",
+    shadowScaleX: 0.96,
+    shadowOpacity: 0.58
   },
   left: {
-    x: "-104%",
-    z: "0px",
-    rotateY: "32deg",
-    scale: 0.78,
-    opacity: 0.96
+    x: "-112%",
+    z: "-26px",
+    rotateY: "37deg",
+    scale: 0.82,
+    opacity: 0.84,
+    reflectionY: "clamp(20rem, 42vh, 25rem)",
+    reflectionZ: "-28px",
+    reflectionScaleY: 0.32,
+    reflectionOpacity: 0.64,
+    shadowY: "clamp(10.2rem, 23vh, 13.3rem)",
+    shadowScaleX: 0.58,
+    shadowOpacity: 0.4
   },
   right: {
-    x: "104%",
-    z: "0px",
-    rotateY: "-32deg",
-    scale: 0.78,
-    opacity: 0.96
+    x: "112%",
+    z: "-26px",
+    rotateY: "-37deg",
+    scale: 0.82,
+    opacity: 0.84,
+    reflectionY: "clamp(20rem, 42vh, 25rem)",
+    reflectionZ: "-28px",
+    reflectionScaleY: 0.32,
+    reflectionOpacity: 0.64,
+    shadowY: "clamp(10.2rem, 23vh, 13.3rem)",
+    shadowScaleX: 0.58,
+    shadowOpacity: 0.4
   }
-} satisfies Record<HeroCardSlot, Record<string, string | number>>;
+} satisfies Record<HeroCardSlot, HeroCardMotion>;
 
 export function getHeroCardSlot(
   brandId: BrandId,

@@ -1,12 +1,13 @@
 import type { Brand } from "@/types/brand";
-import type { HeroCardSlot } from "@/lib/animations/heroAnimations";
+import type { HeroCardMotion, HeroCardSlot } from "@/lib/animations/heroAnimations";
 import type { CSSProperties, KeyboardEvent } from "react";
 
 type BrandCardProps = {
   brand: Brand;
   isActive: boolean;
+  isTransitioning: boolean;
   slot: HeroCardSlot;
-  motion?: Record<string, string | number>;
+  motion?: HeroCardMotion;
   onSelect: () => void;
 };
 
@@ -20,7 +21,7 @@ type BrandCardStyle = CSSProperties & {
   "--card-focal-point"?: string;
 };
 
-export function BrandCard({ brand, isActive, slot, motion, onSelect }: BrandCardProps) {
+export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSelect }: BrandCardProps) {
   const hasReadyAsset = brand.heroAsset.status === "ready";
   const cardStyle: BrandCardStyle = {
     "--card-x": String(motion?.x ?? "0%"),
@@ -50,15 +51,18 @@ export function BrandCard({ brand, isActive, slot, motion, onSelect }: BrandCard
       aria-pressed={isActive}
       data-brand={brand.id}
       data-slot={slot}
+      data-active={isActive}
+      data-transitioning={isTransitioning}
       style={cardStyle}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
     >
+      <span className="brand-card__backplate" aria-hidden="true" />
       <span
         className="brand-card__asset"
         data-status={brand.heroAsset.status}
         data-has-image={hasReadyAsset}
-        aria-label={hasReadyAsset ? brand.heroAsset.alt : undefined}
+        aria-hidden="true"
       />
       <span className="brand-card__sheen" aria-hidden="true" />
       <span className="brand-card__content">
@@ -66,11 +70,13 @@ export function BrandCard({ brand, isActive, slot, motion, onSelect }: BrandCard
         <strong className="brand-card__title">{brand.name}</strong>
         <span className="brand-card__line" aria-hidden="true" />
         <span className="brand-card__description">{brand.visualTagline}</span>
+        <span className="brand-card__scene">{brand.visualScene}</span>
       </span>
       <span className="brand-card__side brand-card__side--left" aria-hidden="true" />
       <span className="brand-card__side brand-card__side--right" aria-hidden="true" />
       <span className="brand-card__glass-edge brand-card__glass-edge--left" aria-hidden="true" />
       <span className="brand-card__glass-edge brand-card__glass-edge--right" aria-hidden="true" />
+      <span className="brand-card__floor-reflection" aria-hidden="true" />
     </button>
   );
 }
