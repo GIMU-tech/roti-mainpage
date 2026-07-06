@@ -48,10 +48,8 @@ function createStageLayerStyle(brand: Brand, motion: HeroCardMotion): StageLayer
 export function BrandCarousel({ brands }: BrandCarouselProps) {
   const {
     activeBrand,
-    activeBrandId,
     cardStates,
     isTransitioning,
-    selectBrand,
     selectNextBrand,
     selectPreviousBrand
   } = useBrandCarousel(brands);
@@ -67,12 +65,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
     });
   };
   const handleCardSelect = (brandId: Brand["id"]) => {
-    if (brandId === activeBrandId) {
-      scrollToBrand(brandId);
-      return;
-    }
-
-    selectBrand(brandId);
+    scrollToBrand(brandId);
   };
   const handleCardsLayerClick = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;

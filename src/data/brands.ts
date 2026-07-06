@@ -1,7 +1,5 @@
 import type { Brand } from "@/types/brand";
 
-const ROTI_SHOP_URL = "https://www.lotteon.com/m/display/seller/sellerShop/LD470389";
-
 export const brands: Brand[] = [
   {
     id: "roti-camp",
@@ -9,6 +7,8 @@ export const brands: Brand[] = [
     shortName: "CAMP",
     logoSrc: "/images/logos/roti-camp-logo.png",
     logoAlt: "ROTI CAMP",
+    logoWidth: 1164,
+    logoHeight: 170,
     headline: "밖으로 향하는 생활",
     description: "캠핑과 이동을 위한 실용 브랜드",
     mood: ["outdoor", "movement", "nature", "rest"],
@@ -30,15 +30,16 @@ export const brands: Brand[] = [
       direction: "어두운 야외, 이동선, 장비 실루엣, 낮은 조도",
       align: "left"
     },
-    brandUrl: "/brands/roti-camp",
-    shopUrl: ROTI_SHOP_URL
+    brandUrl: "#roti-camp"
   },
   {
     id: "roti-homesys",
     name: "ROTI HOMESYS",
     shortName: "HOMESYS",
-    logoSrc: "/images/logos/roti-homesys-logo.png",
+    logoSrc: "/images/logos/roti-homesys-logo-v2.png",
     logoAlt: "ROTI HOMESYS",
+    logoWidth: 1455,
+    logoHeight: 172,
     headline: "정리되는 집",
     description: "수납과 이동을 정돈하는 홈 시스템 브랜드",
     mood: ["organize", "move", "utility", "efficiency"],
@@ -60,15 +61,16 @@ export const brands: Brand[] = [
       direction: "정돈된 실내, 수납 구조, 따뜻한 실내 조명",
       align: "right"
     },
-    brandUrl: "/brands/roti-homesys",
-    shopUrl: ROTI_SHOP_URL
+    brandUrl: "#roti-homesys"
   },
   {
     id: "leel",
-    name: "LEEL",
-    shortName: "LEEL",
+    name: "LeEL",
+    shortName: "LeEL",
     logoSrc: "/images/logos/leel-logo.png",
-    logoAlt: "LEEL",
+    logoAlt: "LeEL",
+    logoWidth: 381,
+    logoHeight: 70,
     headline: "차분한 주방과 리빙",
     description: "주방과 생활 공간을 정갈하게 제안하는 브랜드",
     mood: ["kitchen", "clean", "density", "calm"],
@@ -77,7 +79,7 @@ export const brands: Brand[] = [
     sectionImage: "/images/sections/leel-bg.jpg",
     heroAsset: {
       src: "/images/brands/leel-hero.jpg",
-      alt: "LEEL 조용한 주방과 리빙 오브젝트 장면",
+      alt: "LeEL 조용한 주방과 리빙 오브젝트 장면",
       status: "ready",
       focalPoint: "center center"
     },
@@ -90,7 +92,6 @@ export const brands: Brand[] = [
       direction: "주방, 스틸, 스톤, 조용한 빛, 여백",
       align: "left"
     },
-    brandUrl: "/brands/leel",
-    shopUrl: ROTI_SHOP_URL
+    brandUrl: "#leel"
   }
 ];

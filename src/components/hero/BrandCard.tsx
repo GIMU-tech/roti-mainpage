@@ -69,7 +69,13 @@ export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSe
       <span className="brand-card__content">
         <span className="brand-card__eyebrow">ROTI BRAND PORTAL</span>
         <strong className="brand-card__title">
-          <Image src={brand.logoSrc} alt={brand.logoAlt} width={690} height={320} sizes="(max-width: 768px) 9rem, 13rem" />
+          <Image
+            src={brand.logoSrc}
+            alt={brand.logoAlt}
+            width={brand.logoWidth}
+            height={brand.logoHeight}
+            sizes="(max-width: 768px) 9rem, 13rem"
+          />
         </strong>
         <span className="brand-card__line" aria-hidden="true" />
         <span className="brand-card__description">{brand.visualTagline}</span>

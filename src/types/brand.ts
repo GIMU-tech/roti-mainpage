@@ -22,6 +22,8 @@ export type Brand = {
   shortName: string;
   logoSrc: string;
   logoAlt: string;
+  logoWidth: number;
+  logoHeight: number;
   headline: string;
   description: string;
   mood: string[];
@@ -34,5 +36,4 @@ export type Brand = {
   visualScene: string;
   scene: BrandScene;
   brandUrl: string;
-  shopUrl?: string;
 };

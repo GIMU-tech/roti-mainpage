@@ -3,23 +3,24 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const navItems = [{ label: "BRAND", href: "#brand" }];
+const navItems = [
+  { label: "BRAND", href: "#brand" },
+  { label: "ABOUT", href: "#about" },
+  { label: "STANDARD", href: "#standard" },
+  { label: "CONTACT", href: "#roti-footer" }
+];
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isOnLightSection, setIsOnLightSection] = useState(false);
   const [isOnFooter, setIsOnFooter] = useState(false);
 
   useEffect(() => {
     const updateHeaderState = () => {
       setIsScrolled(window.scrollY > 24);
 
-      const lightSection = document.querySelector<HTMLElement>(".hcg-business-replica");
-      const lightSectionRect = lightSection?.getBoundingClientRect();
       const footerSection = document.querySelector<HTMLElement>(".roti-footer");
       const footerSectionRect = footerSection?.getBoundingClientRect();
 
-      setIsOnLightSection(Boolean(lightSectionRect && lightSectionRect.top <= 96 && lightSectionRect.bottom > 96));
       setIsOnFooter(Boolean(footerSectionRect && footerSectionRect.top <= 96 && footerSectionRect.bottom > 96));
     };
 
@@ -37,7 +38,7 @@ export function Header() {
     <header
       className="site-header"
       data-scrolled={isScrolled}
-      data-theme={isOnLightSection ? "light" : "dark"}
+      data-theme="dark"
       data-hidden={isOnFooter}
       aria-label="ROTI 사이트 헤더"
     >

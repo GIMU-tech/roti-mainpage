@@ -10,6 +10,28 @@ type SmoothScrollProviderProps = {
 
 const easeOutExpo = (value: number) => Math.min(1, 1.001 - Math.pow(2, -10 * value));
 const easeOutSine = (value: number) => Math.sin((value * Math.PI) / 2);
+const SECTION_SNAP_DURATION_SECONDS = 1.08;
+const SECTION_SNAP_RELEASE_MS = SECTION_SNAP_DURATION_SECONDS * 1000 + 180;
+const SECTION_SNAP_MIN_DELTA = 6;
+const SECTION_SNAP_DEAD_ZONE = 8;
+const SECTION_SNAP_SELECTOR = [".hero-portal", ".brand-slide-stack__anchor", "#about", "#standard", "#roti-footer"].join(
+  ", "
+);
+
+function clampScrollPoint(point: number, limit: number) {
+  return Math.max(0, Math.min(Math.round(point), Math.round(limit)));
+}
+
+function getElementScrollTop(element: HTMLElement) {
+  return element.getBoundingClientRect().top + window.scrollY;
+}
+
+function getUniqueSnapPoints(points: number[], limit: number) {
+  return points
+    .map((point) => clampScrollPoint(point, limit))
+    .sort((a, b) => a - b)
+    .filter((point, index, sortedPoints) => index === 0 || Math.abs(point - sortedPoints[index - 1]) > 24);
+}
 
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   useEffect(() => {
@@ -59,6 +81,109 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       });
       const updateScrollTrigger = () => ScrollTrigger.update();
       const rafLenis = (time: number) => lenis.raf(time * 1000);
+      let isSectionSnapping = false;
+      let sectionSnapReleaseTimer: number | undefined;
+      const releaseSectionSnap = () => {
+        isSectionSnapping = false;
+
+        if (sectionSnapReleaseTimer) {
+          window.clearTimeout(sectionSnapReleaseTimer);
+          sectionSnapReleaseTimer = undefined;
+        }
+      };
+      const canUseSectionSnap = () =>
+        document.body.dataset.rotiIntroActive !== "true" &&
+        document.body.dataset.rotiHeroInteractive !== "false" &&
+        !window.matchMedia("(max-width: 520px)").matches;
+      const getSectionSnapPoints = () => {
+        const maxScroll = lenis.limit;
+        const elementPoints = Array.from(document.querySelectorAll<HTMLElement>(SECTION_SNAP_SELECTOR)).map(
+          getElementScrollTop
+        );
+        const standardSection = document.getElementById("standard");
+        const footerSection = document.getElementById("roti-footer");
+
+        if (standardSection && footerSection) {
+          const standardTop = getElementScrollTop(standardSection);
+          const footerTop = getElementScrollTop(footerSection);
+          const standardDistance = footerTop - standardTop;
+
+          if (standardDistance > window.innerHeight * 1.4) {
+            elementPoints.push(standardTop + standardDistance / 3, standardTop + (standardDistance / 3) * 2);
+          }
+        }
+
+        return getUniqueSnapPoints([0, ...elementPoints], maxScroll);
+      };
+      const getSectionSnapTarget = (deltaY: number) => {
+        const currentY = lenis.scroll;
+        const snapPoints = getSectionSnapPoints();
+
+        if (deltaY > 0) {
+          return snapPoints.find((point) => point > currentY + SECTION_SNAP_DEAD_ZONE);
+        }
+
+        for (let index = snapPoints.length - 1; index >= 0; index -= 1) {
+          const point = snapPoints[index];
+
+          if (point < currentY - SECTION_SNAP_DEAD_ZONE) {
+            return point;
+          }
+        }
+
+        return undefined;
+      };
+      const scrollToSectionSnapPoint = (targetY: number) => {
+        isSectionSnapping = true;
+
+        if (sectionSnapReleaseTimer) {
+          window.clearTimeout(sectionSnapReleaseTimer);
+        }
+
+        ScrollTrigger.update();
+        lenis.scrollTo(targetY, {
+          duration: SECTION_SNAP_DURATION_SECONDS,
+          easing: easeOutSine,
+          force: true,
+          lock: true,
+          userData: { initiator: "section-snap" },
+          onComplete: () => {
+            ScrollTrigger.update();
+            releaseSectionSnap();
+          }
+        });
+
+        sectionSnapReleaseTimer = window.setTimeout(() => {
+          ScrollTrigger.update();
+          releaseSectionSnap();
+        }, SECTION_SNAP_RELEASE_MS);
+      };
+      const handleSectionWheelSnap = (event: WheelEvent) => {
+        if (
+          event.defaultPrevented ||
+          event.ctrlKey ||
+          !canUseSectionSnap() ||
+          Math.abs(event.deltaY) < SECTION_SNAP_MIN_DELTA ||
+          Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+
+        if (isSectionSnapping) {
+          ScrollTrigger.update();
+          return;
+        }
+
+        const targetY = getSectionSnapTarget(event.deltaY);
+
+        if (targetY === undefined || Math.abs(targetY - lenis.scroll) <= 4) {
+          return;
+        }
+
+        scrollToSectionSnapPoint(targetY);
+      };
       const handleScrollTo = (event: Event) => {
         event.preventDefault();
         const { duration = 1.15, lock = false, offset = 0, target } = (event as CustomEvent<SmoothScrollEventDetail>)
@@ -95,14 +220,17 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       gsap.ticker.add(rafLenis);
       gsap.ticker.lagSmoothing(0);
       ScrollTrigger.addEventListener("refresh", handleRefresh);
+      window.addEventListener("wheel", handleSectionWheelSnap, { capture: true, passive: false });
       window.addEventListener(ROTI_SMOOTH_SCROLL_EVENT, handleScrollTo);
       ScrollTrigger.refresh();
 
       cleanup = () => {
         window.removeEventListener(ROTI_SMOOTH_SCROLL_EVENT, handleScrollTo);
+        window.removeEventListener("wheel", handleSectionWheelSnap, { capture: true });
         ScrollTrigger.removeEventListener("refresh", handleRefresh);
         gsap.ticker.remove(rafLenis);
         lenis.off("scroll", updateScrollTrigger);
+        releaseSectionSnap();
         lenis.destroy();
       };
     }

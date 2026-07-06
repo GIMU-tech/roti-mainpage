@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 const brandLogos = [
-  { src: "/images/logos/roti-camp-logo.png", alt: "ROTI CAMP", width: 685, height: 299 },
-  { src: "/images/logos/roti-homesys-logo.png", alt: "ROTI HOMESYS", width: 690, height: 320 },
-  { src: "/images/logos/leel-logo.png", alt: "LEEL", width: 381, height: 70 }
+  { id: "roti-camp", src: "/images/logos/roti-camp-logo.png", alt: "ROTI CAMP", width: 1164, height: 170 },
+  { id: "roti-homesys", src: "/images/logos/roti-homesys-logo-v2.png", alt: "ROTI HOMESYS", width: 1455, height: 172 },
+  { id: "leel", src: "/images/logos/leel-logo.png", alt: "LeEL", width: 381, height: 70 }
 ] as const;
 
 const locations = [
@@ -47,7 +47,7 @@ export function Footer() {
 
         <div className="roti-footer__links" aria-label="ROTI footer links">
           <a href="#brand">BRAND</a>
-          <a href="#roti-standard">STANDARD</a>
+          <a href="#standard">STANDARD</a>
           <span>개인정보처리방침</span>
         </div>
 
@@ -55,7 +55,14 @@ export function Footer() {
 
         <div className="roti-footer__brand-logos" aria-label="ROTI brand logos">
           {brandLogos.map((logo) => (
-            <Image key={logo.alt} src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} />
+            <Image
+              key={logo.alt}
+              src={logo.src}
+              alt={logo.alt}
+              width={logo.width}
+              height={logo.height}
+              data-logo={logo.id}
+            />
           ))}
         </div>
 

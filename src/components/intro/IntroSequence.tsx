@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import type { KeyboardEvent, TouchEvent, WheelEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -16,21 +15,24 @@ type IntroWordStyle = CSSProperties & {
   "--intro-scene-duration": string;
 };
 
+const INTRO_WORD_SCENE_MS = 1260;
+const INTRO_LOGO_SCENE_MS = 860;
+
 const INTRO_SCENES: IntroScene[] = [
-  { text: "ALWAY", duration: 720 },
-  { text: "ALERT", duration: 720 },
-  { text: "FOR CHANGES", duration: 720 },
-  { text: "ROTI", duration: 720, isLogoScene: true }
+  { text: "ALWAY", duration: INTRO_WORD_SCENE_MS },
+  { text: "ALERT", duration: INTRO_WORD_SCENE_MS },
+  { text: "FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
+  { text: "ROTI", duration: INTRO_LOGO_SCENE_MS, isLogoScene: true }
 ];
 
 const REDUCED_MOTION_SCENES: IntroScene[] = [
   { text: "ROTI", duration: 1, isLogoScene: true }
 ];
 
-const NORMAL_HERO_SPREAD_DELAY_MS = 520;
-const NORMAL_HERO_SETTLE_MS = 1420;
+const NORMAL_HERO_SPREAD_DELAY_MS = 180;
+const NORMAL_HERO_SETTLE_MS = 1840;
 const NORMAL_HERO_INTERACTIVE_DELAY_MS = NORMAL_HERO_SPREAD_DELAY_MS + NORMAL_HERO_SETTLE_MS;
-const NORMAL_OVERLAY_EXIT_MS = 1080;
+const NORMAL_OVERLAY_EXIT_MS = 1240;
 const QUICK_HERO_SPREAD_DELAY_MS = 80;
 const QUICK_HERO_SETTLE_MS = 180;
 const QUICK_HERO_INTERACTIVE_DELAY_MS = QUICK_HERO_SPREAD_DELAY_MS + QUICK_HERO_SETTLE_MS;
@@ -378,14 +380,12 @@ export function IntroSequence() {
             style={wordStyle}
           >
             <p className="intro-sequence__tagline">ALWAY ALERT FOR CHANGES</p>
-            <Image
-              className="intro-sequence__logo"
-              src="/images/logos/roti-logo.png"
-              alt="ROTI"
-              width={589}
-              height={140}
-              priority
-            />
+            <span className="intro-sequence__logo-letters" role="img" aria-label="ROTI">
+              <span className="intro-sequence__logo-letter" data-letter="r" aria-hidden="true" />
+              <span className="intro-sequence__logo-letter" data-letter="o" aria-hidden="true" />
+              <span className="intro-sequence__logo-letter" data-letter="t" aria-hidden="true" />
+              <span className="intro-sequence__logo-letter" data-letter="i" aria-hidden="true" />
+            </span>
           </div>
         ) : (
           <p
@@ -397,6 +397,12 @@ export function IntroSequence() {
           </p>
         )}
       </div>
+      {sceneIndex === 0 && !currentScene.isLogoScene ? (
+        <p className="hero-portal__scroll-note intro-sequence__scroll-cue" aria-hidden="true">
+          <span />
+          SCROLL
+        </p>
+      ) : null}
       <button className="intro-sequence__skip" type="button" onClick={() => completeIntro(true)}>
         SKIP
       </button>

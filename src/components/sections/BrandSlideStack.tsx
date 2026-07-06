@@ -38,8 +38,9 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
     async function setupScrollTimeline() {
       const root = rootRef.current;
       const viewport = viewportRef.current;
+      const usesStaticMobileStack = window.matchMedia("(max-width: 520px)").matches;
 
-      if (!root || !viewport || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (!root || !viewport || usesStaticMobileStack || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         return;
       }
 
@@ -66,7 +67,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
         });
 
         gsap.set(slides[0], {
-          y: "72vh",
+          y: 0,
           opacity: 1,
           pointerEvents: "auto"
         });
@@ -86,31 +87,15 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
           transformOrigin: "center bottom"
         });
 
-        gsap.set(slides[0]?.querySelector(".brand-slide-stack__frame"), {
-          width: "88%",
-          height: "70%",
-          borderRadius: 44,
-          y: "6vh",
-          rotateX: 4,
-          rotateY: 12,
-          rotateZ: 1.8,
-          scale: 0.92
-        });
-
         gsap.set(".brand-slide-stack__image", {
           scale: 1.02,
           yPercent: 0,
           transformOrigin: "center center"
         });
 
-        gsap.set(slides[0]?.querySelector(".brand-slide-stack__image"), {
-          yPercent: 5,
-          scale: 1.14
-        });
-
         gsap.set(slides[0]?.querySelector(".brand-slide-stack__copy"), {
-          y: 38,
-          opacity: 0
+          y: 0,
+          opacity: 1
         });
 
         const timeline = gsap.timeline({
@@ -139,81 +124,6 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
             }
           }
         });
-
-        const firstSlide = slides[0];
-        const firstFrame = firstSlide?.querySelector<HTMLElement>(".brand-slide-stack__frame");
-        const firstImage = firstSlide?.querySelector<HTMLElement>(".brand-slide-stack__image");
-        const firstCopy = firstSlide?.querySelector<HTMLElement>(".brand-slide-stack__copy");
-
-        if (firstSlide && firstFrame && firstImage && firstCopy) {
-          timeline
-            .fromTo(
-              firstSlide,
-              {
-                y: "72vh",
-                opacity: 1,
-                pointerEvents: "auto"
-              },
-              {
-                y: 0,
-                opacity: 1,
-                pointerEvents: "auto",
-                duration: 1
-              },
-              "brand-entry"
-            )
-            .fromTo(
-              firstFrame,
-              {
-                width: "88%",
-                height: "70%",
-                borderRadius: 44,
-                y: "6vh",
-                rotateX: 4,
-                rotateY: 12,
-                rotateZ: 1.8,
-                scale: 0.92
-              },
-              {
-                width: "100%",
-                height: "100%",
-                borderRadius: 0,
-                y: 0,
-                rotateX: 0,
-                rotateY: 0,
-                rotateZ: 0,
-                scale: 1,
-                duration: 1
-              },
-              "brand-entry"
-            )
-            .fromTo(
-              firstImage,
-              {
-                yPercent: 5,
-                scale: 1.14
-              },
-              {
-                yPercent: 0,
-                scale: 1.02,
-                duration: 1
-              },
-              "brand-entry"
-            )
-            .fromTo(
-              firstCopy,
-              {
-                y: 38,
-                opacity: 0
-              },
-              {
-                y: 0,
-                opacity: 1,
-                duration: 0.45
-              },
-              "brand-entry+=0.55"
-            );
-        }
 
         slides.slice(0, -1).forEach((slide, index) => {
           const nextSlide = slides[index + 1];
@@ -406,7 +316,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
           return getPreviousSnapPoint(snapPoints, currentY) ?? getHeroSnapTarget(stackTop);
         };
         const handleWheelSnap = (event: WheelEvent) => {
-          if (Math.abs(event.deltaY) < 6) {
+          if (event.defaultPrevented || Math.abs(event.deltaY) < 6) {
             return;
           }
 
@@ -503,13 +413,19 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
                 <span className="brand-slide-stack__shade" aria-hidden="true" />
                 <div className="brand-slide-stack__copy">
                   <h2 id={`${brand.id}-slide-title`} className="brand-slide-stack__title">
-                    <Image src={brand.logoSrc} alt={brand.logoAlt} width={690} height={320} sizes="(max-width: 760px) 72vw, 38rem" />
+                    <Image
+                      src={brand.logoSrc}
+                      alt={brand.logoAlt}
+                      width={brand.logoWidth}
+                      height={brand.logoHeight}
+                      sizes="(max-width: 760px) 48vw, 20rem"
+                    />
                   </h2>
                   <p className="brand-slide-stack__body">{brand.scene.copy}</p>
                   <a
                     className="brand-slide-stack__keywords-link"
-                    href={brand.shopUrl ?? brand.brandUrl}
-                    aria-label={`${brand.name} 쇼핑몰로 이동`}
+                    href={brand.brandUrl}
+                    aria-label={`${brand.name} 섹션으로 이동`}
                   >
                     <span>{brand.visualScene}</span>
                     <span className="brand-slide-stack__keyword-arrow" aria-hidden="true" />

@@ -3,8 +3,9 @@ import { Footer } from "@/components/layout/Footer";
 import { HeroPortal } from "@/components/hero/HeroPortal";
 import { IntroSequence } from "@/components/intro/IntroSequence";
 import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
+import { AboutRotiSection } from "@/components/sections/AboutRotiSection";
 import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
-import { HakjisaBusinessReplicaSection } from "@/components/sections/HakjisaBusinessReplicaSection";
+import { RotiBusinessReplicaSection } from "@/components/sections/RotiBusinessReplicaSection";
 import { brands } from "@/data/brands";
 
 export default function HomePage() {
@@ -15,7 +16,8 @@ export default function HomePage() {
       <main id="top">
         <HeroPortal brands={brands} />
         <BrandSlideStack brands={brands} />
-        <HakjisaBusinessReplicaSection />
+        <AboutRotiSection />
+        <RotiBusinessReplicaSection />
         <Footer />
       </main>
     </SmoothScrollProvider>

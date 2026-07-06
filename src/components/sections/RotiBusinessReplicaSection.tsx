@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-const standardSlides = [
+const rotiBusinessSlides = [
   {
     tab: "Practicality",
     title: "실용성",
@@ -27,7 +27,7 @@ const standardSlides = [
   }
 ] as const;
 
-export function HakjisaBusinessReplicaSection() {
+export function RotiBusinessReplicaSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -50,11 +50,11 @@ export function HakjisaBusinessReplicaSection() {
       gsap.registerPlugin(ScrollTrigger);
 
       context = gsap.context(() => {
-        const tabList = section.querySelector<HTMLElement>(".hcg-business-replica__tab-list");
-        const tabItems = gsap.utils.toArray<HTMLElement>(".hcg-business-replica__tab", section);
-        const imageContainer = section.querySelector<HTMLElement>(".hcg-business-replica__image-stage");
-        const serviceImages = gsap.utils.toArray<HTMLElement>(".hcg-business-replica__image", section);
-        const serviceContents = gsap.utils.toArray<HTMLElement>(".hcg-business-replica__content", section);
+        const tabList = section.querySelector<HTMLElement>(".roti-business-replica__tab-list");
+        const tabItems = gsap.utils.toArray<HTMLElement>(".roti-business-replica__tab", section);
+        const imageContainer = section.querySelector<HTMLElement>(".roti-business-replica__image-stage");
+        const serviceImages = gsap.utils.toArray<HTMLElement>(".roti-business-replica__image", section);
+        const serviceContents = gsap.utils.toArray<HTMLElement>(".roti-business-replica__content", section);
 
         if (!imageContainer || serviceImages.length === 0 || serviceContents.length === 0) {
           return;
@@ -96,8 +96,8 @@ export function HakjisaBusinessReplicaSection() {
         });
 
         serviceContents.forEach((content, index) => {
-          const title = content.querySelector(".hcg-business-replica__content-title");
-          const description = content.querySelector(".hcg-business-replica__content-description");
+          const title = content.querySelector(".roti-business-replica__content-title");
+          const description = content.querySelector(".roti-business-replica__content-description");
 
           gsap.set(content, { autoAlpha: index === 0 ? 1 : 0 });
           gsap.set([title, description], {
@@ -148,8 +148,8 @@ export function HakjisaBusinessReplicaSection() {
           timeline.to(serviceContents[index], { autoAlpha: 0, duration: 0.3, ease: "power2.in" }, `step-${index}`);
 
           const nextContent = serviceContents[nextIndex];
-          const nextTitle = nextContent.querySelector(".hcg-business-replica__content-title");
-          const nextDescription = nextContent.querySelector(".hcg-business-replica__content-description");
+          const nextTitle = nextContent.querySelector(".roti-business-replica__content-title");
+          const nextDescription = nextContent.querySelector(".roti-business-replica__content-description");
 
           timeline.to(nextContent, { autoAlpha: 1, duration: 0.1 }, `step-${index}`);
           timeline.fromTo(
@@ -213,22 +213,22 @@ export function HakjisaBusinessReplicaSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="hcg-business-replica" id="roti-standard" aria-labelledby="hcg-business-replica-title">
-      <div className="hcg-business-replica__container">
-        <div className="hcg-business-replica__top">
-          <div className="hcg-business-replica__header">
-            <h2 id="hcg-business-replica-title" className="hcg-business-replica__title">
+    <section ref={sectionRef} className="roti-business-replica" id="standard" aria-labelledby="roti-business-replica-title">
+      <div className="roti-business-replica__container">
+        <div className="roti-business-replica__top">
+          <div className="roti-business-replica__header">
+            <h2 id="roti-business-replica-title" className="roti-business-replica__title">
               일상을 위한 세 가지 기준
             </h2>
           </div>
         </div>
 
-        <div className="hcg-business-replica__bottom">
-          <div className="hcg-business-replica__content-wrapper">
-            {standardSlides.map((item, index) => (
-              <div key={item.title} className="hcg-business-replica__content" data-active={index === 0}>
-                <h3 className="hcg-business-replica__content-title">{item.title}</h3>
-                <p className="hcg-business-replica__content-description">
+        <div className="roti-business-replica__bottom">
+          <div className="roti-business-replica__content-wrapper">
+            {rotiBusinessSlides.map((item, index) => (
+              <div key={item.title} className="roti-business-replica__content" data-active={index === 0}>
+                <h3 className="roti-business-replica__content-title">{item.title}</h3>
+                <p className="roti-business-replica__content-description">
                   {item.description.map((line) => (
                     <span key={line}>
                       {line}
@@ -240,9 +240,9 @@ export function HakjisaBusinessReplicaSection() {
             ))}
           </div>
 
-          <div className="hcg-business-replica__image-stage" aria-hidden="true">
-            {standardSlides.map((item) => (
-              <figure key={item.image} className="hcg-business-replica__image">
+          <div className="roti-business-replica__image-stage" aria-hidden="true">
+            {rotiBusinessSlides.map((item) => (
+              <figure key={item.image} className="roti-business-replica__image">
                 <Image src={item.image} alt={item.alt} width={968} height={550} sizes="(max-width: 768px) 33.125rem, 60.5rem" />
               </figure>
             ))}
