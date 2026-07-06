@@ -8,7 +8,7 @@ const aboutSceneItems = [
     name: "ROTI CAMP",
     description: "변화하는 환경에 반응하는 아웃도어.",
     href: "#roti-camp",
-    image: "/images/sections/camp-bg.jpg",
+    image: "/images/sections/camp-bg.webp",
     logoHeight: 170,
     logoSrc: "/images/logos/roti-camp-logo.png",
     logoWidth: 1164
@@ -18,7 +18,7 @@ const aboutSceneItems = [
     name: "ROTI HOMESYS",
     description: "달라지는 생활 흐름을 정돈하는 방식.",
     href: "#roti-homesys",
-    image: "/images/sections/homesys-bg.jpg",
+    image: "/images/sections/homesys-bg.webp",
     logoHeight: 172,
     logoSrc: "/images/logos/roti-homesys-logo-v2.png",
     logoWidth: 1455
@@ -28,7 +28,7 @@ const aboutSceneItems = [
     name: "LeEL",
     description: "공간의 균형을 섬세하게 다듬는 태도.",
     href: "#leel",
-    image: "/images/sections/leel-bg.jpg",
+    image: "/images/sections/leel-bg.webp",
     logoHeight: 70,
     logoSrc: "/images/logos/leel-logo.png",
     logoWidth: 381

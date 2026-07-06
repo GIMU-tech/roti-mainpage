@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import type { MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 const navItems = [
   { label: "BRAND", href: "#brand" },
@@ -13,6 +15,24 @@ const navItems = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOnFooter, setIsOnFooter] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  const handleNavClick = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+      event.preventDefault();
+      closeMenu();
+      scrollToTarget(href, {
+        duration: 1.08,
+        lock: true
+      });
+    },
+    [closeMenu]
+  );
 
   useEffect(() => {
     const updateHeaderState = () => {
@@ -34,12 +54,42 @@ export function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.dataset.rotiMenuOpen = "true";
+    document.body.style.overflow = "hidden";
+
+    const focusFrame = window.requestAnimationFrame(() => {
+      closeButtonRef.current?.focus({ preventScroll: true });
+    });
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenu();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      delete document.body.dataset.rotiMenuOpen;
+    };
+  }, [closeMenu, isMenuOpen]);
+
   return (
     <header
       className="site-header"
       data-scrolled={isScrolled}
       data-theme="dark"
       data-hidden={isOnFooter}
+      data-menu-open={isMenuOpen}
       aria-label="ROTI 사이트 헤더"
     >
       <a className="site-header__logo" href="/" aria-label="ROTI 홈">
@@ -48,15 +98,40 @@ export function Header() {
       <nav className="site-header__nav" aria-label="주요 메뉴">
         <div className="site-header__nav-links">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a key={item.href} href={item.href} onClick={(event) => handleNavClick(event, item.href)}>
               {item.label}
             </a>
           ))}
         </div>
-        <span className="site-header__menu" aria-hidden="true">
-          =
-        </span>
+        <button
+          className="site-header__menu"
+          type="button"
+          aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+          aria-controls="site-mobile-menu"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((current) => !current)}
+        >
+          <span aria-hidden="true" />
+        </button>
       </nav>
+      {isMenuOpen ? (
+        <div id="site-mobile-menu" className="site-header__mobile-menu" role="dialog" aria-label="모바일 메뉴">
+          <button
+            ref={closeButtonRef}
+            className="site-header__mobile-close"
+            type="button"
+            aria-label="메뉴 닫기"
+            onClick={closeMenu}
+          />
+          <nav className="site-header__mobile-links" aria-label="모바일 주요 메뉴">
+            {navItems.map((item) => (
+              <a key={item.href} href={item.href} onClick={(event) => handleNavClick(event, item.href)}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }

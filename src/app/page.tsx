@@ -5,7 +5,7 @@ import { IntroSequence } from "@/components/intro/IntroSequence";
 import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
 import { AboutRotiSection } from "@/components/sections/AboutRotiSection";
 import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
-import { RotiBusinessReplicaSection } from "@/components/sections/RotiBusinessReplicaSection";
+import { RotiStandardSection } from "@/components/sections/RotiStandardSection";
 import { brands } from "@/data/brands";
 
 export default function HomePage() {
@@ -17,7 +17,7 @@ export default function HomePage() {
         <HeroPortal brands={brands} />
         <BrandSlideStack brands={brands} />
         <AboutRotiSection />
-        <RotiBusinessReplicaSection />
+        <RotiStandardSection />
         <Footer />
       </main>
     </SmoothScrollProvider>

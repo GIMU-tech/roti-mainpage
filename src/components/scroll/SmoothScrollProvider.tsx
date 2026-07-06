@@ -94,7 +94,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       const canUseSectionSnap = () =>
         document.body.dataset.rotiIntroActive !== "true" &&
         document.body.dataset.rotiHeroInteractive !== "false" &&
-        !window.matchMedia("(max-width: 520px)").matches;
+        !window.matchMedia("(max-width: 760px)").matches;
       const getSectionSnapPoints = () => {
         const maxScroll = lenis.limit;
         const elementPoints = Array.from(document.querySelectorAll<HTMLElement>(SECTION_SNAP_SELECTOR)).map(

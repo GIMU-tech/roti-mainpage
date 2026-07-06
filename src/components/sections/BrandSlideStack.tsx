@@ -38,7 +38,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
     async function setupScrollTimeline() {
       const root = rootRef.current;
       const viewport = viewportRef.current;
-      const usesStaticMobileStack = window.matchMedia("(max-width: 520px)").matches;
+      const usesStaticMobileStack = window.matchMedia("(max-width: 760px)").matches;
 
       if (!root || !viewport || usesStaticMobileStack || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         return;

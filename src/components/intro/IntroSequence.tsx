@@ -19,13 +19,15 @@ const INTRO_WORD_SCENE_MS = 1260;
 const INTRO_LOGO_SCENE_MS = 860;
 
 const INTRO_SCENES: IntroScene[] = [
-  { text: "ALWAY", duration: INTRO_WORD_SCENE_MS },
+  { text: "ALWAYS", duration: INTRO_WORD_SCENE_MS },
   { text: "ALERT", duration: INTRO_WORD_SCENE_MS },
   { text: "FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
+  { text: "ALWAYS ALERT FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
   { text: "ROTI", duration: INTRO_LOGO_SCENE_MS, isLogoScene: true }
 ];
 
 const REDUCED_MOTION_SCENES: IntroScene[] = [
+  { text: "ALWAYS ALERT FOR CHANGES", duration: 1 },
   { text: "ROTI", duration: 1, isLogoScene: true }
 ];
 
@@ -354,6 +356,7 @@ export function IntroSequence() {
   }
 
   const currentScene = scenes[Math.min(sceneIndex, scenes.length - 1)] ?? INTRO_SCENES[0];
+  const isSentenceScene = !currentScene.isLogoScene && currentScene.text.includes(" ");
   const wordStyle = {
     "--intro-scene-duration": `${currentScene.duration}ms`
   } as IntroWordStyle;
@@ -379,7 +382,7 @@ export function IntroSequence() {
             className="intro-sequence__brand"
             style={wordStyle}
           >
-            <p className="intro-sequence__tagline">ALWAY ALERT FOR CHANGES</p>
+            <p className="intro-sequence__tagline">ALWAYS ALERT FOR CHANGES</p>
             <span className="intro-sequence__logo-letters" role="img" aria-label="ROTI">
               <span className="intro-sequence__logo-letter" data-letter="r" aria-hidden="true" />
               <span className="intro-sequence__logo-letter" data-letter="o" aria-hidden="true" />
@@ -390,7 +393,7 @@ export function IntroSequence() {
         ) : (
           <p
             key={`${currentScene.text}-${sceneIndex}`}
-            className="intro-sequence__word"
+            className={isSentenceScene ? "intro-sequence__word intro-sequence__word--sentence" : "intro-sequence__word"}
             style={wordStyle}
           >
             {currentScene.text}
@@ -400,7 +403,8 @@ export function IntroSequence() {
       {sceneIndex === 0 && !currentScene.isLogoScene ? (
         <p className="hero-portal__scroll-note intro-sequence__scroll-cue" aria-hidden="true">
           <span />
-          SCROLL
+          <span className="intro-sequence__cue-desktop">SCROLL</span>
+          <span className="intro-sequence__cue-mobile">SWIPE</span>
         </p>
       ) : null}
       <button className="intro-sequence__skip" type="button" onClick={() => completeIntro(true)}>
