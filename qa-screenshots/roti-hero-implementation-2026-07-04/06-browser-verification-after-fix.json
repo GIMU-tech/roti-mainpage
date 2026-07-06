@@ -1,0 +1,112 @@
+{
+  "heroStateDesktop": {
+    "canvasCount": 0,
+    "cardCount": 3,
+    "floorContacts": 3,
+    "floorReflections": 3,
+    "hasCardShadowRouteAnchor": false,
+    "heroCards": [
+      {
+        "assetStatus": "ready",
+        "backgroundImage": true,
+        "brand": "roti-camp",
+        "hasImage": "true",
+        "height": 230,
+        "label": "ROTI CAMP 선택",
+        "left": 30,
+        "pressed": "false",
+        "right": 177,
+        "slot": "left",
+        "visible": true,
+        "width": 147
+      },
+      {
+        "assetStatus": "ready",
+        "backgroundImage": true,
+        "brand": "roti-homesys",
+        "hasImage": "true",
+        "height": 404,
+        "label": "ROTI HOMESYS 선택",
+        "left": 132,
+        "pressed": "true",
+        "right": 452,
+        "slot": "center",
+        "visible": true,
+        "width": 320
+      },
+      {
+        "assetStatus": "ready",
+        "backgroundImage": true,
+        "brand": "leel",
+        "hasImage": "true",
+        "height": 230,
+        "label": "LEEL 선택",
+        "left": 407,
+        "pressed": "false",
+        "right": 554,
+        "slot": "right",
+        "visible": true,
+        "width": 147
+      }
+    ],
+    "mistLayers": 2,
+    "title": "ROTI Brand Portal",
+    "url": "http://127.0.0.1:3001/",
+    "viewport": {
+      "height": 912,
+      "width": 599
+    }
+  },
+  "afterClick": {
+    "meta": "02 / 03",
+    "pressed": "false",
+    "slot": "left"
+  },
+  "heroStateMobile": {
+    "cardCount": 3,
+    "cards": [
+      {
+        "brand": "roti-camp",
+        "height": 229,
+        "left": -57,
+        "pressed": "false",
+        "right": 80,
+        "slot": "left",
+        "visible": true,
+        "width": 137
+      },
+      {
+        "brand": "roti-homesys",
+        "height": 391,
+        "left": 40,
+        "pressed": "true",
+        "right": 335,
+        "slot": "center",
+        "visible": true,
+        "width": 296
+      },
+      {
+        "brand": "leel",
+        "height": 229,
+        "left": 295,
+        "pressed": "false",
+        "right": 432,
+        "slot": "right",
+        "visible": true,
+        "width": 137
+      }
+    ],
+    "floorReflections": 3,
+    "navLinksDisplay": "none",
+    "titleText": "일상을 위한 세 가지 방식",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  "freshConsoleErrors": [],
+  "screenshots": [
+    "C:\\Users\\kkh53\\OneDrive\\문서\\GitHub\\roti-mainpage\\qa-screenshots\\roti-hero-implementation-2026-07-04\\04-desktop-hero-click-fixed.png",
+    "C:\\Users\\kkh53\\OneDrive\\문서\\GitHub\\roti-mainpage\\qa-screenshots\\roti-hero-implementation-2026-07-04\\05-mobile-390x844-click-fixed.png"
+  ]
+}

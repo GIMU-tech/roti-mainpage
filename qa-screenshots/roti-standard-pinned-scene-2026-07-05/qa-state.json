@@ -1,0 +1,62 @@
+{
+  "desktopStates": [
+    {
+      "name": "desktop-standard-scene-1",
+      "activeTitle": "실용성",
+      "mobileMediaDisplay": "none",
+      "progressActive": [
+        "01"
+      ],
+      "scrollY": 7167,
+      "standardTop": -345,
+      "titleHeight": 122,
+      "titleLineCount": 1,
+      "titleLineRatio": 1.25,
+      "titleWidth": 544,
+      "visiblePanels": 1,
+      "visibleScenes": 1
+    },
+    {
+      "name": "desktop-standard-scene-2",
+      "activeTitle": "정돈된 설계",
+      "mobileMediaDisplay": "none",
+      "progressActive": [
+        "02"
+      ],
+      "scrollY": 8267,
+      "standardTop": -1445,
+      "titleHeight": 122,
+      "titleLineCount": 1,
+      "titleLineRatio": 1.25,
+      "titleWidth": 544,
+      "visiblePanels": 1,
+      "visibleScenes": 1
+    },
+    {
+      "name": "desktop-standard-scene-3",
+      "activeTitle": "믿을 수 있는 품질",
+      "mobileMediaDisplay": "none",
+      "progressActive": [
+        "03"
+      ],
+      "scrollY": 9667,
+      "standardTop": -2845,
+      "titleHeight": 245,
+      "titleLineCount": 2,
+      "titleLineRatio": 1.25,
+      "titleWidth": 682,
+      "visiblePanels": 1,
+      "visibleScenes": 1
+    }
+  ],
+  "mobile": {
+    "firstLineRatio": 1.25,
+    "firstTitle": "실용성",
+    "panels": 3,
+    "progressDisplay": "none",
+    "sceneStackDisplay": "none",
+    "standardTop": 0,
+    "visibleMedia": 3,
+    "visiblePanels": 3
+  }
+}

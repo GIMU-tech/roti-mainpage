@@ -1,0 +1,29 @@
+{
+  "desktop": {
+    "activeBrand": "roti-camp",
+    "activePressed": "true",
+    "canvasCount": 0,
+    "cardCount": 3,
+    "countText": "01 / 03",
+    "pseudoBackgroundHasImage": true,
+    "pseudoDisplay": "block",
+    "pseudoHeight": "252.109px",
+    "pseudoOpacity": "0.64",
+    "pseudoZIndex": "0"
+  },
+  "mobile": {
+    "navLinksDisplay": "none",
+    "pseudoBackgroundHasImage": true,
+    "pseudoOpacity": "0.64",
+    "viewport": {
+      "height": 844,
+      "width": 390
+    },
+    "visibleCards": 3
+  },
+  "freshConsoleErrors": [],
+  "screenshots": [
+    "C:\\Users\\kkh53\\OneDrive\\문서\\GitHub\\roti-mainpage\\qa-screenshots\\roti-hero-card-reflection-2026-07-04\\03-final-card-shaped-reflection.png",
+    "C:\\Users\\kkh53\\OneDrive\\문서\\GitHub\\roti-mainpage\\qa-screenshots\\roti-hero-card-reflection-2026-07-04\\04-final-mobile-card-shaped-reflection.png"
+  ]
+}
