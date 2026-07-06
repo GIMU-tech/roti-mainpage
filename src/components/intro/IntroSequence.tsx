@@ -1,12 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import type { CSSProperties } from "react";
 import type { KeyboardEvent, TouchEvent, WheelEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 type IntroScene = {
   text: string;
   duration: number;
+  isLogoScene?: boolean;
 };
 
 type IntroWordStyle = CSSProperties & {
@@ -14,23 +17,23 @@ type IntroWordStyle = CSSProperties & {
 };
 
 const INTRO_SCENES: IntroScene[] = [
-  { text: "ALWAYS", duration: 720 },
+  { text: "ALWAY", duration: 720 },
   { text: "ALERT", duration: 720 },
   { text: "FOR CHANGES", duration: 720 },
-  { text: "ALWAYS ALERT FOR CHANGES", duration: 780 },
-  { text: "ROTI", duration: 720 }
+  { text: "ROTI", duration: 720, isLogoScene: true }
 ];
 
 const REDUCED_MOTION_SCENES: IntroScene[] = [
-  { text: "ALWAYS ALERT FOR CHANGES", duration: 1 },
-  { text: "ROTI", duration: 1 }
+  { text: "ROTI", duration: 1, isLogoScene: true }
 ];
 
-const NORMAL_HERO_SPREAD_DELAY_MS = 260;
-const NORMAL_HERO_INTERACTIVE_DELAY_MS = NORMAL_HERO_SPREAD_DELAY_MS + 1280;
-const NORMAL_OVERLAY_EXIT_MS = 980;
+const NORMAL_HERO_SPREAD_DELAY_MS = 520;
+const NORMAL_HERO_SETTLE_MS = 1420;
+const NORMAL_HERO_INTERACTIVE_DELAY_MS = NORMAL_HERO_SPREAD_DELAY_MS + NORMAL_HERO_SETTLE_MS;
+const NORMAL_OVERLAY_EXIT_MS = 1080;
 const QUICK_HERO_SPREAD_DELAY_MS = 80;
-const QUICK_HERO_INTERACTIVE_DELAY_MS = QUICK_HERO_SPREAD_DELAY_MS + 140;
+const QUICK_HERO_SETTLE_MS = 180;
+const QUICK_HERO_INTERACTIVE_DELAY_MS = QUICK_HERO_SPREAD_DELAY_MS + QUICK_HERO_SETTLE_MS;
 const QUICK_OVERLAY_EXIT_MS = 360;
 const SCROLL_STEP_LOCK_MS = 620;
 const WHEEL_STEP_THRESHOLD = 24;
@@ -51,6 +54,22 @@ function setDocumentIntroState({
   document.body.dataset.rotiIntroActive = String(introActive);
   document.body.dataset.rotiIntroComplete = String(introComplete);
   document.body.dataset.rotiHeroSpread = String(heroSpread);
+  document.documentElement.dataset.rotiHeroInteractive = String(heroInteractive);
+  document.documentElement.dataset.rotiIntroActive = String(introActive);
+  document.documentElement.dataset.rotiIntroComplete = String(introComplete);
+  document.documentElement.dataset.rotiHeroSpread = String(heroSpread);
+}
+
+function setDocumentHeroSettling(isSettling: boolean) {
+  document.body.dataset.rotiHeroSettling = String(isSettling);
+  document.documentElement.dataset.rotiHeroSettling = String(isSettling);
+}
+
+function resetHeroScrollPosition() {
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  scrollToTarget(0, { duration: 0, lock: true });
 }
 
 function setMainInteractionBlocked(isBlocked: boolean) {
@@ -99,11 +118,14 @@ export function IntroSequence() {
 
       const shouldMoveQuickly = isSkipped || prefersReducedMotionRef.current;
       const heroSpreadDelay = shouldMoveQuickly ? QUICK_HERO_SPREAD_DELAY_MS : NORMAL_HERO_SPREAD_DELAY_MS;
+      const heroSettleDelay = shouldMoveQuickly ? QUICK_HERO_SETTLE_MS : NORMAL_HERO_SETTLE_MS;
       const heroInteractiveDelay = shouldMoveQuickly
         ? QUICK_HERO_INTERACTIVE_DELAY_MS
         : NORMAL_HERO_INTERACTIVE_DELAY_MS;
       const overlayExitDelay = shouldMoveQuickly ? QUICK_OVERLAY_EXIT_MS : NORMAL_OVERLAY_EXIT_MS;
 
+      resetHeroScrollPosition();
+      setDocumentHeroSettling(false);
       setDocumentIntroState({
         heroInteractive: false,
         heroSpread: false,
@@ -113,6 +135,8 @@ export function IntroSequence() {
 
       timersRef.current.push(
         window.setTimeout(() => {
+          resetHeroScrollPosition();
+          setDocumentHeroSettling(!shouldMoveQuickly);
           setDocumentIntroState({
             heroInteractive: false,
             heroSpread: true,
@@ -120,11 +144,18 @@ export function IntroSequence() {
             introComplete: true
           });
           window.dispatchEvent(new CustomEvent("roti:hero-spread"));
+          timersRef.current.push(
+            window.setTimeout(() => {
+              setDocumentHeroSettling(false);
+            }, heroSettleDelay)
+          );
         }, heroSpreadDelay)
       );
 
       timersRef.current.push(
         window.setTimeout(() => {
+          resetHeroScrollPosition();
+          setDocumentHeroSettling(false);
           setDocumentIntroState({
             heroInteractive: true,
             heroSpread: true,
@@ -262,22 +293,57 @@ export function IntroSequence() {
     setIsExiting(false);
     setIsVisible(true);
     setMainInteractionBlocked(true);
+    setDocumentHeroSettling(false);
     setDocumentIntroState({
       heroInteractive: false,
       heroSpread: false,
       introActive: true,
       introComplete: false
     });
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    resetHeroScrollPosition();
+
+    const preventIntroMomentumScroll = (event: Event) => {
+      if (document.body.dataset.rotiHeroInteractive === "false") {
+        event.preventDefault();
+      }
+    };
+    let scrollResetFrame = 0;
+    const keepHeroPinnedUntilInteractive = () => {
+      if (document.body.dataset.rotiHeroInteractive !== "false" || window.scrollY === 0 || scrollResetFrame) {
+        return;
+      }
+
+      scrollResetFrame = window.requestAnimationFrame(() => {
+        scrollResetFrame = 0;
+
+        if (document.body.dataset.rotiHeroInteractive === "false") {
+          resetHeroScrollPosition();
+        }
+      });
+    };
+
+    window.addEventListener("wheel", preventIntroMomentumScroll, { capture: true, passive: false });
+    window.addEventListener("touchmove", preventIntroMomentumScroll, { capture: true, passive: false });
+    window.addEventListener("scroll", keepHeroPinnedUntilInteractive, { capture: true, passive: true });
 
     return () => {
       window.cancelAnimationFrame(focusFrame);
+      window.cancelAnimationFrame(scrollResetFrame);
+      window.removeEventListener("wheel", preventIntroMomentumScroll, { capture: true });
+      window.removeEventListener("touchmove", preventIntroMomentumScroll, { capture: true });
+      window.removeEventListener("scroll", keepHeroPinnedUntilInteractive, { capture: true });
       clearTimers();
       setMainInteractionBlocked(false);
       delete document.body.dataset.rotiHeroInteractive;
       delete document.body.dataset.rotiIntroActive;
       delete document.body.dataset.rotiIntroComplete;
       delete document.body.dataset.rotiHeroSpread;
+      delete document.body.dataset.rotiHeroSettling;
+      delete document.documentElement.dataset.rotiHeroInteractive;
+      delete document.documentElement.dataset.rotiIntroActive;
+      delete document.documentElement.dataset.rotiIntroComplete;
+      delete document.documentElement.dataset.rotiHeroSpread;
+      delete document.documentElement.dataset.rotiHeroSettling;
     };
   }, [clearTimers, completeIntro]);
 
@@ -305,14 +371,31 @@ export function IntroSequence() {
       onWheel={handleWheel}
     >
       <div className="intro-sequence__content" aria-live="polite">
-        <p
-          key={`${currentScene.text}-${sceneIndex}`}
-          className="intro-sequence__word"
-          data-brand={currentScene.text === "ROTI"}
-          style={wordStyle}
-        >
-          {currentScene.text}
-        </p>
+        {currentScene.isLogoScene ? (
+          <div
+            key={`${currentScene.text}-${sceneIndex}`}
+            className="intro-sequence__brand"
+            style={wordStyle}
+          >
+            <p className="intro-sequence__tagline">ALWAY ALERT FOR CHANGES</p>
+            <Image
+              className="intro-sequence__logo"
+              src="/images/logos/roti-logo.png"
+              alt="ROTI"
+              width={589}
+              height={140}
+              priority
+            />
+          </div>
+        ) : (
+          <p
+            key={`${currentScene.text}-${sceneIndex}`}
+            className="intro-sequence__word"
+            style={wordStyle}
+          >
+            {currentScene.text}
+          </p>
+        )}
       </div>
       <button className="intro-sequence__skip" type="button" onClick={() => completeIntro(true)}>
         SKIP
