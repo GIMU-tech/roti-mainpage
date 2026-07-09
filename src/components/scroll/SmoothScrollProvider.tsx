@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect } from "react";
+import { HOME_SECTION_IDS, sectionSnapSelector } from "@/data/sections";
 import { nativeScrollTo, ROTI_SMOOTH_SCROLL_EVENT, type SmoothScrollEventDetail } from "@/lib/scroll/smoothScroll";
 
 type SmoothScrollProviderProps = {
@@ -14,9 +15,6 @@ const SECTION_SNAP_DURATION_SECONDS = 1.08;
 const SECTION_SNAP_RELEASE_MS = SECTION_SNAP_DURATION_SECONDS * 1000 + 180;
 const SECTION_SNAP_MIN_DELTA = 6;
 const SECTION_SNAP_DEAD_ZONE = 8;
-const SECTION_SNAP_SELECTOR = [".hero-portal", ".brand-slide-stack__anchor", "#about", "#standard", "#roti-footer"].join(
-  ", "
-);
 
 function clampScrollPoint(point: number, limit: number) {
   return Math.max(0, Math.min(Math.round(point), Math.round(limit)));
@@ -83,6 +81,14 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       const rafLenis = (time: number) => lenis.raf(time * 1000);
       let isSectionSnapping = false;
       let sectionSnapReleaseTimer: number | undefined;
+      let mobileSectionSnapTimer: number | undefined;
+      const mobileSectionSnapQuery = window.matchMedia("(max-width: 900px)");
+      const clearMobileSectionSnap = () => {
+        if (mobileSectionSnapTimer) {
+          window.clearTimeout(mobileSectionSnapTimer);
+          mobileSectionSnapTimer = undefined;
+        }
+      };
       const releaseSectionSnap = () => {
         isSectionSnapping = false;
 
@@ -93,15 +99,30 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       };
       const canUseSectionSnap = () =>
         document.body.dataset.rotiIntroActive !== "true" &&
-        document.body.dataset.rotiHeroInteractive !== "false" &&
-        !window.matchMedia("(max-width: 760px)").matches;
+        document.body.dataset.rotiHeroInteractive !== "false";
+      const isInsideDesktopBrandStack = () => {
+        if (mobileSectionSnapQuery.matches) {
+          return false;
+        }
+
+        const brandSection = document.getElementById(HOME_SECTION_IDS.brand);
+
+        if (!brandSection) {
+          return false;
+        }
+
+        const brandTop = getElementScrollTop(brandSection);
+        const brandBottom = brandTop + brandSection.offsetHeight - window.innerHeight;
+
+        return lenis.scroll >= brandTop - SECTION_SNAP_DEAD_ZONE && lenis.scroll <= brandBottom + SECTION_SNAP_DEAD_ZONE;
+      };
       const getSectionSnapPoints = () => {
         const maxScroll = lenis.limit;
-        const elementPoints = Array.from(document.querySelectorAll<HTMLElement>(SECTION_SNAP_SELECTOR)).map(
+        const elementPoints = Array.from(document.querySelectorAll<HTMLElement>(sectionSnapSelector)).map(
           getElementScrollTop
         );
-        const standardSection = document.getElementById("standard");
-        const footerSection = document.getElementById("roti-footer");
+        const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
+        const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
 
         if (standardSection && footerSection) {
           const standardTop = getElementScrollTop(standardSection);
@@ -118,6 +139,22 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       const getSectionSnapTarget = (deltaY: number) => {
         const currentY = lenis.scroll;
         const snapPoints = getSectionSnapPoints();
+        const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
+        const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
+
+        if (deltaY > 0 && standardSection && footerSection) {
+          const standardTop = getElementScrollTop(standardSection);
+          const footerTop = getElementScrollTop(footerSection);
+          const standardDistance = footerTop - standardTop;
+
+          if (
+            standardDistance > window.innerHeight * 1.4 &&
+            currentY >= standardTop + standardDistance * 0.58 &&
+            currentY < footerTop - SECTION_SNAP_DEAD_ZONE
+          ) {
+            return footerTop;
+          }
+        }
 
         if (deltaY > 0) {
           return snapPoints.find((point) => point > currentY + SECTION_SNAP_DEAD_ZONE);
@@ -133,8 +170,21 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
 
         return undefined;
       };
+      const getNearestSectionSnapTarget = () => {
+        const currentY = lenis.scroll;
+        const snapPoints = getSectionSnapPoints();
+
+        if (snapPoints.length === 0) {
+          return undefined;
+        }
+
+        return snapPoints.reduce((nearestPoint, point) =>
+          Math.abs(point - currentY) < Math.abs(nearestPoint - currentY) ? point : nearestPoint
+        );
+      };
       const scrollToSectionSnapPoint = (targetY: number) => {
         isSectionSnapping = true;
+        clearMobileSectionSnap();
 
         if (sectionSnapReleaseTimer) {
           window.clearTimeout(sectionSnapReleaseTimer);
@@ -163,6 +213,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           event.defaultPrevented ||
           event.ctrlKey ||
           !canUseSectionSnap() ||
+          isInsideDesktopBrandStack() ||
           Math.abs(event.deltaY) < SECTION_SNAP_MIN_DELTA ||
           Math.abs(event.deltaX) > Math.abs(event.deltaY)
         ) {
@@ -183,6 +234,28 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         }
 
         scrollToSectionSnapPoint(targetY);
+      };
+      const scheduleMobileSectionSnap = () => {
+        if (!mobileSectionSnapQuery.matches || !canUseSectionSnap() || isSectionSnapping) {
+          return;
+        }
+
+        clearMobileSectionSnap();
+        mobileSectionSnapTimer = window.setTimeout(() => {
+          mobileSectionSnapTimer = undefined;
+
+          if (!mobileSectionSnapQuery.matches || !canUseSectionSnap() || isSectionSnapping) {
+            return;
+          }
+
+          const targetY = getNearestSectionSnapTarget();
+
+          if (targetY === undefined || Math.abs(targetY - lenis.scroll) <= 10) {
+            return;
+          }
+
+          scrollToSectionSnapPoint(targetY);
+        }, 140);
       };
       const handleScrollTo = (event: Event) => {
         event.preventDefault();
@@ -216,7 +289,12 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       };
       const handleRefresh = () => lenis.resize();
 
-      lenis.on("scroll", updateScrollTrigger);
+      const handleLenisScroll = () => {
+        updateScrollTrigger();
+        scheduleMobileSectionSnap();
+      };
+
+      lenis.on("scroll", handleLenisScroll);
       gsap.ticker.add(rafLenis);
       gsap.ticker.lagSmoothing(0);
       ScrollTrigger.addEventListener("refresh", handleRefresh);
@@ -229,7 +307,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         window.removeEventListener("wheel", handleSectionWheelSnap, { capture: true });
         ScrollTrigger.removeEventListener("refresh", handleRefresh);
         gsap.ticker.remove(rafLenis);
-        lenis.off("scroll", updateScrollTrigger);
+        lenis.off("scroll", handleLenisScroll);
+        clearMobileSectionSnap();
         releaseSectionSnap();
         lenis.destroy();
       };

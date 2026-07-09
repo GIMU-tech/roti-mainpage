@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import type { KeyboardEvent, TouchEvent, WheelEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { HeroScrollCue } from "@/components/hero/HeroScrollCue";
 import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 type IntroScene = {
@@ -22,12 +23,10 @@ const INTRO_SCENES: IntroScene[] = [
   { text: "ALWAYS", duration: INTRO_WORD_SCENE_MS },
   { text: "ALERT", duration: INTRO_WORD_SCENE_MS },
   { text: "FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
-  { text: "ALWAYS ALERT FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
   { text: "ROTI", duration: INTRO_LOGO_SCENE_MS, isLogoScene: true }
 ];
 
 const REDUCED_MOTION_SCENES: IntroScene[] = [
-  { text: "ALWAYS ALERT FOR CHANGES", duration: 1 },
   { text: "ROTI", duration: 1, isLogoScene: true }
 ];
 
@@ -401,11 +400,7 @@ export function IntroSequence() {
         )}
       </div>
       {sceneIndex === 0 && !currentScene.isLogoScene ? (
-        <p className="hero-portal__scroll-note intro-sequence__scroll-cue" aria-hidden="true">
-          <span />
-          <span className="intro-sequence__cue-desktop">SCROLL</span>
-          <span className="intro-sequence__cue-mobile">SWIPE</span>
-        </p>
+        <HeroScrollCue className="intro-sequence__scroll-cue" />
       ) : null}
       <button className="intro-sequence__skip" type="button" onClick={() => completeIntro(true)}>
         SKIP

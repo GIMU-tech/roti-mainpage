@@ -3,17 +3,13 @@
 import Image from "next/image";
 import type { MouseEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { desktopNavigationItems, mobileNavigationItems } from "@/data/navigation";
+import { HOME_SECTION_IDS } from "@/data/sections";
 import { scrollToTarget } from "@/lib/scroll/smoothScroll";
-
-const navItems = [
-  { label: "BRAND", href: "#brand" },
-  { label: "ABOUT", href: "#about" },
-  { label: "STANDARD", href: "#standard" },
-  { label: "CONTACT", href: "#roti-footer" }
-];
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isOnLightSurface, setIsOnLightSurface] = useState(false);
   const [isOnFooter, setIsOnFooter] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -38,9 +34,19 @@ export function Header() {
     const updateHeaderState = () => {
       setIsScrolled(window.scrollY > 24);
 
-      const footerSection = document.querySelector<HTMLElement>(".roti-footer");
+      const headerToneProbeY = Math.min(96, window.innerHeight * 0.14);
+      const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
+      const standardSectionRect = standardSection?.getBoundingClientRect();
+      const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
       const footerSectionRect = footerSection?.getBoundingClientRect();
 
+      setIsOnLightSurface(
+        Boolean(
+          standardSectionRect &&
+            standardSectionRect.top <= headerToneProbeY &&
+            standardSectionRect.bottom > headerToneProbeY
+        )
+      );
       setIsOnFooter(Boolean(footerSectionRect && footerSectionRect.top <= 96 && footerSectionRect.bottom > 96));
     };
 
@@ -87,7 +93,7 @@ export function Header() {
     <header
       className="site-header"
       data-scrolled={isScrolled}
-      data-theme="dark"
+      data-theme={isOnLightSurface ? "light" : "dark"}
       data-hidden={isOnFooter}
       data-menu-open={isMenuOpen}
       aria-label="ROTI 사이트 헤더"
@@ -97,7 +103,7 @@ export function Header() {
       </a>
       <nav className="site-header__nav" aria-label="주요 메뉴">
         <div className="site-header__nav-links">
-          {navItems.map((item) => (
+          {desktopNavigationItems.map((item) => (
             <a key={item.href} href={item.href} onClick={(event) => handleNavClick(event, item.href)}>
               {item.label}
             </a>
@@ -124,7 +130,7 @@ export function Header() {
             onClick={closeMenu}
           />
           <nav className="site-header__mobile-links" aria-label="모바일 주요 메뉴">
-            {navItems.map((item) => (
+            {mobileNavigationItems.map((item) => (
               <a key={item.href} href={item.href} onClick={(event) => handleNavClick(event, item.href)}>
                 {item.label}
               </a>

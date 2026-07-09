@@ -147,6 +147,18 @@ Users should understand quickly:
 - Desktop Hero initial state may place the nav link group at the bottom-right.
 - When scrolling starts or Hero is exited, the nav link group should move naturally into the top header area.
 
+### Body Section Grid
+- Treat the Header as an independent fixed interface layer. Do not force body section content to align to the Header logo or menu position.
+- Body information sections should share one content grid: `--section-content-max: 95rem` with `--section-gutter` as the responsive side margin.
+- The left edge of key section content should align across body sections: section title, primary copy block, CTA/link groups, and Footer information.
+- Full-bleed immersive sections such as Hero and brand scene slides may use the full viewport for imagery and motion, but their readable text, controls, and CTA areas should still respect the body section rhythm when practical.
+- Vertical rhythm should be section-based. Keep bottom spacing balanced with the top title area; avoid leaving a large empty lower band or revealing the next section before the snap point.
+- Grouped section compositions should be vertically centered through structural layout rules such as flex/grid centering, balanced padding, min-height, and explicit content bands.
+- Do not use manual visual offsets, arbitrary `translateY` nudges, or one-off spacer hacks as the default way to make grouped content look centered.
+- Use top-aligned or bottom-aligned layouts only when the section explicitly calls for that reading direction, such as fullscreen brand scene copy, pinned visual transitions, or footer/CTA endings.
+- If optical adjustment is needed because of a fixed header or oversized media, solve it by changing the section layout model, content band, row sizing, or padding balance first; document any remaining exception in the component CSS.
+- On mobile, preserve the same section rhythm with a smaller gutter and prioritize readable content over strict desktop proportions.
+
 ### Header / Navigation
 - Top-left: ROTI logo
 - Top-right: menu icon

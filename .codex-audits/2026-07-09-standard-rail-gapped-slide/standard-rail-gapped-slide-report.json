@@ -1,0 +1,488 @@
+{
+  "desktopInitial": {
+    "bodyOverflowX": 0,
+    "docOverflowX": 0,
+    "images": [
+      {
+        "bottom": 1006,
+        "filter": "brightness(1)",
+        "height": 764,
+        "index": 1,
+        "left": 650,
+        "right": 1230,
+        "top": 242,
+        "width": 580,
+        "zIndex": "3"
+      },
+      {
+        "bottom": 1006,
+        "filter": "brightness(0.64)",
+        "height": 764,
+        "index": 2,
+        "left": 1250,
+        "right": 1440,
+        "top": 242,
+        "width": 190,
+        "zIndex": "2"
+      },
+      {
+        "bottom": 1006,
+        "filter": "brightness(0.42)",
+        "height": 764,
+        "index": 3,
+        "left": 1460,
+        "right": 1650,
+        "top": 242,
+        "width": 190,
+        "zIndex": "1"
+      }
+    ],
+    "scrollX": 0,
+    "scrollY": 5422,
+    "section": {
+      "bottom": 1058,
+      "height": 900,
+      "left": 0,
+      "right": 1440,
+      "top": 158,
+      "width": 1440
+    },
+    "stage": {
+      "bottom": 1006,
+      "height": 764,
+      "left": 650,
+      "right": 1440,
+      "top": 242,
+      "width": 790
+    },
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "desktopInitialAssert": {
+    "noHorizontalOverflow": true,
+    "rightEdgeFlush": true,
+    "largestImageIndex": 1,
+    "orderByLeft": [
+      1,
+      2,
+      3
+    ],
+    "firstGap": 20,
+    "secondGap": 20,
+    "previewEndsAtRight": true,
+    "thirdWaitsRight": true,
+    "activeStartsAtStageLeft": true,
+    "widths": [
+      580,
+      190,
+      190
+    ]
+  },
+  "desktopMid": {
+    "bodyOverflowX": 0,
+    "docOverflowX": 0,
+    "images": [
+      {
+        "bottom": 848,
+        "filter": "brightness(0.4256)",
+        "height": 764,
+        "index": 1,
+        "left": 1452,
+        "right": 1645,
+        "top": 84,
+        "width": 193,
+        "zIndex": "1"
+      },
+      {
+        "bottom": 848,
+        "filter": "brightness(0.9965)",
+        "height": 764,
+        "index": 2,
+        "left": 655,
+        "right": 1232,
+        "top": 84,
+        "width": 577,
+        "zIndex": "3"
+      },
+      {
+        "bottom": 848,
+        "filter": "brightness(0.6379)",
+        "height": 764,
+        "index": 3,
+        "left": 1252,
+        "right": 1442,
+        "top": 84,
+        "width": 190,
+        "zIndex": "2"
+      }
+    ],
+    "scrollX": 0,
+    "scrollY": 6630,
+    "section": {
+      "bottom": 900,
+      "height": 900,
+      "left": 0,
+      "right": 1440,
+      "top": 0,
+      "width": 1440
+    },
+    "stage": {
+      "bottom": 848,
+      "height": 764,
+      "left": 650,
+      "right": 1440,
+      "top": 84,
+      "width": 790
+    },
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "desktopMidAssert": {
+    "noHorizontalOverflow": true,
+    "rightEdgeFlush": true,
+    "largestImageIndex": 2,
+    "orderByLeft": [
+      2,
+      3,
+      1
+    ],
+    "firstGap": 20,
+    "secondGap": 10,
+    "previewEndsAtRight": true,
+    "thirdWaitsRight": true,
+    "activeStartsAtStageLeft": false,
+    "widths": [
+      577,
+      190,
+      193
+    ]
+  },
+  "desktopLate": {
+    "bodyOverflowX": 0,
+    "docOverflowX": 0,
+    "images": [
+      {
+        "bottom": 567,
+        "filter": "brightness(0.64)",
+        "height": 764,
+        "index": 1,
+        "left": 1250,
+        "right": 1440,
+        "top": -197,
+        "width": 190,
+        "zIndex": "2"
+      },
+      {
+        "bottom": 567,
+        "filter": "brightness(0.42)",
+        "height": 764,
+        "index": 2,
+        "left": 1460,
+        "right": 1650,
+        "top": -197,
+        "width": 190,
+        "zIndex": "1"
+      },
+      {
+        "bottom": 567,
+        "filter": "brightness(1)",
+        "height": 764,
+        "index": 3,
+        "left": 650,
+        "right": 1230,
+        "top": -197,
+        "width": 580,
+        "zIndex": "3"
+      }
+    ],
+    "scrollX": 0,
+    "scrollY": 8381,
+    "section": {
+      "bottom": 619,
+      "height": 900,
+      "left": 0,
+      "right": 1440,
+      "top": -281,
+      "width": 1440
+    },
+    "stage": {
+      "bottom": 567,
+      "height": 764,
+      "left": 650,
+      "right": 1440,
+      "top": -197,
+      "width": 790
+    },
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "desktopLateAssert": {
+    "noHorizontalOverflow": true,
+    "rightEdgeFlush": true,
+    "largestImageIndex": 3,
+    "orderByLeft": [
+      3,
+      1,
+      2
+    ],
+    "firstGap": 20,
+    "secondGap": 20,
+    "previewEndsAtRight": true,
+    "thirdWaitsRight": true,
+    "activeStartsAtStageLeft": true,
+    "widths": [
+      580,
+      190,
+      190
+    ]
+  },
+  "tabletInitial": {
+    "bodyOverflowX": 0,
+    "docOverflowX": 0,
+    "images": [
+      {
+        "bottom": 625,
+        "filter": "brightness(1)",
+        "height": 399,
+        "index": 1,
+        "left": 38,
+        "right": 548,
+        "top": 226,
+        "width": 510,
+        "zIndex": "3"
+      },
+      {
+        "bottom": 625,
+        "filter": "brightness(0.64)",
+        "height": 399,
+        "index": 2,
+        "left": 564,
+        "right": 768,
+        "top": 226,
+        "width": 204,
+        "zIndex": "2"
+      },
+      {
+        "bottom": 625,
+        "filter": "brightness(0.42)",
+        "height": 399,
+        "index": 3,
+        "left": 784,
+        "right": 988,
+        "top": 226,
+        "width": 204,
+        "zIndex": "1"
+      }
+    ],
+    "scrollX": 0,
+    "scrollY": 5366,
+    "section": {
+      "bottom": 1024,
+      "height": 1024,
+      "left": 0,
+      "right": 768,
+      "top": 0,
+      "width": 768
+    },
+    "stage": {
+      "bottom": 625,
+      "height": 399,
+      "left": 38,
+      "right": 768,
+      "top": 226,
+      "width": 730
+    },
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    }
+  },
+  "tabletInitialAssert": {
+    "noHorizontalOverflow": true,
+    "rightEdgeFlush": true,
+    "largestImageIndex": 1,
+    "orderByLeft": [
+      1,
+      2,
+      3
+    ],
+    "firstGap": 16,
+    "secondGap": 16,
+    "previewEndsAtRight": true,
+    "thirdWaitsRight": true,
+    "activeStartsAtStageLeft": true,
+    "widths": [
+      510,
+      204,
+      204
+    ]
+  },
+  "mobileInitial": {
+    "bodyOverflowX": 0,
+    "docOverflowX": 0,
+    "images": [
+      {
+        "bottom": 490,
+        "filter": "brightness(1)",
+        "height": 306,
+        "index": 1,
+        "left": 30,
+        "right": 273,
+        "top": 184,
+        "width": 243,
+        "zIndex": "3"
+      },
+      {
+        "bottom": 490,
+        "filter": "brightness(0.64)",
+        "height": 306,
+        "index": 2,
+        "left": 289,
+        "right": 390,
+        "top": 184,
+        "width": 101,
+        "zIndex": "2"
+      },
+      {
+        "bottom": 490,
+        "filter": "brightness(0.42)",
+        "height": 306,
+        "index": 3,
+        "left": 406,
+        "right": 507,
+        "top": 184,
+        "width": 101,
+        "zIndex": "1"
+      }
+    ],
+    "scrollX": 0,
+    "scrollY": 4422,
+    "section": {
+      "bottom": 844,
+      "height": 844,
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "width": 390
+    },
+    "stage": {
+      "bottom": 490,
+      "height": 306,
+      "left": 30,
+      "right": 390,
+      "top": 184,
+      "width": 360
+    },
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  "mobileInitialAssert": {
+    "noHorizontalOverflow": true,
+    "rightEdgeFlush": true,
+    "largestImageIndex": 1,
+    "orderByLeft": [
+      1,
+      2,
+      3
+    ],
+    "firstGap": 16,
+    "secondGap": 16,
+    "previewEndsAtRight": true,
+    "thirdWaitsRight": true,
+    "activeStartsAtStageLeft": true,
+    "widths": [
+      243,
+      101,
+      101
+    ]
+  },
+  "mobileLate": {
+    "bodyOverflowX": 0,
+    "docOverflowX": 0,
+    "images": [
+      {
+        "bottom": 490,
+        "filter": "brightness(0.42)",
+        "height": 306,
+        "index": 1,
+        "left": 407,
+        "right": 508,
+        "top": 184,
+        "width": 101,
+        "zIndex": "1"
+      },
+      {
+        "bottom": 490,
+        "filter": "brightness(1)",
+        "height": 306,
+        "index": 2,
+        "left": 30,
+        "right": 274,
+        "top": 184,
+        "width": 244,
+        "zIndex": "3"
+      },
+      {
+        "bottom": 490,
+        "filter": "brightness(0.64)",
+        "height": 306,
+        "index": 3,
+        "left": 290,
+        "right": 391,
+        "top": 184,
+        "width": 101,
+        "zIndex": "2"
+      }
+    ],
+    "scrollX": 0,
+    "scrollY": 5722,
+    "section": {
+      "bottom": 844,
+      "height": 844,
+      "left": 0,
+      "right": 391,
+      "top": 0,
+      "width": 391
+    },
+    "stage": {
+      "bottom": 490,
+      "height": 306,
+      "left": 30,
+      "right": 391,
+      "top": 184,
+      "width": 361
+    },
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  "mobileLateAssert": {
+    "noHorizontalOverflow": true,
+    "rightEdgeFlush": true,
+    "largestImageIndex": 2,
+    "orderByLeft": [
+      2,
+      3,
+      1
+    ],
+    "firstGap": 16,
+    "secondGap": 16,
+    "previewEndsAtRight": true,
+    "thirdWaitsRight": true,
+    "activeStartsAtStageLeft": true,
+    "widths": [
+      244,
+      101,
+      101
+    ]
+  }
+}

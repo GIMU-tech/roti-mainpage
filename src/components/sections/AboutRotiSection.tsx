@@ -1,5 +1,8 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
+import { SectionGrid } from "@/components/layout/SectionGrid";
+import { SectionShell } from "@/components/layout/SectionShell";
+import { HOME_SECTION_IDS } from "@/data/sections";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const aboutSceneItems = [
@@ -37,9 +40,10 @@ const aboutSceneItems = [
 
 export function AboutRotiSection() {
   return (
-    <section className="section-shell about-roti" id="about" aria-labelledby="about-roti-title">
+    <SectionShell className="about-roti" id={HOME_SECTION_IDS.about} aria-labelledby="about-roti-title">
+      <SectionGrid className="about-roti__grid">
       <div className="about-roti__copy">
-        <SectionLabel>ROTI STANDARD</SectionLabel>
+        <SectionLabel>ABOUT ROTI</SectionLabel>
         <h2 id="about-roti-title" className="about-roti__title">
           <span>변화를 읽고,</span>
           <span>필요를 나누고,</span>
@@ -56,7 +60,7 @@ export function AboutRotiSection() {
         </div>
       </div>
       <div className="about-roti__visual" aria-label="ROTI 세 브랜드 장면 인덱스">
-        <p className="about-roti__visual-kicker">THREE WAYS FOR EVERYDAY LIFE</p>
+        <p className="about-roti__visual-kicker">THREE STANDARDS FOR EVERYDAY LIFE</p>
         <span className="about-roti__wordmark" aria-hidden="true">
           ROTI
         </span>
@@ -66,6 +70,7 @@ export function AboutRotiSection() {
               key={item.name}
               className="about-roti__visual-line"
               href={item.href}
+              aria-label={`${item.code} ${item.name}: ${item.description}`}
               style={{ "--about-scene-image": `url(${item.image})` } as CSSProperties}
             >
               <span className="about-roti__visual-index">{item.code}</span>
@@ -85,6 +90,7 @@ export function AboutRotiSection() {
           ))}
         </div>
       </div>
-    </section>
+      </SectionGrid>
+    </SectionShell>
   );
 }

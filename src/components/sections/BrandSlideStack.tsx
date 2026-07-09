@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { Brand } from "@/types/brand";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
+import { HOME_SECTION_IDS } from "@/data/sections";
 import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 type BrandSlideStackProps = {
@@ -14,13 +15,17 @@ type BrandSlideStackStyle = CSSProperties & {
   "--brand-stack-steps": number;
 };
 
-type BrandSlideStyle = CSSProperties & {
+type BrandSceneStyle = CSSProperties & {
   "--brand-scene-image": string;
+};
+
+type BrandAnchorStyle = CSSProperties & {
   "--brand-anchor-index": number;
 };
 
 const BRAND_SNAP_DURATION_SECONDS = 1.15;
-const BRAND_SNAP_RELEASE_MS = BRAND_SNAP_DURATION_SECONDS * 1000 + 120;
+const BRAND_SNAP_RELEASE_MS = BRAND_SNAP_DURATION_SECONDS * 1000 + 140;
+const BRAND_SETTLED_HOLD_SECONDS = 0.18;
 
 export function BrandSlideStack({ brands }: BrandSlideStackProps) {
   const rootRef = useRef<HTMLElement | null>(null);
@@ -34,13 +39,21 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
   useEffect(() => {
     let cleanup: (() => void) | undefined;
     let isActive = true;
+    let setupRun = 0;
+    const mobileStackQuery = window.matchMedia("(max-width: 900px)");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     async function setupScrollTimeline() {
+      setupRun += 1;
+      const currentRun = setupRun;
+      cleanup?.();
+      cleanup = undefined;
+
       const root = rootRef.current;
       const viewport = viewportRef.current;
-      const usesStaticMobileStack = window.matchMedia("(max-width: 760px)").matches;
+      const usesMobileStack = mobileStackQuery.matches;
 
-      if (!root || !viewport || usesStaticMobileStack || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (!root || !viewport || reducedMotionQuery.matches) {
         return;
       }
 
@@ -49,11 +62,221 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
         import("gsap/ScrollTrigger")
       ]);
 
-      if (!isActive) {
+      if (!isActive || currentRun !== setupRun) {
         return;
       }
 
       gsap.registerPlugin(ScrollTrigger);
+
+      if (usesMobileStack) {
+        const context = gsap.context(() => {
+          const slides = gsap.utils.toArray<HTMLElement>(".brand-slide-stack__slide", root);
+          const mobileStepCount = Math.max(brands.length - 1, 1);
+          const mobileSnapPoints = Array.from({ length: brands.length }, (_, index) => index / mobileStepCount);
+          const getClosestMobileSnap = (progress: number) => {
+            if (mobileSnapPoints.length === 0) {
+              return progress;
+            }
+
+            return mobileSnapPoints.reduce((closestPoint, point) =>
+              Math.abs(point - progress) < Math.abs(closestPoint - progress) ? point : closestPoint
+            );
+          };
+
+          gsap.set(slides, {
+            zIndex: (index) => index + 1,
+            y: "108svh",
+            opacity: 0,
+            pointerEvents: "none"
+          });
+
+          gsap.set(slides[0], {
+            y: 0,
+            opacity: 1,
+            pointerEvents: "auto"
+          });
+
+          gsap.set(".brand-slide-stack__frame", {
+            xPercent: 0,
+            yPercent: 0,
+            x: 0,
+            y: 0,
+            width: "100%",
+            height: "100%",
+            borderRadius: 0,
+            rotateX: 0,
+            rotateY: 0,
+            rotateZ: 0,
+            scale: 1,
+            transformOrigin: "center bottom"
+          });
+
+          gsap.set(".brand-slide-stack__image", {
+            scale: 1.03,
+            yPercent: 0,
+            transformOrigin: "center center"
+          });
+
+          gsap.set(".brand-slide-stack__copy", {
+            y: 28,
+            opacity: 0
+          });
+
+          gsap.set(slides[0]?.querySelector(".brand-slide-stack__copy"), {
+            y: 0,
+            opacity: 1
+          });
+
+          const timeline = gsap.timeline({
+            defaults: {
+              ease: "none"
+            },
+            scrollTrigger: {
+              trigger: root,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: true,
+              invalidateOnRefresh: true,
+              snap: {
+                snapTo: getClosestMobileSnap,
+                duration: { min: 0.18, max: 0.38 },
+                delay: 0.02,
+                ease: "power2.out"
+              },
+              onUpdate: (self) => {
+                const nextIndex = Math.min(brands.length - 1, Math.max(0, Math.round(self.progress * mobileStepCount)));
+                setActiveSlideIndex(nextIndex);
+              }
+            }
+          });
+
+          slides.slice(0, -1).forEach((slide, index) => {
+            const nextSlide = slides[index + 1];
+            const currentFrame = slide.querySelector<HTMLElement>(".brand-slide-stack__frame");
+            const nextFrame = nextSlide?.querySelector<HTMLElement>(".brand-slide-stack__frame");
+            const currentImage = slide.querySelector<HTMLElement>(".brand-slide-stack__image");
+            const nextImage = nextSlide?.querySelector<HTMLElement>(".brand-slide-stack__image");
+            const currentCopy = slide.querySelector<HTMLElement>(".brand-slide-stack__copy");
+            const nextCopy = nextSlide?.querySelector<HTMLElement>(".brand-slide-stack__copy");
+            const label = `mobile-brand-slide-${index}`;
+
+            if (!nextSlide || !currentFrame || !nextFrame || !currentImage || !nextImage || !currentCopy || !nextCopy) {
+              return;
+            }
+
+            timeline.addLabel(label, ">");
+
+            timeline
+              .set(
+                nextSlide,
+                {
+                  opacity: 1,
+                  pointerEvents: "auto"
+                },
+                label
+              )
+              .to(
+                currentFrame,
+                {
+                  y: "-8svh",
+                  borderRadius: 16,
+                  scale: 0.7,
+                  duration: 1
+                },
+                label
+              )
+              .to(
+                currentImage,
+                {
+                  yPercent: -2,
+                  scale: 1.08,
+                  duration: 1
+                },
+                label
+              )
+              .to(
+                currentCopy,
+                {
+                  y: -30,
+                  opacity: 0,
+                  duration: 0.42
+                },
+                label
+              )
+              .fromTo(
+                nextSlide,
+                {
+                  y: "106svh",
+                  opacity: 1,
+                  pointerEvents: "auto"
+                },
+                {
+                  y: 0,
+                  opacity: 1,
+                  pointerEvents: "auto",
+                  duration: 1
+                },
+                label
+              )
+              .fromTo(
+                nextFrame,
+                {
+                  y: "3svh",
+                  borderRadius: 16,
+                  scale: 0.7
+                },
+                {
+                  y: 0,
+                  borderRadius: 0,
+                  scale: 1,
+                  duration: 1
+                },
+                label
+              )
+              .fromTo(
+                nextImage,
+                {
+                  yPercent: 2,
+                  scale: 1.08
+                },
+                {
+                  yPercent: 0,
+                  scale: 1.03,
+                  duration: 1
+                },
+                label
+              )
+              .fromTo(
+                nextCopy,
+                {
+                  y: 30,
+                  opacity: 0
+                },
+                {
+                  y: 0,
+                  opacity: 1,
+                  duration: 0.48
+                },
+                `${label}+=0.42`
+              )
+              .to(
+                slide,
+                {
+                  opacity: 0,
+                  pointerEvents: "none",
+                  duration: 0.01
+                },
+                `${label}+=0.98`
+              );
+          });
+        }, root);
+
+        cleanup = () => {
+          context.revert();
+        };
+        ScrollTrigger.refresh();
+        return;
+      }
 
       let removeWheelSnap: (() => void) | undefined;
 
@@ -250,16 +473,14 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
               },
               `${label}+=0.94`
             );
+
+          if (index < brands.length - 2) {
+            timeline.to({}, { duration: BRAND_SETTLED_HOLD_SECONDS });
+          }
         });
 
         let isWheelSnapping = false;
         let wheelSnapTimer: number | undefined;
-        const getStackScrollRange = () => {
-          const stackTop = root.getBoundingClientRect().top + window.scrollY;
-          const stackEnd = stackTop + root.offsetHeight - window.innerHeight;
-
-          return { stackEnd, stackTop };
-        };
         const getBrandSnapPoints = () =>
           Array.from(root.querySelectorAll<HTMLElement>(".brand-slide-stack__anchor")).map((anchor) =>
             Math.round(anchor.getBoundingClientRect().top + window.scrollY)
@@ -280,7 +501,6 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
             window.clearTimeout(wheelSnapTimer);
           }
 
-          ScrollTrigger.update();
           scrollToTarget(targetY, {
             duration: BRAND_SNAP_DURATION_SECONDS,
             lock: true
@@ -292,16 +512,12 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
             wheelSnapTimer = undefined;
           }, BRAND_SNAP_RELEASE_MS);
         };
-        const getHeroSnapTarget = (stackTop: number) => Math.max(0, stackTop - window.innerHeight);
         const getWheelSnapTarget = (event: WheelEvent) => {
-          const { stackEnd, stackTop } = getStackScrollRange();
+          const stackTop = root.getBoundingClientRect().top + window.scrollY;
+          const stackEnd = stackTop + root.offsetHeight - window.innerHeight;
+          const nextSectionTop = stackTop + root.offsetHeight;
           const currentY = window.scrollY;
           const isScrollingDown = event.deltaY > 0;
-          const isNearHeroBeforeStack = currentY >= stackTop - window.innerHeight - 24 && currentY < stackTop - 2;
-
-          if (isScrollingDown && isNearHeroBeforeStack) {
-            return getBrandSnapPoints()[0];
-          }
 
           if (currentY < stackTop - 2 || currentY > stackEnd + 2) {
             return undefined;
@@ -310,13 +526,18 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
           const snapPoints = getBrandSnapPoints();
 
           if (isScrollingDown) {
-            return snapPoints.find((point) => point > currentY + 8) ?? (currentY < stackEnd - 8 ? stackEnd : undefined);
+            return snapPoints.find((point) => point > currentY + 8) ?? (currentY < stackEnd - 8 ? stackEnd : nextSectionTop);
           }
 
-          return getPreviousSnapPoint(snapPoints, currentY) ?? getHeroSnapTarget(stackTop);
+          return getPreviousSnapPoint(snapPoints, currentY) ?? Math.max(0, stackTop - window.innerHeight);
         };
         const handleWheelSnap = (event: WheelEvent) => {
-          if (event.defaultPrevented || Math.abs(event.deltaY) < 6) {
+          if (
+            event.defaultPrevented ||
+            event.ctrlKey ||
+            Math.abs(event.deltaY) < 6 ||
+            Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ) {
             return;
           }
 
@@ -329,7 +550,6 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
           event.preventDefault();
 
           if (isWheelSnapping) {
-            ScrollTrigger.update();
             return;
           }
 
@@ -354,9 +574,17 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
     }
 
     void setupScrollTimeline();
+    const handleMediaChange = () => {
+      void setupScrollTimeline();
+    };
+
+    mobileStackQuery.addEventListener("change", handleMediaChange);
+    reducedMotionQuery.addEventListener("change", handleMediaChange);
 
     return () => {
       isActive = false;
+      mobileStackQuery.removeEventListener("change", handleMediaChange);
+      reducedMotionQuery.removeEventListener("change", handleMediaChange);
       cleanup?.();
     };
   }, [brands.length, transitionSteps]);
@@ -364,7 +592,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
   return (
     <section
       ref={rootRef}
-      id="brand"
+      id={HOME_SECTION_IDS.brand}
       className="brand-slide-stack"
       aria-label="ROTI brand scene slides"
       style={stackStyle}
@@ -374,7 +602,11 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
           key={`${brand.id}-anchor`}
           id={brand.id}
           className="brand-slide-stack__anchor"
-          style={{ "--brand-anchor-index": index } as BrandSlideStyle}
+          style={
+            {
+              "--brand-anchor-index": index
+            } as BrandAnchorStyle
+          }
           aria-hidden="true"
         />
       ))}
@@ -387,6 +619,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
               type="button"
               aria-current={activeSlideIndex === index ? "true" : undefined}
               data-active={activeSlideIndex === index}
+              aria-label={`${String(index + 1).padStart(2, "0")} ${brand.name} 장면으로 이동`}
               onClick={() =>
                 scrollToTarget(brand.id, {
                   duration: BRAND_SNAP_DURATION_SECONDS,
@@ -406,7 +639,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
               className="brand-slide-stack__slide"
               data-brand={brand.id}
               aria-labelledby={`${brand.id}-slide-title`}
-              style={{ "--brand-scene-image": `url(${brand.sectionImage})` } as BrandSlideStyle}
+              style={{ "--brand-scene-image": `url(${brand.sectionImage})` } as BrandSceneStyle}
             >
               <div className="brand-slide-stack__frame">
                 <span className="brand-slide-stack__image" aria-hidden="true" />
