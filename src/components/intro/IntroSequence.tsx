@@ -3,7 +3,6 @@
 import type { CSSProperties } from "react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { HeroScrollCue } from "@/components/hero/HeroScrollCue";
 import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 type IntroScene = {
@@ -342,9 +341,6 @@ export function IntroSequence() {
           </p>
         )}
       </div>
-      {sceneIndex === 0 && !currentScene.isLogoScene ? (
-        <HeroScrollCue className="intro-sequence__scroll-cue" />
-      ) : null}
       <button className="intro-sequence__skip" type="button" onClick={() => completeIntro(true)}>
         SKIP
       </button>

@@ -62,18 +62,6 @@
   }
 }
 
-@keyframes intro-scroll-cue-reveal {
-  0% {
-    opacity: 0;
-    transform: translate3d(-50%, 0.65rem, 0);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 @keyframes roti-scroll-cue-float {
   0%,
   100% {
@@ -128,12 +116,6 @@
     opacity: 1;
     filter: none;
     transform: none;
-    animation: none !important;
-  }
-
-  .intro-sequence__scroll-cue {
-    opacity: 1;
-    transform: translate3d(-50%, 0, 0);
     animation: none !important;
   }
 

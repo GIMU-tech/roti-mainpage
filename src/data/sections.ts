@@ -73,7 +73,7 @@ export const homeSections = [
   },
   {
     key: "group",
-    label: "GROUP",
+    label: "CONNECT",
     id: HOME_SECTION_IDS.group,
     href: HOME_SECTION_HREFS.group,
     snapSelector: HOME_SECTION_HREFS.group,

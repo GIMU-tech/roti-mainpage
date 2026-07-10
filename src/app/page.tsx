@@ -7,7 +7,7 @@ import { BrandTransitionProvider } from "@/components/transitions/BrandTransitio
 import { AboutRotiSection } from "@/components/sections/AboutRotiSection";
 import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
 import { RotiBusinessReplicaSection } from "@/components/sections/RotiBusinessReplicaSection";
-import { RotiGroupSection } from "@/components/sections/RotiGroupSection";
+import { RotiConnectSection } from "@/components/sections/RotiConnectSection";
 import { brands } from "@/data/brands";
 import { HOME_SECTION_IDS } from "@/data/sections";
 
@@ -22,7 +22,7 @@ export default function HomePage() {
           <BrandSlideStack brands={brands} />
           <AboutRotiSection />
           <RotiBusinessReplicaSection />
-          <RotiGroupSection brands={brands} />
+          <RotiConnectSection />
           <Footer />
         </main>
       </BrandTransitionProvider>
