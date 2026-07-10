@@ -1,11 +1,12 @@
 "use client";
 
 import type { Brand } from "@/types/brand";
-import type { HeroCardMotion } from "@/lib/animations/heroAnimations";
-import type { CSSProperties, MouseEvent } from "react";
+import type { HeroCardMotion, HeroCardSlot } from "@/lib/animations/heroAnimations";
+import type { CSSProperties } from "react";
+import { useRef } from "react";
 import { BrandCard } from "./BrandCard";
 import { useBrandCarousel } from "@/hooks/useBrandCarousel";
-import { scrollToTarget } from "@/lib/scroll/smoothScroll";
+import { useBrandTransition } from "@/hooks/useBrandTransition";
 
 type BrandCarouselProps = {
   brands: Brand[];
@@ -46,6 +47,8 @@ function createStageLayerStyle(brand: Brand, motion: HeroCardMotion): StageLayer
 }
 
 export function BrandCarousel({ brands }: BrandCarouselProps) {
+  const cardsRef = useRef<HTMLDivElement | null>(null);
+  const { state: brandTransitionState, startBrandTransition } = useBrandTransition();
   const {
     activeBrand,
     cardStates,
@@ -58,52 +61,28 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
 
     return brand ? [{ ...state, brand }] : [];
   });
-  const scrollToBrand = (brandId: Brand["id"]) => {
-    scrollToTarget(brandId, {
-      duration: 1.15,
-      lock: true
-    });
-  };
-  const handleCardSelect = (brandId: Brand["id"]) => {
-    scrollToBrand(brandId);
-  };
-  const handleCardsLayerClick = (event: MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-
-    if (target.closest(".brand-card")) {
+  const isBrandTransitionActive = brandTransitionState.phase !== "idle";
+  const handleCardSelect = (brandId: Brand["id"], sourceSlot: HeroCardSlot, sourceElement: HTMLButtonElement) => {
+    if (isBrandTransitionActive) {
       return;
     }
 
-    const candidates = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".brand-card"))
-      .map((card) => {
-        const rect = card.getBoundingClientRect();
-        const brandId = card.dataset.brand as Brand["id"] | undefined;
-        const isInside =
-          event.clientX >= rect.left &&
-          event.clientX <= rect.right &&
-          event.clientY >= rect.top &&
-          event.clientY <= rect.bottom;
-        const distanceFromCenter = Math.hypot(
-          event.clientX - (rect.left + rect.width / 2),
-          event.clientY - (rect.top + rect.height / 2)
-        );
+    const centerElement = cardsRef.current?.querySelector<HTMLButtonElement>(".brand-card[data-slot=\"center\"]");
 
-        return { brandId, distanceFromCenter, isInside };
-      })
-      .filter((candidate): candidate is { brandId: Brand["id"]; distanceFromCenter: number; isInside: boolean } =>
-        Boolean(candidate.brandId && candidate.isInside)
-      )
-      .sort((first, second) => first.distanceFromCenter - second.distanceFromCenter);
-
-    const selectedBrandId = candidates[0]?.brandId;
-
-    if (selectedBrandId) {
-      handleCardSelect(selectedBrandId);
-    }
+    startBrandTransition({
+      brandId,
+      sourceElement,
+      sourceSlot,
+      centerElement
+    });
   };
 
   return (
-    <div className="brand-carousel" aria-label="ROTI 브랜드 선택">
+    <div
+      className="brand-carousel"
+      aria-label="ROTI 브랜드 선택"
+      data-transition-active={isBrandTransitionActive}
+    >
       <div className="brand-carousel__stage" aria-label="화살표로 브랜드 카드를 회전하고 카드를 클릭하면 섹션으로 이동">
         <div className="brand-carousel__controls" aria-label="브랜드 카드 회전">
           <button
@@ -111,6 +90,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
             type="button"
             aria-label="이전 브랜드 카드 보기"
             onClick={selectPreviousBrand}
+            disabled={isBrandTransitionActive}
           >
             <span aria-hidden="true">‹</span>
           </button>
@@ -119,6 +99,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
             type="button"
             aria-label="다음 브랜드 카드 보기"
             onClick={selectNextBrand}
+            disabled={isBrandTransitionActive}
           >
             <span aria-hidden="true">›</span>
           </button>
@@ -137,16 +118,18 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
             />
           ))}
         </div>
-        <div className="brand-carousel__cards" onClick={handleCardsLayerClick}>
+        <div ref={cardsRef} className="brand-carousel__cards">
           {displayCards.map(({ brand, isActive, slot, motion }) => (
             <BrandCard
               key={brand.id}
               brand={brand}
               isActive={isActive}
-              isTransitioning={isTransitioning}
+              isTransitioning={isTransitioning || isBrandTransitionActive}
+              isTransitionSelected={brandTransitionState.brandId === brand.id}
+              isDisabled={isBrandTransitionActive}
               slot={slot}
               motion={motion}
-              onSelect={() => handleCardSelect(brand.id)}
+              onSelect={(sourceElement) => handleCardSelect(brand.id, slot, sourceElement)}
             />
           ))}
         </div>

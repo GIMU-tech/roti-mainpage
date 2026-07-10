@@ -535,6 +535,7 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
           if (
             event.defaultPrevented ||
             event.ctrlKey ||
+            document.body.dataset.rotiBrandTransition === "true" ||
             Math.abs(event.deltaY) < 6 ||
             Math.abs(event.deltaX) > Math.abs(event.deltaY)
           ) {

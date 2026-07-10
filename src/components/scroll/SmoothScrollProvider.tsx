@@ -99,7 +99,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       };
       const canUseSectionSnap = () =>
         document.body.dataset.rotiIntroActive !== "true" &&
-        document.body.dataset.rotiHeroInteractive !== "false";
+        document.body.dataset.rotiHeroInteractive !== "false" &&
+        document.body.dataset.rotiBrandTransition !== "true";
       const isInsideDesktopBrandStack = () => {
         if (mobileSectionSnapQuery.matches) {
           return false;

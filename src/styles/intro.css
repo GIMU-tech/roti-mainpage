@@ -117,22 +117,6 @@
   animation: intro-logo-letter-from-right 940ms 210ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.intro-sequence__scroll-cue {
-  position: absolute;
-  bottom: clamp(1.2rem, 3vh, 2.25rem);
-  left: 50%;
-  z-index: 3;
-  color: rgba(244, 241, 234, 0.7);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate3d(-50%, 0.65rem, 0);
-  animation: intro-scroll-cue-reveal 760ms 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.intro-sequence__scroll-cue[data-hidden="true"] {
-  transform: translate3d(-50%, 0.85rem, 0);
-}
-
 .intro-sequence__skip {
   position: absolute;
   right: clamp(1.25rem, 3.5vw, 3rem);

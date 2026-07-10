@@ -6,7 +6,7 @@
   justify-content: center;
   overflow: hidden;
   padding: clamp(6rem, 11vh, 10rem) var(--section-gutter);
-  background: #061227;
+  background: #050505;
   color: #ffffff;
   isolation: isolate;
 }
@@ -16,8 +16,8 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(4, 11, 24, 0.84) 0%, rgba(8, 19, 39, 0.58) 48%, rgba(6, 14, 28, 0.72) 100%),
-    linear-gradient(180deg, rgba(4, 10, 20, 0.28), rgba(4, 9, 19, 0.72));
+    linear-gradient(90deg, rgba(5, 5, 5, 0.7) 0%, rgba(8, 8, 8, 0.56) 48%, rgba(5, 5, 5, 0.68) 100%),
+    linear-gradient(180deg, rgba(5, 5, 5, 0.3), rgba(0, 0, 0, 0.64));
   content: "";
 }
 
@@ -32,14 +32,6 @@
 
 .roti-footer__background--one {
   background-image: url("/images/footer/roti-footer-office-bg.webp");
-}
-
-.roti-footer__background--two {
-  background:
-    radial-gradient(ellipse at 24% 32%, rgba(255, 255, 255, 0.2), transparent 28%),
-    radial-gradient(ellipse at 82% 22%, rgba(255, 255, 255, 0.16), transparent 24%);
-  opacity: 0.42;
-  mix-blend-mode: soft-light;
 }
 
 .roti-footer__inner {

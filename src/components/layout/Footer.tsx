@@ -6,7 +6,6 @@ export function Footer() {
   return (
     <footer className="roti-footer" id={HOME_SECTION_IDS.footer} aria-label="ROTI footer">
       <span className="roti-footer__background roti-footer__background--one" aria-hidden="true" />
-      <span className="roti-footer__background roti-footer__background--two" aria-hidden="true" />
       <div className="roti-footer__inner">
         <div className="roti-footer__left">
           <h2 className="roti-footer__logo">

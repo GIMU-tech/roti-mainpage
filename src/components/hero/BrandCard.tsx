@@ -7,9 +7,11 @@ type BrandCardProps = {
   brand: Brand;
   isActive: boolean;
   isTransitioning: boolean;
+  isTransitionSelected: boolean;
+  isDisabled: boolean;
   slot: HeroCardSlot;
   motion?: HeroCardMotion;
-  onSelect: () => void;
+  onSelect: (sourceElement: HTMLButtonElement) => void;
 };
 
 type BrandCardStyle = CSSProperties & {
@@ -22,7 +24,16 @@ type BrandCardStyle = CSSProperties & {
   "--card-focal-point"?: string;
 };
 
-export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSelect }: BrandCardProps) {
+export function BrandCard({
+  brand,
+  isActive,
+  isTransitioning,
+  isTransitionSelected,
+  isDisabled,
+  slot,
+  motion,
+  onSelect
+}: BrandCardProps) {
   const hasReadyAsset = brand.heroAsset.status === "ready";
   const cardStyle: BrandCardStyle = {
     "--card-x": String(motion?.x ?? "0%"),
@@ -40,7 +51,7 @@ export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSe
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      onSelect();
+      onSelect(event.currentTarget);
     }
   };
 
@@ -48,14 +59,16 @@ export function BrandCard({ brand, isActive, isTransitioning, slot, motion, onSe
     <button
       className="brand-card"
       type="button"
-      aria-label={`${brand.name} 섹션으로 이동`}
+      aria-label={`${brand.name} 브랜드 전환 시작`}
       aria-current={isActive ? "true" : undefined}
       data-brand={brand.id}
       data-slot={slot}
       data-active={isActive}
       data-transitioning={isTransitioning}
+      data-transition-selected={isTransitionSelected}
+      disabled={isDisabled}
       style={cardStyle}
-      onClick={onSelect}
+      onClick={(event) => onSelect(event.currentTarget)}
       onKeyDown={handleKeyDown}
     >
       <span className="brand-card__backplate" aria-hidden="true" />

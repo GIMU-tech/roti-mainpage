@@ -14,12 +14,18 @@ export const brands: Brand[] = [
     mood: ["outdoor", "movement", "nature", "rest"],
     keywords: ["캠핑", "이동", "수납"],
     heroImage: "/images/brands/camp-hero.jpg",
-    sectionImage: "/images/sections/roti-camp-brand-section.jpg",
+    sectionImage: "/images/sections/roti-camp-brand-section.webp",
     heroAsset: {
       src: "/images/brands/camp-hero.jpg",
       alt: "ROTI CAMP 어두운 야외와 장비 분위기의 장면",
       status: "ready",
       focalPoint: "center bottom"
+    },
+    transition: {
+      heroFocalPoint: "center bottom",
+      sectionFocalPoint: "center center",
+      overlayShade: "rgba(0, 0, 0, 0.22)",
+      accessibilityLabel: "ROTI CAMP 브랜드 섹션으로 이동합니다."
     },
     visualTagline: "밖으로 향하는 생활",
     visualMaterial: "smoked mountain / matte gear",
@@ -45,12 +51,18 @@ export const brands: Brand[] = [
     mood: ["organize", "move", "utility", "efficiency"],
     keywords: ["수납", "이동", "생활 동선"],
     heroImage: "/images/brands/homesys-hero.jpg",
-    sectionImage: "/images/sections/roti-homesys-brand-section.jpg",
+    sectionImage: "/images/sections/roti-homesys-brand-section.webp",
     heroAsset: {
       src: "/images/brands/homesys-hero.jpg",
       alt: "ROTI HOMESYS 정돈된 실내와 수납 구조 장면",
       status: "ready",
       focalPoint: "center center"
+    },
+    transition: {
+      heroFocalPoint: "center center",
+      sectionFocalPoint: "center center",
+      overlayShade: "rgba(0, 0, 0, 0.18)",
+      accessibilityLabel: "ROTI HOMESYS 브랜드 섹션으로 이동합니다."
     },
     visualTagline: "정리되는 집",
     visualMaterial: "warm interior / charcoal structure",
@@ -76,12 +88,18 @@ export const brands: Brand[] = [
     mood: ["kitchen", "clean", "density", "calm"],
     keywords: ["주방", "소재", "여백"],
     heroImage: "/images/brands/leel-hero.jpg",
-    sectionImage: "/images/sections/leel-brand-section.jpg",
+    sectionImage: "/images/sections/leel-brand-section.webp",
     heroAsset: {
       src: "/images/brands/leel-hero.jpg",
       alt: "LeEL 조용한 주방과 리빙 오브젝트 장면",
       status: "ready",
       focalPoint: "center center"
+    },
+    transition: {
+      heroFocalPoint: "center center",
+      sectionFocalPoint: "center center",
+      overlayShade: "rgba(0, 0, 0, 0.18)",
+      accessibilityLabel: "LeEL 브랜드 섹션으로 이동합니다."
     },
     visualTagline: "차분한 주방과 리빙",
     visualMaterial: "dark stone / brushed steel",

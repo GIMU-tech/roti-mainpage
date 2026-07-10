@@ -1,9 +1,8 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import type { KeyboardEvent, TouchEvent, WheelEvent } from "react";
+import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { HeroScrollCue } from "@/components/hero/HeroScrollCue";
 import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
 type IntroScene = {
@@ -16,8 +15,8 @@ type IntroWordStyle = CSSProperties & {
   "--intro-scene-duration": string;
 };
 
-const INTRO_WORD_SCENE_MS = 1260;
-const INTRO_LOGO_SCENE_MS = 860;
+const INTRO_WORD_SCENE_MS = 800;
+const INTRO_LOGO_SCENE_MS = 820 * 1.3;
 
 const INTRO_SCENES: IntroScene[] = [
   { text: "ALWAYS", duration: INTRO_WORD_SCENE_MS },
@@ -38,10 +37,6 @@ const QUICK_HERO_SPREAD_DELAY_MS = 80;
 const QUICK_HERO_SETTLE_MS = 180;
 const QUICK_HERO_INTERACTIVE_DELAY_MS = QUICK_HERO_SPREAD_DELAY_MS + QUICK_HERO_SETTLE_MS;
 const QUICK_OVERLAY_EXIT_MS = 360;
-const SCROLL_STEP_LOCK_MS = 620;
-const WHEEL_STEP_THRESHOLD = 24;
-const TOUCH_STEP_THRESHOLD = 36;
-
 function setDocumentIntroState({
   heroInteractive,
   heroSpread,
@@ -99,14 +94,20 @@ export function IntroSequence() {
   const [isVisible, setIsVisible] = useState(true);
   const introRef = useRef<HTMLDivElement | null>(null);
   const timersRef = useRef<number[]>([]);
+  const autoAdvanceTimerRef = useRef<number | null>(null);
   const finishedRef = useRef(false);
-  const lastStepAtRef = useRef(-SCROLL_STEP_LOCK_MS);
   const prefersReducedMotionRef = useRef(false);
-  const touchStartYRef = useRef<number | null>(null);
 
   const clearTimers = useCallback(() => {
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
     timersRef.current = [];
+  }, []);
+
+  const clearAutoAdvanceTimer = useCallback(() => {
+    if (autoAdvanceTimerRef.current !== null) {
+      window.clearTimeout(autoAdvanceTimerRef.current);
+      autoAdvanceTimerRef.current = null;
+    }
   }, []);
 
   const completeIntro = useCallback(
@@ -117,6 +118,7 @@ export function IntroSequence() {
 
       finishedRef.current = true;
       clearTimers();
+      clearAutoAdvanceTimer();
       setIsExiting(true);
 
       const shouldMoveQuickly = isSkipped || prefersReducedMotionRef.current;
@@ -176,89 +178,7 @@ export function IntroSequence() {
         }, overlayExitDelay)
       );
     },
-    [clearTimers]
-  );
-
-  const canStepScene = useCallback(() => {
-    const now = window.performance.now();
-
-    if (now - lastStepAtRef.current < SCROLL_STEP_LOCK_MS) {
-      return false;
-    }
-
-    lastStepAtRef.current = now;
-    return true;
-  }, []);
-
-  const stepScene = useCallback(
-    (direction: 1 | -1) => {
-      if (finishedRef.current || isExiting) {
-        return;
-      }
-
-      if (direction > 0) {
-        if (sceneIndex >= scenes.length - 1) {
-          completeIntro(false);
-          return;
-        }
-
-        setSceneIndex(sceneIndex + 1);
-        return;
-      }
-
-      setSceneIndex(Math.max(0, sceneIndex - 1));
-    },
-    [completeIntro, isExiting, sceneIndex, scenes.length]
-  );
-
-  const requestSceneStep = useCallback(
-    (direction: 1 | -1) => {
-      if (!canStepScene()) {
-        return;
-      }
-
-      stepScene(direction);
-    },
-    [canStepScene, stepScene]
-  );
-
-  const handleWheel = useCallback(
-    (event: WheelEvent<HTMLDivElement>) => {
-      event.preventDefault();
-
-      if (Math.abs(event.deltaY) < WHEEL_STEP_THRESHOLD) {
-        return;
-      }
-
-      requestSceneStep(event.deltaY > 0 ? 1 : -1);
-    },
-    [requestSceneStep]
-  );
-
-  const handleTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
-    touchStartYRef.current = event.touches[0]?.clientY ?? null;
-  }, []);
-
-  const handleTouchEnd = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      const startY = touchStartYRef.current;
-      const endY = event.changedTouches[0]?.clientY;
-
-      touchStartYRef.current = null;
-
-      if (startY === null || endY === undefined) {
-        return;
-      }
-
-      const deltaY = startY - endY;
-
-      if (Math.abs(deltaY) < TOUCH_STEP_THRESHOLD) {
-        return;
-      }
-
-      requestSceneStep(deltaY > 0 ? 1 : -1);
-    },
-    [requestSceneStep]
+    [clearAutoAdvanceTimer, clearTimers]
   );
 
   const handleKeyDown = useCallback(
@@ -269,18 +189,8 @@ export function IntroSequence() {
         return;
       }
 
-      if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === " " || event.key === "Enter") {
-        event.preventDefault();
-        requestSceneStep(1);
-        return;
-      }
-
-      if (event.key === "ArrowUp" || event.key === "PageUp") {
-        event.preventDefault();
-        requestSceneStep(-1);
-      }
     },
-    [completeIntro, requestSceneStep]
+    [completeIntro]
   );
 
   useEffect(() => {
@@ -290,6 +200,9 @@ export function IntroSequence() {
       introRef.current?.focus({ preventScroll: true });
     });
 
+    finishedRef.current = false;
+    clearTimers();
+    clearAutoAdvanceTimer();
     prefersReducedMotionRef.current = prefersReducedMotion;
     setScenes(activeScenes);
     setSceneIndex(0);
@@ -304,6 +217,10 @@ export function IntroSequence() {
       introComplete: false
     });
     resetHeroScrollPosition();
+
+    if (prefersReducedMotion) {
+      completeIntro(true);
+    }
 
     const preventIntroMomentumScroll = (event: Event) => {
       if (document.body.dataset.rotiHeroInteractive === "false") {
@@ -336,6 +253,7 @@ export function IntroSequence() {
       window.removeEventListener("touchmove", preventIntroMomentumScroll, { capture: true });
       window.removeEventListener("scroll", keepHeroPinnedUntilInteractive, { capture: true });
       clearTimers();
+      clearAutoAdvanceTimer();
       setMainInteractionBlocked(false);
       delete document.body.dataset.rotiHeroInteractive;
       delete document.body.dataset.rotiIntroActive;
@@ -348,7 +266,34 @@ export function IntroSequence() {
       delete document.documentElement.dataset.rotiHeroSpread;
       delete document.documentElement.dataset.rotiHeroSettling;
     };
-  }, [clearTimers, completeIntro]);
+  }, [clearAutoAdvanceTimer, clearTimers, completeIntro]);
+
+  useEffect(() => {
+    clearAutoAdvanceTimer();
+
+    if (finishedRef.current || isExiting || scenes.length === 0) {
+      return;
+    }
+
+    const currentScene = scenes[Math.min(sceneIndex, scenes.length - 1)];
+
+    if (!currentScene) {
+      return;
+    }
+
+    autoAdvanceTimerRef.current = window.setTimeout(() => {
+      autoAdvanceTimerRef.current = null;
+
+      if (sceneIndex >= scenes.length - 1) {
+        completeIntro(false);
+        return;
+      }
+
+      setSceneIndex((currentIndex) => Math.min(currentIndex + 1, scenes.length - 1));
+    }, currentScene.duration);
+
+    return clearAutoAdvanceTimer;
+  }, [clearAutoAdvanceTimer, completeIntro, isExiting, sceneIndex, scenes]);
 
   if (!isVisible) {
     return null;
@@ -370,9 +315,6 @@ export function IntroSequence() {
       aria-modal="true"
       tabIndex={-1}
       onKeyDown={handleKeyDown}
-      onTouchEnd={handleTouchEnd}
-      onTouchStart={handleTouchStart}
-      onWheel={handleWheel}
     >
       <div className="intro-sequence__content" aria-live="polite">
         {currentScene.isLogoScene ? (
@@ -399,9 +341,6 @@ export function IntroSequence() {
           </p>
         )}
       </div>
-      {sceneIndex === 0 && !currentScene.isLogoScene ? (
-        <HeroScrollCue className="intro-sequence__scroll-cue" />
-      ) : null}
       <button className="intro-sequence__skip" type="button" onClick={() => completeIntro(true)}>
         SKIP
       </button>
