@@ -11,6 +11,7 @@ export type RotiConnectItem = {
   href: string;
   tone: "product" | "business" | "partnership";
   imageSrc: string;
+  mobileImageSrc: string;
   imageAlt: string;
 };
 
@@ -28,7 +29,8 @@ export const rotiConnectContent = {
       ctaLabel: "문의 정보 보기",
       href: HOME_SECTION_HREFS.footer,
       tone: "product",
-      imageSrc: "/images/sections/leel-brand-section.webp",
+      imageSrc: "/images/connect/connect-product-desktop.webp",
+      mobileImageSrc: "/images/connect/connect-product-mobile.webp",
       imageAlt: "LeEL 제품과 소재가 놓인 차분한 생활 공간"
     },
     {
@@ -41,7 +43,8 @@ export const rotiConnectContent = {
       ctaLabel: "문의 정보 보기",
       href: HOME_SECTION_HREFS.footer,
       tone: "business",
-      imageSrc: "/images/sections/roti-homesys-brand-section.webp",
+      imageSrc: "/images/connect/connect-business-desktop.webp",
+      mobileImageSrc: "/images/connect/connect-business-mobile.webp",
       imageAlt: "ROTI HOMESYS 수납 구조가 보이는 정돈된 실내"
     },
     {
@@ -54,7 +57,8 @@ export const rotiConnectContent = {
       ctaLabel: "문의 정보 보기",
       href: HOME_SECTION_HREFS.footer,
       tone: "partnership",
-      imageSrc: "/images/sections/roti-camp-brand-section.webp",
+      imageSrc: "/images/connect/connect-partnership-desktop.webp",
+      mobileImageSrc: "/images/connect/connect-partnership-mobile.webp",
       imageAlt: "ROTI CAMP 야외 장면과 캠핑 장비"
     }
   ] as const satisfies readonly RotiConnectItem[]

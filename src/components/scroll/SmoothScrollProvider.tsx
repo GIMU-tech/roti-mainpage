@@ -122,40 +122,30 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         const elementPoints = Array.from(document.querySelectorAll<HTMLElement>(sectionSnapSelector)).map(
           getElementScrollTop
         );
-        const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
-        const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
+        const steppedSectionPoints = Array.from(
+          document.querySelectorAll<HTMLElement>("[data-section-snap-progress][data-section-snap-range-vh]")
+        ).flatMap((section) => {
+          const rangeInViewports = Number(section.dataset.sectionSnapRangeVh);
+          const snapProgress = section.dataset.sectionSnapProgress
+            ?.split(",")
+            .map(Number)
+            .filter((progress) => Number.isFinite(progress) && progress > 0 && progress < 1);
 
-        if (standardSection && footerSection) {
-          const standardTop = getElementScrollTop(standardSection);
-          const footerTop = getElementScrollTop(footerSection);
-          const standardDistance = footerTop - standardTop;
-
-          if (standardDistance > window.innerHeight * 1.4) {
-            elementPoints.push(standardTop + standardDistance / 3, standardTop + (standardDistance / 3) * 2);
+          if (!snapProgress?.length || !Number.isFinite(rangeInViewports) || rangeInViewports <= 0) {
+            return [];
           }
-        }
 
-        return getUniqueSnapPoints([0, ...elementPoints], maxScroll);
+          const sectionTop = getElementScrollTop(section);
+          const snapRange = window.innerHeight * rangeInViewports;
+
+          return snapProgress.map((progress) => sectionTop + snapRange * progress);
+        });
+
+        return getUniqueSnapPoints([0, ...elementPoints, ...steppedSectionPoints], maxScroll);
       };
       const getSectionSnapTarget = (deltaY: number) => {
         const currentY = lenis.scroll;
         const snapPoints = getSectionSnapPoints();
-        const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
-        const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
-
-        if (deltaY > 0 && standardSection && footerSection) {
-          const standardTop = getElementScrollTop(standardSection);
-          const footerTop = getElementScrollTop(footerSection);
-          const standardDistance = footerTop - standardTop;
-
-          if (
-            standardDistance > window.innerHeight * 1.4 &&
-            currentY >= standardTop + standardDistance * 0.58 &&
-            currentY < footerTop - SECTION_SNAP_DEAD_ZONE
-          ) {
-            return footerTop;
-          }
-        }
 
         if (deltaY > 0) {
           return snapPoints.find((point) => point > currentY + SECTION_SNAP_DEAD_ZONE);

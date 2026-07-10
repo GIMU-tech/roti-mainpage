@@ -29,6 +29,9 @@ const rotiBusinessSlides = [
   }
 ] as const;
 
+const STANDARD_SCROLL_RANGE_PERCENT = 40 + rotiBusinessSlides.length * 80;
+const STANDARD_SNAP_PROGRESS = [0.5, 0.75] as const;
+
 export function RotiBusinessReplicaSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
@@ -139,7 +142,7 @@ export function RotiBusinessReplicaSection() {
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: () => `+=${40 + actualSlideCount * 80}%`,
+            end: () => `+=${STANDARD_SCROLL_RANGE_PERCENT}%`,
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true
@@ -286,6 +289,8 @@ export function RotiBusinessReplicaSection() {
       className="roti-business-replica"
       id={HOME_SECTION_IDS.standard}
       aria-labelledby="roti-business-replica-title"
+      data-section-snap-progress={STANDARD_SNAP_PROGRESS.join(",")}
+      data-section-snap-range-vh={STANDARD_SCROLL_RANGE_PERCENT / 100}
     >
       <div className="roti-business-replica__container">
         <div className="roti-business-replica__layout">
