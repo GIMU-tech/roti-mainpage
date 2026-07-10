@@ -127,7 +127,6 @@ body[data-roti-brand-transition="true"] {
 }
 
 body[data-roti-brand-transition="true"] .hero-portal__intro,
-body[data-roti-brand-transition="true"] .hero-portal__footer,
 body[data-roti-brand-transition="true"] .brand-carousel__meta,
 body[data-roti-brand-transition="true"] .brand-carousel__controls {
   opacity: 0;

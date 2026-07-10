@@ -62,17 +62,6 @@
   }
 }
 
-@keyframes roti-scroll-cue-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: translate3d(0, -0.42rem, 0);
-  }
-}
-
 @keyframes hero-spotlight-breathe {
   0% {
     opacity: 0.78;
@@ -116,10 +105,6 @@
     opacity: 1;
     filter: none;
     transform: none;
-    animation: none !important;
-  }
-
-  .hero-portal__scroll-note-inner {
     animation: none !important;
   }
 

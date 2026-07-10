@@ -15,8 +15,8 @@ type IntroWordStyle = CSSProperties & {
   "--intro-scene-duration": string;
 };
 
-const INTRO_WORD_SCENE_MS = 520;
-const INTRO_LOGO_SCENE_MS = 820;
+const INTRO_WORD_SCENE_MS = 800;
+const INTRO_LOGO_SCENE_MS = 820 * 1.3;
 
 const INTRO_SCENES: IntroScene[] = [
   { text: "ALWAYS", duration: INTRO_WORD_SCENE_MS },

@@ -37,14 +37,19 @@ export function Header() {
       const headerToneProbeY = Math.min(96, window.innerHeight * 0.14);
       const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
       const standardSectionRect = standardSection?.getBoundingClientRect();
+      const connectSection = document.getElementById(HOME_SECTION_IDS.group);
+      const connectSectionRect = connectSection?.getBoundingClientRect();
       const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
       const footerSectionRect = footerSection?.getBoundingClientRect();
 
       setIsOnLightSurface(
         Boolean(
-          standardSectionRect &&
+          (standardSectionRect &&
             standardSectionRect.top <= headerToneProbeY &&
-            standardSectionRect.bottom > headerToneProbeY
+            standardSectionRect.bottom > headerToneProbeY) ||
+            (connectSectionRect &&
+              connectSectionRect.top <= headerToneProbeY &&
+              connectSectionRect.bottom > headerToneProbeY)
         )
       );
       setIsOnFooter(Boolean(footerSectionRect && footerSectionRect.top <= 96 && footerSectionRect.bottom > 96));

@@ -377,6 +377,12 @@ Must not include:
 - No long unnecessary paragraphs
 - Avoid repeating the same three-brand introduction in Hero, brand scenes, and About without adding new meaning.
 
+### ROTI Connect
+- ROTI Connect is a warm off-white inquiry selection section within the shared body grid.
+- Three inquiry-type tabs share one active carousel state with a large center image, restrained side previews, and synchronized detail copy.
+- The inquiry carousel may advance automatically every five seconds, but must pause while hovered or keyboard-focused and must stop for reduced-motion users.
+- Do not use complex signal networks, SVG connecting lines, 3D, ScrollTrigger, or new scroll locking.
+
 ---
 
 ## 10. Accessibility & Performance

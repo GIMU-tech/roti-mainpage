@@ -359,16 +359,6 @@
     font-size: 0.72rem;
   }
 
-  .hero-portal__footer {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    bottom: 0.65rem;
-  }
-
-  .hero-portal__copyright {
-    display: none;
-  }
-
   .brand-slide-stack {
     --brand-stack-entry: 0svh;
     --brand-stack-step: 112svh;

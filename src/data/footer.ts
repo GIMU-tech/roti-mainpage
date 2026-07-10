@@ -59,8 +59,4 @@ export const footerLinks: readonly FooterLink[] = [
   { label: "개인정보처리방침" }
 ] as const;
 
-export const footerContactTopics = ["브랜드", "제품", "제휴", "유통", "대량 구매"] as const;
-
-export const footerContactCopy = "브랜드, 제품, 제휴 관련 문의를 남겨주세요.";
-
 export const footerCopyright = "COPYRIGHT © ROTI. ALL RIGHTS RESERVED.";

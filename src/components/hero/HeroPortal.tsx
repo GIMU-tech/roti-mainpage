@@ -1,6 +1,5 @@
 import type { Brand } from "@/types/brand";
 import { BrandCarousel } from "./BrandCarousel";
-import { HeroScrollCue } from "./HeroScrollCue";
 
 type HeroPortalProps = {
   brands: Brand[];
@@ -20,9 +19,6 @@ export function HeroPortal({ brands }: HeroPortalProps) {
         <p className="hero-portal__copy">이동, 정리, 휴식을 위한 서로 다른 해석</p>
       </div>
       <BrandCarousel brands={brands} />
-      <div className="hero-portal__footer">
-        <HeroScrollCue />
-      </div>
     </section>
   );
 }

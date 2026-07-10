@@ -1,12 +1,11 @@
 import Image from "next/image";
-import { footerBrandLogos, footerContactCopy, footerContactTopics, footerCopyright, footerLinks, footerLocations } from "@/data/footer";
+import { footerBrandLogos, footerCopyright, footerLinks, footerLocations } from "@/data/footer";
 import { HOME_SECTION_HREFS, HOME_SECTION_IDS } from "@/data/sections";
 
 export function Footer() {
   return (
     <footer className="roti-footer" id={HOME_SECTION_IDS.footer} aria-label="ROTI footer">
       <span className="roti-footer__background roti-footer__background--one" aria-hidden="true" />
-      <span className="roti-footer__background roti-footer__background--two" aria-hidden="true" />
       <div className="roti-footer__inner">
         <div className="roti-footer__left">
           <h2 className="roti-footer__logo">
@@ -21,15 +20,6 @@ export function Footer() {
         </div>
 
         <div className="roti-footer__right" aria-label="ROTI 주소">
-          <div className="roti-footer__contact">
-            <p className="roti-footer__contact-label">CONTACT / PARTNERSHIP</p>
-            <p className="roti-footer__contact-copy">{footerContactCopy}</p>
-            <ul className="roti-footer__contact-topics" aria-label="문의 가능 범위">
-              {footerContactTopics.map((topic) => (
-                <li key={topic}>{topic}</li>
-              ))}
-            </ul>
-          </div>
           <ul>
             {footerLocations.map((location) => (
               <li key={location.label}>

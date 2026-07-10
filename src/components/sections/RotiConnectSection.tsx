@@ -1,152 +1,221 @@
 "use client";
 
-import type { CSSProperties, KeyboardEvent } from "react";
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState } from "react";
 import { SectionGrid } from "@/components/layout/SectionGrid";
 import { SectionShell } from "@/components/layout/SectionShell";
-import { SectionLabel } from "@/components/ui/SectionLabel";
 import { rotiConnectContent, type RotiConnectItem } from "@/data/rotiConnect";
 import { HOME_SECTION_IDS } from "@/data/sections";
 
+const AUTOPLAY_DELAY_MS = 5000;
+
+type ConnectSlideSlot = "previous" | "active" | "next";
+
+function getSlideSlot(index: number, activeIndex: number, itemCount: number): ConnectSlideSlot {
+  if (index === activeIndex) {
+    return "active";
+  }
+
+  return (index - activeIndex + itemCount) % itemCount === 1 ? "next" : "previous";
+}
+
 export function RotiConnectSection() {
-  const [activeId, setActiveId] = useState<RotiConnectItem["id"]>(rotiConnectContent.items[0].id);
-  const [hasEntered, setHasEntered] = useState(false);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const triggerRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const activeItem = rotiConnectContent.items.find((item) => item.id === activeId) ?? rotiConnectContent.items[0];
+  const [activeId, setActiveId] = useState<RotiConnectItem["id"]>("business");
+  const [isPaused, setIsPaused] = useState(false);
+  const items = rotiConnectContent.items;
+  const activeIndex = Math.max(
+    0,
+    items.findIndex((item) => item.id === activeId)
+  );
+  const activeItem = items[activeIndex] ?? items[1];
+  const slideItems = useMemo(
+    () => items.map((item, index) => ({ item, slot: getSlideSlot(index, activeIndex, items.length) })),
+    [activeIndex, items]
+  );
 
   useEffect(() => {
-    const section = sectionRef.current;
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let autoplayTimer: number | undefined;
 
-    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setHasEntered(true);
-      return undefined;
-    }
+    const scheduleAutoplay = () => {
+      window.clearTimeout(autoplayTimer);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setHasEntered(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.25 }
-    );
+      if (isPaused || reducedMotionQuery.matches || document.visibilityState !== "visible") {
+        return;
+      }
 
-    observer.observe(section);
+      autoplayTimer = window.setTimeout(() => {
+        const nextItem = items[(activeIndex + 1) % items.length];
+        setActiveId(nextItem.id);
+      }, AUTOPLAY_DELAY_MS);
+    };
 
-    return () => observer.disconnect();
-  }, []);
+    scheduleAutoplay();
+    document.addEventListener("visibilitychange", scheduleAutoplay);
+    reducedMotionQuery.addEventListener("change", scheduleAutoplay);
 
-  const activateItem = (index: number, shouldFocus = false) => {
-    const item = rotiConnectContent.items[index];
+    return () => {
+      window.clearTimeout(autoplayTimer);
+      document.removeEventListener("visibilitychange", scheduleAutoplay);
+      reducedMotionQuery.removeEventListener("change", scheduleAutoplay);
+    };
+  }, [activeIndex, isPaused, items]);
 
-    if (!item) {
-      return;
-    }
-
-    setActiveId(item.id);
-
-    if (shouldFocus) {
-      window.requestAnimationFrame(() => {
-        triggerRefs.current[index]?.focus();
-      });
-    }
+  const selectByIndex = (index: number) => {
+    const normalizedIndex = (index + items.length) % items.length;
+    setActiveId(items[normalizedIndex].id);
   };
 
-  const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const lastIndex = rotiConnectContent.items.length - 1;
-    let targetIndex: number | undefined;
-
-    if (event.key === "ArrowDown") {
-      targetIndex = index === lastIndex ? 0 : index + 1;
-    } else if (event.key === "ArrowUp") {
-      targetIndex = index === 0 ? lastIndex : index - 1;
-    } else if (event.key === "Home") {
-      targetIndex = 0;
-    } else if (event.key === "End") {
-      targetIndex = lastIndex;
-    }
-
-    if (targetIndex === undefined) {
+  const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
       return;
     }
 
     event.preventDefault();
-    activateItem(targetIndex, true);
+    const nextIndex = event.key === "ArrowRight" ? index + 1 : index - 1;
+    const normalizedIndex = (nextIndex + items.length) % items.length;
+    selectByIndex(normalizedIndex);
+    document.getElementById(`roti-connect-tab-${items[normalizedIndex].id}`)?.focus();
   };
 
   return (
     <SectionShell
-      ref={sectionRef}
       className="roti-connect"
       id={HOME_SECTION_IDS.group}
       aria-labelledby="roti-connect-title"
-      data-entered={hasEntered}
-      data-visual={activeItem.visual}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setIsPaused(false);
+        }
+      }}
     >
-      <div className="roti-connect__visuals" aria-hidden="true">
-        <span className="roti-connect__visual roti-connect__visual--rings" />
-        <span className="roti-connect__visual roti-connect__visual--grid" />
-        <span className="roti-connect__visual roti-connect__visual--network" />
-      </div>
       <SectionGrid className="roti-connect__grid">
-        <div className="roti-connect__intro">
-          <SectionLabel>{rotiConnectContent.eyebrow}</SectionLabel>
+        <header className="roti-connect__header">
           <h2 id="roti-connect-title" className="roti-connect__title">
-            {rotiConnectContent.title.map((line) => (
-              <span key={line}>{line}</span>
-            ))}
+            {rotiConnectContent.title}
           </h2>
-          <p className="roti-connect__description">{rotiConnectContent.description}</p>
+        </header>
+
+        <div className="roti-connect__selector" role="tablist" aria-label="ROTI 문의 유형">
+          {items.map((item, index) => {
+            const isActive = item.id === activeId;
+
+            return (
+              <button
+                key={item.id}
+                id={`roti-connect-tab-${item.id}`}
+                className="roti-connect__tab"
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls="roti-connect-panel"
+                tabIndex={isActive ? 0 : -1}
+                onClick={(event) => {
+                  setActiveId(item.id);
+                  if (event.detail > 0) {
+                    setIsPaused(false);
+                  }
+                }}
+                onKeyDown={(event) => handleTabKeyDown(event, index)}
+              >
+                <span>{item.index}</span>
+                <strong>{item.category}</strong>
+              </button>
+            );
+          })}
+        </div>
+      </SectionGrid>
+
+      <div className="roti-connect__carousel" aria-roledescription="carousel" aria-label="ROTI 문의 유형 미리보기">
+        <button
+          className="roti-connect__arrow roti-connect__arrow--previous"
+          type="button"
+          aria-label="이전 문의 유형"
+          onClick={(event) => {
+            selectByIndex(activeIndex - 1);
+            if (event.detail > 0) {
+              setIsPaused(false);
+            }
+          }}
+        >
+          <CaretLeft aria-hidden="true" weight="regular" />
+        </button>
+
+        <div
+          className="roti-connect__viewport"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {slideItems.map(({ item, slot }) => (
+            <button
+              key={item.id}
+              className="roti-connect__media-card"
+              type="button"
+              data-slot={slot}
+              aria-label={`${item.title} 선택`}
+              aria-current={slot === "active" ? "true" : undefined}
+              tabIndex={slot === "active" ? 0 : -1}
+              onClick={(event) => {
+                setActiveId(item.id);
+                if (event.detail > 0) {
+                  setIsPaused(false);
+                }
+              }}
+            >
+              <Image
+                src={item.imageSrc}
+                alt={item.imageAlt}
+                fill
+                sizes="(max-width: 760px) 88vw, 48vw"
+                className="roti-connect__media-image"
+              />
+              <span className="roti-connect__media-shade" aria-hidden="true" />
+              <span className="roti-connect__media-index" aria-hidden="true">
+                {item.index}
+              </span>
+            </button>
+          ))}
         </div>
 
-        <ol className="roti-connect__items" aria-label="ROTI 문의 유형">
-          {rotiConnectContent.items.map((item, index) => (
-            <li
-              key={item.id}
-              className="roti-connect__item"
-              data-active={activeId === item.id}
-              data-visual={item.visual}
-              style={{ "--connect-item-index": index } as CSSProperties}
-            >
-              <button
-                ref={(element) => {
-                  triggerRefs.current[index] = element;
-                }}
-                id={`roti-connect-trigger-${item.id}`}
-                className="roti-connect__trigger"
-                type="button"
-                aria-expanded={activeId === item.id}
-                aria-controls={`roti-connect-panel-${item.id}`}
-                onClick={() => activateItem(index)}
-                onFocus={() => activateItem(index)}
-                onMouseEnter={() => activateItem(index)}
-                onKeyDown={(event) => handleTriggerKeyDown(event, index)}
-              >
-                <span className="roti-connect__index">{item.index}</span>
-                <div className="roti-connect__heading">
-                  <strong>{item.title}</strong>
-                  <span>{item.description}</span>
-                </div>
-                <span className="roti-connect__arrow" aria-hidden="true" />
-              </button>
-              <div
-                id={`roti-connect-panel-${item.id}`}
-                className="roti-connect__panel"
-                role="region"
-                aria-labelledby={`roti-connect-trigger-${item.id}`}
-                aria-hidden={activeId !== item.id}
-              >
-                <div className="roti-connect__panel-inner">
-                  <a href={item.href} tabIndex={activeId === item.id ? 0 : -1}>
-                    {item.ctaLabel}
-                  </a>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <button
+          className="roti-connect__arrow roti-connect__arrow--next"
+          type="button"
+          aria-label="다음 문의 유형"
+          onClick={(event) => {
+            selectByIndex(activeIndex + 1);
+            if (event.detail > 0) {
+              setIsPaused(false);
+            }
+          }}
+        >
+          <CaretRight aria-hidden="true" weight="regular" />
+        </button>
+      </div>
+
+      <SectionGrid className="roti-connect__detail-grid">
+        <article
+          id="roti-connect-panel"
+          className="roti-connect__detail"
+          role="tabpanel"
+          aria-labelledby={`roti-connect-tab-${activeItem.id}`}
+          aria-live="polite"
+        >
+          <div key={activeItem.id} className="roti-connect__detail-content">
+            <h3>{activeItem.title}</h3>
+            <p>{activeItem.description}</p>
+            <ul aria-label={`${activeItem.title} 주요 문의`}>
+              {activeItem.keywords.map((keyword) => (
+                <li key={keyword}>{keyword}</li>
+              ))}
+            </ul>
+            <a href={activeItem.href}>{activeItem.ctaLabel}</a>
+          </div>
+        </article>
+        <div className="roti-connect__progress" aria-hidden="true">
+          <span style={{ "--connect-progress-index": activeIndex } as React.CSSProperties} />
+        </div>
       </SectionGrid>
     </SectionShell>
   );
