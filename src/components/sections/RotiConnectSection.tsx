@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { SectionGrid } from "@/components/layout/SectionGrid";
@@ -8,7 +8,7 @@ import { SectionShell } from "@/components/layout/SectionShell";
 import { rotiConnectContent, type RotiConnectItem } from "@/data/rotiConnect";
 import { HOME_SECTION_IDS } from "@/data/sections";
 
-const AUTOPLAY_DELAY_MS = 5000;
+const AUTOPLAY_DELAY_MS = 3000;
 
 type ConnectSlideSlot = "previous" | "active" | "next";
 
@@ -18,6 +18,32 @@ function getSlideSlot(index: number, activeIndex: number, itemCount: number): Co
   }
 
   return (index - activeIndex + itemCount) % itemCount === 1 ? "next" : "previous";
+}
+
+function ConnectMediaImage({ item }: { item: RotiConnectItem }) {
+  const { props: desktopImageProps } = getImageProps({
+    src: item.imageSrc,
+    alt: item.imageAlt,
+    width: 1672,
+    height: 941,
+    sizes: "48vw",
+    quality: 88
+  });
+  const { props: mobileImageProps } = getImageProps({
+    src: item.mobileImageSrc,
+    alt: "",
+    width: 1000,
+    height: 1600,
+    sizes: "88vw",
+    quality: 88
+  });
+
+  return (
+    <picture>
+      <source media="(max-width: 760px)" srcSet={mobileImageProps.srcSet} sizes="88vw" />
+      <img {...desktopImageProps} alt={item.imageAlt} className="roti-connect__media-image" />
+    </picture>
+  );
 }
 
 export function RotiConnectSection() {
@@ -164,13 +190,7 @@ export function RotiConnectSection() {
                 }
               }}
             >
-              <Image
-                src={item.imageSrc}
-                alt={item.imageAlt}
-                fill
-                sizes="(max-width: 760px) 88vw, 48vw"
-                className="roti-connect__media-image"
-              />
+              <ConnectMediaImage item={item} />
               <span className="roti-connect__media-shade" aria-hidden="true" />
               <span className="roti-connect__media-index" aria-hidden="true">
                 {item.index}
