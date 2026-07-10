@@ -178,7 +178,7 @@ Users should understand quickly:
 - Left and right cards move backward and appear slightly darker.
 - Use restrained left/right arrow controls to rotate the hero cards, matching the approved visual mockup direction.
 - Arrow controls rotate the cards only; they must not turn the Hero into a commerce carousel.
-- Brand card click/tap moves smoothly down to that brand's fullscreen section.
+- Brand card click/tap moves to that brand's fullscreen section through a restrained center-and-expand transition.
 - The background prioritizes dynamic smoke / mist / soft spotlight rather than a static image.
 - Smoke / mist should move very slowly and subtly.
 - Cards must feel grounded on the floor with natural contact shadows.
@@ -203,7 +203,7 @@ Users should understand quickly:
 ### Hero Card Switching
 - Left/right arrow controls are the primary way to switch the active Hero card.
 - The active card rotates in 3D and moves to the center when changed by arrow controls.
-- Clicking a brand card does not rotate the Hero; it scrolls to the matching brand fullscreen section.
+- Clicking a brand card enters the matching brand fullscreen section through a single center-and-expand transition; side cards first move to center, while arrow controls remain the primary card-rotation control.
 - Keep a 3D turntable / carousel feeling.
 - Keyboard access must remain available through accessible controls.
 
@@ -324,7 +324,7 @@ Must not include:
 
 ### Do
 - Keep arrow-based hero card rotation.
-- Keep card-click movement into the matching brand section.
+- Keep single-click card movement into the matching brand section, including the restrained center-and-expand transition.
 - Keep a shared layout system while giving each brand a distinct mood.
 - Use Ember Red sparingly.
 - Emphasize connected scroll transitions.
@@ -337,7 +337,7 @@ Must not include:
 
 ### Don't
 - Use commerce-style carousel controls, product-slider chrome, or auto-advancing sales carousel behavior.
-- Make card click rotate the Hero; card click should move to the brand section.
+- Do not make card click behave like a separate carousel control; it should enter the matching brand section through the restrained center-and-expand transition.
 - Add product prices, reviews, discounts, cart, checkout, member, order, or payment UI.
 - Add a separate product-listing shop page feel to the Hero.
 - Add unapproved third-party brand names or logos.

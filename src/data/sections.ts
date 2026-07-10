@@ -3,6 +3,7 @@ export const HOME_SECTION_IDS = {
   brand: "brand",
   about: "about",
   standard: "standard",
+  group: "group",
   footer: "roti-footer"
 } as const;
 
@@ -11,6 +12,7 @@ export const HOME_SECTION_HREFS = {
   brand: "#brand",
   about: "#about",
   standard: "#standard",
+  group: "#group",
   footer: "#roti-footer"
 } as const;
 
@@ -68,6 +70,16 @@ export const homeSections = [
     showInNavigation: true,
     showOnDesktop: true,
     showOnMobile: true
+  },
+  {
+    key: "group",
+    label: "GROUP",
+    id: HOME_SECTION_IDS.group,
+    href: HOME_SECTION_HREFS.group,
+    snapSelector: HOME_SECTION_HREFS.group,
+    showInNavigation: false,
+    showOnDesktop: false,
+    showOnMobile: false
   },
   {
     key: "footer",

@@ -1,0 +1,161 @@
+body[data-roti-brand-transition="true"] {
+  overscroll-behavior: none;
+}
+
+.brand-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.brand-transition-overlay__card {
+  position: absolute;
+  left: var(--transition-left);
+  top: var(--transition-top);
+  width: var(--transition-width);
+  height: var(--transition-height);
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 8%, transparent 91%, rgba(255, 255, 255, 0.07)),
+    linear-gradient(180deg, #252828 0%, #0f1111 48%, #020303 100%);
+  box-shadow:
+    inset 0.52rem 0 1.24rem rgba(255, 255, 255, 0.07),
+    inset -0.52rem 0 1.16rem rgba(255, 255, 255, 0.045),
+    inset 0 -2.4rem 3.2rem rgba(0, 0, 0, 0.76),
+    0 2.6rem 5.4rem rgba(0, 0, 0, 0.58);
+  transition: opacity 180ms ease;
+  will-change: left, top, width, height, opacity;
+}
+
+.brand-transition-overlay[data-phase="revealing"] .brand-transition-overlay__card,
+.brand-transition-overlay[data-phase="complete"] .brand-transition-overlay__card {
+  opacity: 0;
+}
+
+.brand-transition-overlay__image,
+.brand-transition-overlay__shade {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.brand-transition-overlay__image {
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 26%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.86)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 32%, rgba(0, 0, 0, 0.38)),
+    var(--transition-image, none);
+  background-position: center, center, center;
+  background-size: cover;
+}
+
+.brand-transition-overlay__image--hero,
+.brand-transition-overlay__image--section {
+  background-size: auto, auto, cover;
+}
+
+.brand-transition-overlay__image--section {
+  opacity: 0;
+}
+
+.brand-transition-overlay__shade {
+  z-index: 2;
+}
+
+.brand-transition-overlay__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(105deg, rgba(255, 255, 255, 0.15), transparent 8%, transparent 76%, rgba(255, 255, 255, 0.055)),
+    radial-gradient(ellipse at 44% 8%, rgba(255, 255, 255, 0.16), transparent 34%);
+  mix-blend-mode: screen;
+  opacity: 0.72;
+}
+
+.brand-transition-overlay__content {
+  position: absolute;
+  inset: 20% 16% auto;
+  z-index: 4;
+  display: grid;
+  justify-items: start;
+  gap: 0.28rem;
+  max-width: 78%;
+  color: #fff;
+  text-align: left;
+}
+
+.brand-transition-overlay__eyebrow {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(0.62rem, 0.62vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.brand-transition-overlay__title {
+  display: inline-flex;
+  width: auto;
+  max-width: min(100%, 13.5rem);
+  height: clamp(1.12rem, 1.7vw, 1.68rem);
+}
+
+.brand-transition-overlay__title img {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: invert(1) brightness(1.7);
+}
+
+.brand-transition-overlay__line {
+  width: 1.35rem;
+  height: 2px;
+  margin-top: 0.1rem;
+  background: var(--color-accent-red);
+}
+
+.brand-transition-overlay__description {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(0.72rem, 0.82vw, 0.92rem);
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+body[data-roti-brand-transition="true"] .hero-portal__intro,
+body[data-roti-brand-transition="true"] .hero-portal__footer,
+body[data-roti-brand-transition="true"] .brand-carousel__meta,
+body[data-roti-brand-transition="true"] .brand-carousel__controls {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.brand-carousel[data-transition-active="true"] .brand-carousel__cards {
+  pointer-events: none;
+}
+
+.brand-carousel[data-transition-active="true"] .brand-card[data-transition-selected="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.brand-carousel[data-transition-active="true"] .brand-card[data-transition-selected="false"] {
+  opacity: 0.16;
+  filter: blur(4px) brightness(0.55);
+  pointer-events: none;
+}
+
+.brand-carousel[data-transition-active="true"] .brand-card-contact-shadow {
+  opacity: 0;
+}
+
+.brand-carousel__arrow:disabled {
+  cursor: default;
+  opacity: 0;
+  pointer-events: none;
+}

@@ -95,6 +95,46 @@
   line-height: 1.25;
 }
 
+.roti-footer__contact {
+  margin-bottom: clamp(2.25rem, 4.8vh, 4rem);
+  padding-bottom: clamp(1.5rem, 2.8vh, 2.25rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.roti-footer__contact-label {
+  margin: 0;
+  color: var(--color-accent-red);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+}
+
+.roti-footer__contact-copy {
+  max-width: 28rem;
+  margin: 0.7rem 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1rem, 1.12vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.roti-footer__contact-topics {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1rem 0 0 !important;
+  padding: 0;
+  list-style: none;
+}
+
+.roti-footer__contact-topics li {
+  padding: 0.32rem 0.52rem;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.67rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
 .roti-footer__address {
   max-width: 33rem;
   margin: 0.55rem 0 0;

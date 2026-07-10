@@ -9,6 +9,13 @@ export type BrandHeroAsset = {
   focalPoint: string;
 };
 
+export type BrandTransitionAsset = {
+  heroFocalPoint: string;
+  sectionFocalPoint: string;
+  overlayShade?: string;
+  accessibilityLabel: string;
+};
+
 export type BrandScene = {
   title: string;
   copy: string;
@@ -31,6 +38,7 @@ export type Brand = {
   heroImage: string;
   sectionImage: string;
   heroAsset: BrandHeroAsset;
+  transition: BrandTransitionAsset;
   visualTagline: string;
   visualMaterial: string;
   visualScene: string;
