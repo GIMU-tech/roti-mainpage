@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cx } from "@/lib/utils";
 
-export function HeroScrollCue() {
+type HeroScrollCueProps = {
+  className?: string;
+};
+
+export function HeroScrollCue({ className }: HeroScrollCueProps) {
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
@@ -24,9 +29,11 @@ export function HeroScrollCue() {
   }, []);
 
   return (
-    <p className="hero-portal__scroll-note" data-hidden={isHidden}>
-      <span aria-hidden="true" />
-      SCROLL
+    <p className={cx("hero-portal__scroll-note", className)} data-hidden={isHidden} aria-label="스크롤">
+      <span className="hero-portal__scroll-note-inner" aria-hidden="true">
+        <span className="hero-portal__scroll-icon" aria-hidden="true" />
+        <span className="hero-portal__scroll-label">SCROLL</span>
+      </span>
     </p>
   );
 }

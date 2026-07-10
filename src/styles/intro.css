@@ -1,0 +1,177 @@
+.intro-sequence {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
+  background: #050505;
+  color: #f4f1ea;
+  opacity: 1;
+  pointer-events: auto;
+  transition:
+    opacity 980ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 980ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.intro-sequence[data-exiting="true"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.intro-sequence:focus {
+  outline: none;
+}
+
+.intro-sequence::before,
+.intro-sequence::after {
+  display: none;
+  content: "";
+}
+
+.intro-sequence__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(100% - 2.5rem, 72rem);
+  min-height: clamp(6rem, 18vh, 10rem);
+  place-items: center;
+  text-align: center;
+}
+
+.intro-sequence__word {
+  margin: 0;
+  color: #f4f1ea;
+  font-size: clamp(1.56rem, 4.4vw, 4.8rem);
+  font-weight: 760;
+  letter-spacing: clamp(0.16em, 0.55vw, 0.34em);
+  line-height: 1.18;
+  text-transform: uppercase;
+  text-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.58);
+  animation: intro-word-reveal var(--intro-scene-duration) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-sequence__word--sentence {
+  max-width: min(100%, 38rem);
+  font-size: clamp(1.08rem, 3.35vw, 3.2rem);
+  letter-spacing: clamp(0.08em, 0.28vw, 0.18em);
+  text-wrap: balance;
+}
+
+.intro-sequence__brand {
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.5rem, 1.25vw, 0.86rem);
+}
+
+.intro-sequence__tagline {
+  margin: 0;
+  color: rgba(244, 241, 234, 0.68);
+  font-size: clamp(0.6rem, 0.83vw, 0.78rem);
+  font-weight: 260;
+  letter-spacing: clamp(0.14em, 0.28vw, 0.24em);
+  line-height: 1.3;
+  text-transform: uppercase;
+  animation: intro-tagline-drop 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 130ms;
+  will-change: opacity, filter, transform;
+}
+
+.intro-sequence__logo-letters {
+  position: relative;
+  display: block;
+  width: clamp(13.8rem, 31.5vw, 29.5rem);
+  aspect-ratio: 295 / 70;
+  filter: invert(1) brightness(1.45);
+  line-height: 0;
+}
+
+.intro-sequence__logo-letter {
+  position: absolute;
+  inset: 0;
+  background: url("/images/logos/roti-logo-mark.svg") center / contain no-repeat;
+  opacity: 0;
+  will-change: opacity, filter, transform;
+}
+
+.intro-sequence__logo-letter[data-letter="r"] {
+  clip-path: inset(-4% 75.9% -4% -4%);
+  animation: intro-logo-letter-from-left 940ms 210ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.intro-sequence__logo-letter[data-letter="o"] {
+  clip-path: inset(-4% 43.8% -4% 29.8%);
+  animation: intro-logo-letter-from-left 940ms 70ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.intro-sequence__logo-letter[data-letter="t"] {
+  clip-path: inset(-4% 14.5% -4% 59.5%);
+  animation: intro-logo-letter-from-right 940ms 70ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.intro-sequence__logo-letter[data-letter="i"] {
+  clip-path: inset(-4% -4% -4% 91.9%);
+  animation: intro-logo-letter-from-right 940ms 210ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.intro-sequence__scroll-cue {
+  position: absolute;
+  bottom: clamp(1.2rem, 3vh, 2.25rem);
+  left: 50%;
+  z-index: 3;
+  color: rgba(244, 241, 234, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, 0.65rem, 0);
+  animation: intro-scroll-cue-reveal 760ms 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-sequence__scroll-cue[data-hidden="true"] {
+  transform: translate3d(-50%, 0.85rem, 0);
+}
+
+.intro-sequence__skip {
+  position: absolute;
+  right: clamp(1.25rem, 3.5vw, 3rem);
+  bottom: clamp(1.2rem, 3vh, 2.25rem);
+  z-index: 3;
+  min-width: 3.5rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(244, 241, 234, 0.58);
+  font-size: 0.72rem;
+  font-weight: 680;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.intro-sequence__skip::before {
+  position: absolute;
+  inset: -0.32rem;
+  border-radius: inherit;
+  content: "";
+}
+
+.intro-sequence__skip:hover {
+  color: #f4f1ea;
+  transform: translateY(-1px);
+}
+
+.intro-sequence__skip:focus-visible {
+  outline: 2px solid var(--color-accent-red);
+  outline-offset: 0.2rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-red);
+  outline-offset: 4px;
+}

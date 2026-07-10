@@ -22,9 +22,9 @@ export const rotiStandards = [
     imageAlt: "어두운 실내 벽면에 모듈 수납과 생활 도구가 질서 있게 배치된 장면"
   },
   {
-    id: "trusted-quality",
-    title: "믿을 수 있는 품질",
-    englishTitle: "Trusted Quality",
+    id: "verifiable-quality",
+    title: "확인 가능한 품질 기준",
+    englishTitle: "Verifiable Quality",
     copy: "소재와 마감, 접합부처럼 눈과 손으로 확인되는 디테일을 중심에 둡니다.",
     visualLabel: "Checked Detail",
     visualTitle: "마감과 구조의 디테일",

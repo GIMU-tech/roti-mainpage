@@ -25,6 +25,11 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
 
+  --section-content-max: 95rem;
+  --section-gutter: clamp(1.875rem, 5vw, 5.9rem);
+  --section-grid-gap: clamp(2.5rem, 5vw, 6rem);
+  --section-visual-center-offset: 0px;
+
   --radius-card: 0.5rem;
   --shadow-soft: 0 2rem 5rem rgba(0, 0, 0, 0.36);
   --shadow-red-restraint: 0 1.4rem 4rem rgba(180, 19, 7, 0.18);

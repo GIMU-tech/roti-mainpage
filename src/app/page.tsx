@@ -7,13 +7,14 @@ import { AboutRotiSection } from "@/components/sections/AboutRotiSection";
 import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
 import { RotiBusinessReplicaSection } from "@/components/sections/RotiBusinessReplicaSection";
 import { brands } from "@/data/brands";
+import { HOME_SECTION_IDS } from "@/data/sections";
 
 export default function HomePage() {
   return (
     <SmoothScrollProvider>
       <IntroSequence />
       <Header />
-      <main id="top">
+      <main id={HOME_SECTION_IDS.top}>
         <HeroPortal brands={brands} />
         <BrandSlideStack brands={brands} />
         <AboutRotiSection />

@@ -14,7 +14,7 @@ export const brands: Brand[] = [
     mood: ["outdoor", "movement", "nature", "rest"],
     keywords: ["캠핑", "이동", "수납"],
     heroImage: "/images/brands/camp-hero.jpg",
-    sectionImage: "/images/sections/camp-bg.jpg",
+    sectionImage: "/images/sections/roti-camp-brand-section.jpg",
     heroAsset: {
       src: "/images/brands/camp-hero.jpg",
       alt: "ROTI CAMP 어두운 야외와 장비 분위기의 장면",
@@ -45,7 +45,7 @@ export const brands: Brand[] = [
     mood: ["organize", "move", "utility", "efficiency"],
     keywords: ["수납", "이동", "생활 동선"],
     heroImage: "/images/brands/homesys-hero.jpg",
-    sectionImage: "/images/sections/homesys-bg.jpg",
+    sectionImage: "/images/sections/roti-homesys-brand-section.jpg",
     heroAsset: {
       src: "/images/brands/homesys-hero.jpg",
       alt: "ROTI HOMESYS 정돈된 실내와 수납 구조 장면",
@@ -76,7 +76,7 @@ export const brands: Brand[] = [
     mood: ["kitchen", "clean", "density", "calm"],
     keywords: ["주방", "소재", "여백"],
     heroImage: "/images/brands/leel-hero.jpg",
-    sectionImage: "/images/sections/leel-bg.jpg",
+    sectionImage: "/images/sections/leel-brand-section.jpg",
     heroAsset: {
       src: "/images/brands/leel-hero.jpg",
       alt: "LeEL 조용한 주방과 리빙 오브젝트 장면",

@@ -1,0 +1,496 @@
+{
+  "checkedAt": "2026-07-09T04:16:29.176Z",
+  "target": "Standard rail attached preview sequence",
+  "desktop": {
+    "initial": {
+      "bodyOverflowX": 0,
+      "docOverflowX": 0,
+      "href": "http://localhost:3000/#standard",
+      "images": [
+        {
+          "bottom": 1029,
+          "filter": "brightness(1)",
+          "height": 764,
+          "index": 1,
+          "left": 650,
+          "right": 1250,
+          "top": 265,
+          "width": 600,
+          "zIndex": "3"
+        },
+        {
+          "bottom": 1029,
+          "filter": "brightness(0.52)",
+          "height": 764,
+          "index": 2,
+          "left": 1250,
+          "right": 1345,
+          "top": 265,
+          "width": 95,
+          "zIndex": "2"
+        },
+        {
+          "bottom": 1029,
+          "filter": "brightness(0.36)",
+          "height": 764,
+          "index": 3,
+          "left": 1345,
+          "right": 1440,
+          "top": 265,
+          "width": 95,
+          "zIndex": "1"
+        }
+      ],
+      "scrollX": 0,
+      "scrollY": 5399,
+      "section": {
+        "bottom": 1081,
+        "height": 900,
+        "left": 0,
+        "right": 1440,
+        "top": 181,
+        "width": 1440
+      },
+      "stage": {
+        "bottom": 1029,
+        "height": 764,
+        "left": 650,
+        "right": 1440,
+        "top": 265,
+        "width": 790
+      },
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      }
+    },
+    "initialAssert": {
+      "noHorizontalOverflow": true,
+      "rightEdgeFlush": true,
+      "firstStartsAtStageLeft": true,
+      "firstSecondTouch": true,
+      "secondThirdTouch": true,
+      "thirdEndsAtStageRight": true,
+      "largestImageIndex": 1,
+      "orderByLeft": [
+        1,
+        2,
+        3
+      ],
+      "widths": [
+        600,
+        95,
+        95
+      ]
+    },
+    "mid": {
+      "bodyOverflowX": 0,
+      "docOverflowX": 0,
+      "href": "http://localhost:3000/#standard",
+      "images": [
+        {
+          "bottom": 848,
+          "filter": "brightness(0.3663)",
+          "height": 764,
+          "index": 1,
+          "left": 1338,
+          "right": 1438,
+          "top": 84,
+          "width": 100,
+          "zIndex": "1"
+        },
+        {
+          "bottom": 848,
+          "filter": "brightness(0.9953)",
+          "height": 764,
+          "index": 2,
+          "left": 656,
+          "right": 1251,
+          "top": 84,
+          "width": 595,
+          "zIndex": "3"
+        },
+        {
+          "bottom": 848,
+          "filter": "brightness(0.5184)",
+          "height": 764,
+          "index": 3,
+          "left": 1251,
+          "right": 1346,
+          "top": 84,
+          "width": 95,
+          "zIndex": "2"
+        }
+      ],
+      "scrollX": 0,
+      "scrollY": 6630,
+      "section": {
+        "bottom": 900,
+        "height": 900,
+        "left": 0,
+        "right": 1440,
+        "top": 0,
+        "width": 1440
+      },
+      "stage": {
+        "bottom": 848,
+        "height": 764,
+        "left": 650,
+        "right": 1440,
+        "top": 84,
+        "width": 790
+      },
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      }
+    },
+    "midAssert": {
+      "noHorizontalOverflow": true,
+      "rightEdgeFlush": true,
+      "firstStartsAtStageLeft": false,
+      "firstSecondTouch": true,
+      "secondThirdTouch": false,
+      "thirdEndsAtStageRight": true,
+      "largestImageIndex": 2,
+      "orderByLeft": [
+        2,
+        3,
+        1
+      ],
+      "widths": [
+        595,
+        95,
+        100
+      ]
+    },
+    "late": {
+      "bodyOverflowX": 0,
+      "docOverflowX": 0,
+      "href": "http://localhost:3000/#standard",
+      "images": [
+        {
+          "bottom": 567,
+          "filter": "brightness(0.52)",
+          "height": 764,
+          "index": 1,
+          "left": 1250,
+          "right": 1345,
+          "top": -197,
+          "width": 95,
+          "zIndex": "2"
+        },
+        {
+          "bottom": 567,
+          "filter": "brightness(0.36)",
+          "height": 764,
+          "index": 2,
+          "left": 1345,
+          "right": 1440,
+          "top": -197,
+          "width": 95,
+          "zIndex": "1"
+        },
+        {
+          "bottom": 567,
+          "filter": "brightness(1)",
+          "height": 764,
+          "index": 3,
+          "left": 650,
+          "right": 1250,
+          "top": -197,
+          "width": 600,
+          "zIndex": "3"
+        }
+      ],
+      "scrollX": 0,
+      "scrollY": 8381,
+      "section": {
+        "bottom": 619,
+        "height": 900,
+        "left": 0,
+        "right": 1440,
+        "top": -281,
+        "width": 1440
+      },
+      "stage": {
+        "bottom": 567,
+        "height": 764,
+        "left": 650,
+        "right": 1440,
+        "top": -197,
+        "width": 790
+      },
+      "viewport": {
+        "height": 900,
+        "width": 1440
+      }
+    },
+    "lateAssert": {
+      "noHorizontalOverflow": true,
+      "rightEdgeFlush": true,
+      "firstStartsAtStageLeft": true,
+      "firstSecondTouch": true,
+      "secondThirdTouch": true,
+      "thirdEndsAtStageRight": true,
+      "largestImageIndex": 3,
+      "orderByLeft": [
+        3,
+        1,
+        2
+      ],
+      "widths": [
+        600,
+        95,
+        95
+      ]
+    }
+  },
+  "tablet": {
+    "initial": {
+      "bodyOverflowX": 0,
+      "docOverflowX": 0,
+      "href": "http://localhost:3000/#standard",
+      "images": [
+        {
+          "bottom": 5991,
+          "filter": "brightness(1)",
+          "height": 399,
+          "index": 1,
+          "left": 38,
+          "right": 578,
+          "top": 5591,
+          "width": 540,
+          "zIndex": "3"
+        },
+        {
+          "bottom": 5991,
+          "filter": "brightness(0.52)",
+          "height": 399,
+          "index": 2,
+          "left": 579,
+          "right": 674,
+          "top": 5591,
+          "width": 95,
+          "zIndex": "2"
+        },
+        {
+          "bottom": 5991,
+          "filter": "brightness(0.36)",
+          "height": 399,
+          "index": 3,
+          "left": 674,
+          "right": 769,
+          "top": 5591,
+          "width": 95,
+          "zIndex": "1"
+        }
+      ],
+      "scrollX": 0,
+      "scrollY": 0,
+      "section": {
+        "bottom": 6390,
+        "height": 1024,
+        "left": 0,
+        "right": 768,
+        "top": 5366,
+        "width": 768
+      },
+      "stage": {
+        "bottom": 5991,
+        "height": 399,
+        "left": 38,
+        "right": 768,
+        "top": 5591,
+        "width": 730
+      },
+      "viewport": {
+        "height": 1024,
+        "width": 768
+      }
+    },
+    "initialAssert": {
+      "noHorizontalOverflow": true,
+      "rightEdgeFlush": true,
+      "firstStartsAtStageLeft": true,
+      "firstSecondTouch": true,
+      "secondThirdTouch": true,
+      "thirdEndsAtStageRight": true,
+      "largestImageIndex": 1,
+      "orderByLeft": [
+        1,
+        2,
+        3
+      ],
+      "widths": [
+        540,
+        95,
+        95
+      ]
+    }
+  },
+  "mobile": {
+    "initial": {
+      "bodyOverflowX": 0,
+      "docOverflowX": 0,
+      "href": "http://localhost:3000/#standard",
+      "images": [
+        {
+          "bottom": 4913,
+          "filter": "brightness(1)",
+          "height": 306,
+          "index": 1,
+          "left": 30,
+          "right": 296,
+          "top": 4607,
+          "width": 266,
+          "zIndex": "3"
+        },
+        {
+          "bottom": 4913,
+          "filter": "brightness(0.52)",
+          "height": 306,
+          "index": 2,
+          "left": 296,
+          "right": 343,
+          "top": 4607,
+          "width": 47,
+          "zIndex": "2"
+        },
+        {
+          "bottom": 4913,
+          "filter": "brightness(0.36)",
+          "height": 306,
+          "index": 3,
+          "left": 343,
+          "right": 390,
+          "top": 4607,
+          "width": 47,
+          "zIndex": "1"
+        }
+      ],
+      "scrollX": 0,
+      "scrollY": 0,
+      "section": {
+        "bottom": 5267,
+        "height": 844,
+        "left": 0,
+        "right": 390,
+        "top": 4423,
+        "width": 390
+      },
+      "stage": {
+        "bottom": 4913,
+        "height": 306,
+        "left": 30,
+        "right": 390,
+        "top": 4607,
+        "width": 360
+      },
+      "viewport": {
+        "height": 844,
+        "width": 390
+      }
+    },
+    "initialAssert": {
+      "noHorizontalOverflow": true,
+      "rightEdgeFlush": true,
+      "firstStartsAtStageLeft": true,
+      "firstSecondTouch": true,
+      "secondThirdTouch": true,
+      "thirdEndsAtStageRight": true,
+      "largestImageIndex": 1,
+      "orderByLeft": [
+        1,
+        2,
+        3
+      ],
+      "widths": [
+        266,
+        47,
+        47
+      ]
+    },
+    "late": {
+      "bodyOverflowX": 0,
+      "docOverflowX": 0,
+      "href": "http://localhost:3000/#standard",
+      "images": [
+        {
+          "bottom": 482,
+          "filter": "brightness(0.52)",
+          "height": 306,
+          "index": 1,
+          "left": 296,
+          "right": 343,
+          "top": 176,
+          "width": 47,
+          "zIndex": "2"
+        },
+        {
+          "bottom": 482,
+          "filter": "brightness(0.36)",
+          "height": 306,
+          "index": 2,
+          "left": 343,
+          "right": 390,
+          "top": 176,
+          "width": 47,
+          "zIndex": "1"
+        },
+        {
+          "bottom": 482,
+          "filter": "brightness(1)",
+          "height": 306,
+          "index": 3,
+          "left": 30,
+          "right": 296,
+          "top": 176,
+          "width": 266,
+          "zIndex": "3"
+        }
+      ],
+      "scrollX": 0,
+      "scrollY": 6794,
+      "section": {
+        "bottom": 836,
+        "height": 844,
+        "left": 0,
+        "right": 390,
+        "top": -8,
+        "width": 390
+      },
+      "stage": {
+        "bottom": 482,
+        "height": 306,
+        "left": 30,
+        "right": 390,
+        "top": 176,
+        "width": 360
+      },
+      "viewport": {
+        "height": 844,
+        "width": 390
+      }
+    },
+    "lateAssert": {
+      "noHorizontalOverflow": true,
+      "rightEdgeFlush": true,
+      "firstStartsAtStageLeft": true,
+      "firstSecondTouch": true,
+      "secondThirdTouch": true,
+      "thirdEndsAtStageRight": true,
+      "largestImageIndex": 3,
+      "orderByLeft": [
+        3,
+        1,
+        2
+      ],
+      "widths": [
+        266,
+        47,
+        47
+      ]
+    }
+  }
+}

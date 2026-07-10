@@ -1,0 +1,23 @@
+.section-shell {
+  --section-padding-x: var(--section-gutter);
+  --section-padding-y: clamp(6rem, 12vh, 9rem);
+
+  min-height: 100svh;
+  padding: var(--section-padding-y) var(--section-padding-x);
+  scroll-snap-align: start;
+}
+
+.section-grid {
+  display: grid;
+  width: min(100%, var(--section-content-max));
+  margin-inline: auto;
+  gap: var(--section-grid-gap);
+}
+
+.section-label {
+  color: var(--color-accent-red);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
