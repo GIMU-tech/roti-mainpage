@@ -29,6 +29,7 @@ export function BrandTransitionProvider({ brands, children }: BrandTransitionPro
   const [state, setState] = useState<BrandTransitionState>(IDLE_BRAND_TRANSITION_STATE);
   const transitionLockRef = useRef(false);
   const transitionIdRef = useRef(0);
+  const escapeCompletionFramesRef = useRef<number[]>([]);
   const activeBrand = useMemo(
     () => brands.find((brand) => brand.id === state.brandId),
     [brands, state.brandId]
@@ -104,21 +105,66 @@ export function BrandTransitionProvider({ brands, children }: BrandTransitionPro
     const transitionId = state.transitionId;
     const brandId = state.brandId;
     const brandSection = document.getElementById(brandId);
+    const targetSlide = document.querySelector<HTMLElement>(
+      `.brand-slide-stack__slide[data-brand="${brandId}"]`
+    );
+    const targetFrame = targetSlide?.querySelector<HTMLElement>(".brand-slide-stack__frame");
 
-    if (!brandSection) {
+    if (!brandSection || !targetSlide || !targetFrame) {
       cancelBrandTransition(transitionId);
       return;
     }
 
     let animationFrame = 0;
-    const revealBrandScene = () => setBrandTransitionPhase(transitionId, "revealing");
-    const scrollFallbackTimer = window.setTimeout(
-      revealBrandScene,
+    let alignedFrameCount = 0;
+    let hasRevealed = false;
+    const revealBrandScene = () => {
+      if (hasRevealed) {
+        return;
+      }
+
+      hasRevealed = true;
+      setBrandTransitionPhase(transitionId, "revealing");
+    };
+    const correctionTimer = window.setTimeout(
+      () => {
+        alignedFrameCount = 0;
+        scrollToTarget(brandId, {
+          duration: 0,
+          lock: true
+        });
+      },
       brandTransitionTiming.sectionScrollFallback * 1000
     );
+    const recoveryTimer = window.setTimeout(() => {
+      scrollToTarget(brandId, {
+        duration: 0,
+        lock: true
+      });
+      cancelBrandTransition(transitionId);
+    }, brandTransitionTiming.sectionArrivalRecovery * 1000);
     const confirmBrandSceneArrival = () => {
-      if (Math.abs(brandSection.getBoundingClientRect().top) <= 3) {
-        window.clearTimeout(scrollFallbackTimer);
+      const sectionTopError = Math.abs(brandSection.getBoundingClientRect().top);
+      const frameRect = targetFrame.getBoundingClientRect();
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = document.documentElement.clientHeight;
+      const frameErrors = [
+        Math.abs(frameRect.left),
+        Math.abs(frameRect.top),
+        Math.abs(frameRect.right - viewportWidth),
+        Math.abs(frameRect.bottom - viewportHeight)
+      ];
+      const isTargetVisible = Number(window.getComputedStyle(targetSlide).opacity) >= 0.99;
+      const isAligned =
+        sectionTopError <= 3 &&
+        frameErrors.every((error) => error <= 3) &&
+        isTargetVisible;
+
+      alignedFrameCount = isAligned ? alignedFrameCount + 1 : 0;
+
+      if (alignedFrameCount >= 2) {
+        window.clearTimeout(correctionTimer);
+        window.clearTimeout(recoveryTimer);
         revealBrandScene();
         return;
       }
@@ -133,24 +179,11 @@ export function BrandTransitionProvider({ brands, children }: BrandTransitionPro
     animationFrame = window.requestAnimationFrame(confirmBrandSceneArrival);
 
     return () => {
-      window.clearTimeout(scrollFallbackTimer);
+      window.clearTimeout(correctionTimer);
+      window.clearTimeout(recoveryTimer);
       window.cancelAnimationFrame(animationFrame);
     };
   }, [cancelBrandTransition, setBrandTransitionPhase, state.brandId, state.phase, state.transitionId]);
-
-  useEffect(() => {
-    if (state.phase !== "revealing") {
-      return;
-    }
-
-    const transitionId = state.transitionId;
-    const revealTimer = window.setTimeout(
-      () => setBrandTransitionPhase(transitionId, "complete"),
-      brandTransitionTiming.reveal * 1000
-    );
-
-    return () => window.clearTimeout(revealTimer);
-  }, [setBrandTransitionPhase, state.phase, state.transitionId]);
 
   useEffect(() => {
     if (state.phase !== "complete") {
@@ -158,10 +191,15 @@ export function BrandTransitionProvider({ brands, children }: BrandTransitionPro
     }
 
     const transitionId = state.transitionId;
+    const targetHeading = state.brandId
+      ? document.getElementById(`${state.brandId}-slide-title`)
+      : null;
+
+    targetHeading?.focus({ preventScroll: true });
     const completeTimer = window.setTimeout(() => cancelBrandTransition(transitionId), 0);
 
     return () => window.clearTimeout(completeTimer);
-  }, [cancelBrandTransition, state.phase, state.transitionId]);
+  }, [cancelBrandTransition, state.brandId, state.phase, state.transitionId]);
 
   useEffect(() => {
     if (state.isLocked) {
@@ -210,6 +248,45 @@ export function BrandTransitionProvider({ brands, children }: BrandTransitionPro
     };
   }, [state.isLocked, state.phase]);
 
+  useEffect(() => {
+    if (!state.isLocked || !state.brandId) {
+      return;
+    }
+
+    const transitionId = state.transitionId;
+    const brandId = state.brandId;
+    const fastCompleteTransition = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      cancelBrandTransition(transitionId);
+
+      const scrollFrame = window.requestAnimationFrame(() => {
+        scrollToTarget(brandId, { duration: 0, lock: false });
+        const focusFrame = window.requestAnimationFrame(() => {
+          document.getElementById(`${brandId}-slide-title`)?.focus({ preventScroll: true });
+        });
+        escapeCompletionFramesRef.current.push(focusFrame);
+      });
+      escapeCompletionFramesRef.current.push(scrollFrame);
+    };
+
+    window.addEventListener("keydown", fastCompleteTransition, { capture: true });
+
+    return () => window.removeEventListener("keydown", fastCompleteTransition, { capture: true });
+  }, [cancelBrandTransition, state.brandId, state.isLocked, state.transitionId]);
+
+  useEffect(
+    () => () => {
+      escapeCompletionFramesRef.current.forEach((frame) => window.cancelAnimationFrame(frame));
+      escapeCompletionFramesRef.current = [];
+    },
+    []
+  );
+
   const contextValue = useMemo(
     () => ({ state, startBrandTransition, setBrandTransitionPhase, cancelBrandTransition, resetBrandTransition }),
     [cancelBrandTransition, resetBrandTransition, setBrandTransitionPhase, startBrandTransition, state]
@@ -218,6 +295,9 @@ export function BrandTransitionProvider({ brands, children }: BrandTransitionPro
   return (
     <BrandTransitionContext.Provider value={contextValue}>
       {children}
+      <p className="brand-transition-status" aria-live="polite" aria-atomic="true">
+        {state.phase !== "idle" && activeBrand ? activeBrand.transition.accessibilityLabel : ""}
+      </p>
       {activeBrand ? <BrandTransitionOverlay brand={activeBrand} state={state} /> : null}
     </BrandTransitionContext.Provider>
   );

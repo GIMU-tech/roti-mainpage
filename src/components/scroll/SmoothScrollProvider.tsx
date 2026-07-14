@@ -81,8 +81,16 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       const rafLenis = (time: number) => lenis.raf(time * 1000);
       let isSectionSnapping = false;
       let sectionSnapReleaseTimer: number | undefined;
+      let desktopSectionSnapTimer: number | undefined;
+      let lastSectionSnapDirection = 0;
       let mobileSectionSnapTimer: number | undefined;
       const mobileSectionSnapQuery = window.matchMedia("(max-width: 900px)");
+      const clearDesktopSectionSnap = () => {
+        if (desktopSectionSnapTimer) {
+          window.clearTimeout(desktopSectionSnapTimer);
+          desktopSectionSnapTimer = undefined;
+        }
+      };
       const clearMobileSectionSnap = () => {
         if (mobileSectionSnapTimer) {
           window.clearTimeout(mobileSectionSnapTimer);
@@ -201,7 +209,6 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       };
       const handleSectionWheelSnap = (event: WheelEvent) => {
         if (
-          event.defaultPrevented ||
           event.ctrlKey ||
           !canUseSectionSnap() ||
           isInsideDesktopBrandStack() ||
@@ -211,9 +218,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           return;
         }
 
-        event.preventDefault();
-
         if (isSectionSnapping) {
+          event.preventDefault();
           ScrollTrigger.update();
           return;
         }
@@ -224,7 +230,46 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           return;
         }
 
+        // Lenis may already have marked the native wheel event as handled.
+        // Section snapping is the single owner for this boundary, so the
+        // presence of defaultPrevented must not prevent the snap target from
+        // being selected and locked here.
+        event.preventDefault();
         scrollToSectionSnapPoint(targetY);
+      };
+      const scheduleDesktopSectionSnap = (deltaY: number) => {
+        if (
+          mobileSectionSnapQuery.matches ||
+          !canUseSectionSnap() ||
+          isSectionSnapping ||
+          isInsideDesktopBrandStack() ||
+          Math.abs(deltaY) < SECTION_SNAP_MIN_DELTA
+        ) {
+          return;
+        }
+
+        lastSectionSnapDirection = deltaY > 0 ? 1 : -1;
+        clearDesktopSectionSnap();
+        desktopSectionSnapTimer = window.setTimeout(() => {
+          desktopSectionSnapTimer = undefined;
+
+          if (
+            mobileSectionSnapQuery.matches ||
+            !canUseSectionSnap() ||
+            isSectionSnapping ||
+            isInsideDesktopBrandStack()
+          ) {
+            return;
+          }
+
+          const targetY = getSectionSnapTarget(lastSectionSnapDirection);
+
+          if (targetY === undefined || Math.abs(targetY - lenis.scroll) <= 10) {
+            return;
+          }
+
+          scrollToSectionSnapPoint(targetY);
+        }, 160);
       };
       const scheduleMobileSectionSnap = () => {
         if (!mobileSectionSnapQuery.matches || !canUseSectionSnap() || isSectionSnapping) {
@@ -258,7 +303,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
             duration,
             easing: easeOutSine,
             force: true,
-            lock
+            lock,
+            onComplete: () => ScrollTrigger.update()
           });
           return;
         }
@@ -275,7 +321,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           easing: easeOutSine,
           force: true,
           lock,
-          offset
+          offset,
+          onComplete: () => ScrollTrigger.update()
         });
       };
       const handleRefresh = () => lenis.resize();
@@ -284,8 +331,24 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         updateScrollTrigger();
         scheduleMobileSectionSnap();
       };
+      const handleLenisVirtualScroll = ({
+        deltaX,
+        deltaY,
+        event
+      }: {
+        deltaX: number;
+        deltaY: number;
+        event: Event;
+      }) => {
+        if (event.type !== "wheel" || Math.abs(deltaX) > Math.abs(deltaY)) {
+          return;
+        }
+
+        scheduleDesktopSectionSnap(deltaY);
+      };
 
       lenis.on("scroll", handleLenisScroll);
+      lenis.on("virtual-scroll", handleLenisVirtualScroll);
       gsap.ticker.add(rafLenis);
       gsap.ticker.lagSmoothing(0);
       ScrollTrigger.addEventListener("refresh", handleRefresh);
@@ -299,6 +362,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         ScrollTrigger.removeEventListener("refresh", handleRefresh);
         gsap.ticker.remove(rafLenis);
         lenis.off("scroll", handleLenisScroll);
+        lenis.off("virtual-scroll", handleLenisVirtualScroll);
+        clearDesktopSectionSnap();
         clearMobileSectionSnap();
         releaseSectionSnap();
         lenis.destroy();

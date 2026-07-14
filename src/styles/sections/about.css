@@ -1,292 +1,408 @@
-.about-roti {
+.about-roti-scroll {
+  --about-scene-count: 4;
+  --about-gutter: clamp(1.5rem, 5vw, 5.5rem);
+
   position: relative;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.035), transparent 34%),
-    radial-gradient(ellipse at 78% 38%, rgba(255, 255, 255, 0.055), transparent 30rem),
-    radial-gradient(ellipse at 62% 62%, rgba(180, 19, 7, 0.045), transparent 32rem),
-    linear-gradient(180deg, #050505, #0b0b0b 48%, #050505);
+  height: calc(var(--about-scene-count) * 100svh);
+  background: var(--color-background-primary);
+  scroll-snap-align: start;
 }
 
-.about-roti::before {
+.about-roti-scroll__stage {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-background-primary);
+}
+
+.about-roti-scroll__backgrounds,
+.about-roti-scroll__background,
+.about-roti-scroll__shade,
+.about-roti-scroll__grain {
   position: absolute;
   inset: 0;
-  background:
-    repeating-radial-gradient(circle at 28% 26%, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.035), transparent);
-  content: "";
-  opacity: 0.32;
-  pointer-events: none;
 }
 
-.about-roti::after {
-  position: absolute;
-  inset: clamp(5.4rem, 11vh, 8.2rem) var(--section-gutter);
-  border-top: 1px solid rgba(255, 255, 255, 0.052);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.044);
-  content: "";
-  pointer-events: none;
+.about-roti-scroll__background {
+  opacity: 0;
+  transform: scale(1.035);
+  transition:
+    opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.about-roti__grid {
-  grid-template-columns: minmax(0, 0.76fr) minmax(27rem, 0.82fr);
-  align-items: center;
-  gap: clamp(3.4rem, 6vw, 6.4rem);
-  transform: translateY(var(--section-visual-center-offset));
+.about-roti-scroll__background[data-active="true"] {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.about-roti__copy,
-.about-roti__visual {
+.about-roti-scroll__background > img,
+.about-roti-scroll__background-panel > img {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.72) contrast(1.05) brightness(0.62);
+}
+
+.about-roti-scroll__background[data-brand="roti-camp"] > img {
+  object-position: 45% center;
+}
+
+.about-roti-scroll__background[data-brand="roti-homesys"] > img {
+  object-position: 55% center;
+}
+
+.about-roti-scroll__background[data-brand="leel"] > img {
+  object-position: 52% center;
+}
+
+.about-roti-scroll__background--group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: #111;
+}
+
+.about-roti-scroll__background-panel {
   position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
-.about-roti__title {
-  max-width: 38rem;
-  margin: clamp(1.35rem, 2.5vh, 2.1rem) 0 0;
-  color: var(--color-text-primary);
-  font-size: clamp(3rem, 4vw, 3.75rem);
-  font-weight: 340;
-  letter-spacing: 0;
-  line-height: 1.16;
+.about-roti-scroll__background-panel > img {
+  filter: grayscale(0.28) saturate(0.7) brightness(0.48);
+}
+
+.about-roti-scroll__background-panel:nth-child(1) > img {
+  object-position: 45% center;
+}
+
+.about-roti-scroll__background-panel:nth-child(2) > img {
+  object-position: 55% center;
+}
+
+.about-roti-scroll__background-panel:nth-child(3) > img {
+  object-position: 52% center;
+}
+
+.about-roti-scroll__shade {
+  z-index: 1;
+  background:
+    radial-gradient(circle at var(--about-glow-x, 50%) 52%, rgba(180, 19, 7, 0.17), transparent 34%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.84), rgba(0, 0, 0, 0.48) 46%, rgba(0, 0, 0, 0.76)),
+    linear-gradient(180deg, #050505 0%, transparent 24%, transparent 70%, #050505 100%);
+  transition: background 900ms ease;
+  pointer-events: none;
+}
+
+.about-roti-scroll__grain {
+  z-index: 2;
+  opacity: 0.24;
+  background: repeating-radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.032) 0 1px, transparent 1px 4px);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.about-roti-scroll__content {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  width: 100%;
+  height: 100%;
+  margin-inline: auto;
+  padding: clamp(5.5rem, 10vh, 7rem) var(--about-gutter) clamp(2rem, 4.5vh, 3.2rem);
+  pointer-events: none;
+}
+
+.about-roti-scroll__content > * {
+  pointer-events: auto;
+}
+
+.about-roti-scroll__main {
+  display: grid;
+  grid-column: 2 / 11;
+  align-self: center;
+  grid-template-columns: minmax(7rem, 0.55fr) minmax(0, 3.7fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4.6rem);
+}
+
+.about-roti-scroll__side-index {
+  align-self: center;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.about-roti-scroll__side-index span {
+  display: block;
+  margin-bottom: 0.65rem;
+  color: var(--color-accent-red);
+  font-size: 0.68rem;
+  font-weight: 720;
+  letter-spacing: 0.18em;
+}
+
+.about-roti-scroll__side-index strong {
+  display: block;
+  font-size: clamp(2.5rem, 5.2vw, 5.1rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.about-roti-scroll__story-frame {
+  --about-progress-width: clamp(1.8rem, 2.6vw, 2.5rem);
+  --about-story-padding-x: clamp(0.4rem, 2vw, 1.4rem);
+
+  position: relative;
+  height: clamp(16rem, 37vh, 22.5rem);
+}
+
+.about-roti-scroll__story-frame::before,
+.about-roti-scroll__story-frame::after {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(180, 19, 7, 0.88), rgba(180, 19, 7, 0.28) 22%, rgba(255, 255, 255, 0.12));
+  content: "";
+}
+
+.about-roti-scroll__story-frame::before {
+  top: 0;
+}
+
+.about-roti-scroll__story-frame::after {
+  bottom: 0;
+}
+
+.about-roti-scroll__story {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  padding:
+    clamp(1.5rem, 4vh, 3rem)
+    calc(var(--about-progress-width) + var(--about-story-padding-x) + clamp(1.5rem, 2.5vw, 2.5rem))
+    clamp(1.5rem, 4vh, 3rem)
+    var(--about-story-padding-x);
+  opacity: 0;
+  filter: blur(8px);
+  transform: translate3d(0, 2.2rem, 0);
+  transition:
+    opacity 620ms ease,
+    filter 760ms ease,
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.about-roti-scroll__story[data-active="true"] {
+  z-index: 2;
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0);
+  pointer-events: auto;
+}
+
+.about-roti-scroll__story-logo {
+  width: auto;
+  max-width: min(38%, 10.2rem);
+  max-height: 1.2rem;
+  margin-bottom: 1.25rem;
+  object-fit: contain;
+  object-position: left center;
+  filter: invert(1) brightness(1.8);
+  opacity: 0.84;
+}
+
+.about-roti-scroll__kicker {
+  margin: 0 0 1rem;
+  color: rgba(255, 255, 255, 0.54);
+  font-size: 0.74rem;
+  font-weight: 660;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.about-roti-scroll__title {
+  max-width: 48rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: clamp(2.15rem, 4.2vw, 4.5rem);
+  font-weight: 430;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
   word-break: keep-all;
   text-wrap: balance;
 }
 
-.roti-standard__title {
-  max-width: 50rem;
-  margin: var(--space-3) 0 0;
-  color: var(--color-text-primary);
-  font-size: clamp(2.4rem, 5.2vw, 5.3rem);
-  font-weight: 480;
-  letter-spacing: 0;
-  line-height: 1.25;
+.about-roti-scroll__title em {
+  color: var(--color-accent-red);
+  font-style: normal;
 }
 
-.about-roti__title span {
-  display: block;
+.about-roti-scroll__description {
+  max-width: 41rem;
+  margin: 1.2rem 0 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: clamp(0.86rem, 1.05vw, 1rem);
+  line-height: 1.72;
+  word-break: keep-all;
 }
 
-.about-roti__body {
-  max-width: 29rem;
-  margin: clamp(1.35rem, 2.6vh, 2.1rem) 0 0;
-  color: var(--color-text-secondary);
-  font-size: 1rem;
-  font-weight: 360;
-  line-height: 1.76;
-  text-wrap: pretty;
-}
-
-.about-roti__signature {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  width: min(100%, 27rem);
-  align-items: center;
-  gap: var(--space-5);
-  margin-top: clamp(2rem, 4vh, 3.4rem);
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.11);
-  color: rgba(255, 255, 255, 0.52);
-  font-size: 0.72rem;
-  font-weight: 620;
-  letter-spacing: 0.14em;
-}
-
-.about-roti__signature strong {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.82rem;
-  font-weight: 720;
-  letter-spacing: 0.18em;
-}
-
-.about-roti__visual {
-  position: relative;
-  display: grid;
-  min-height: min(31rem, calc(100svh - 12rem));
-  align-content: center;
-  gap: clamp(0.8rem, 1.8vh, 1.15rem);
-  padding: clamp(1.7rem, 4vh, 3.1rem) 0 clamp(1.7rem, 4vh, 3.1rem) clamp(2.25rem, 4vw, 3.6rem);
-  border-left: 1px solid rgba(255, 255, 255, 0.13);
-  isolation: isolate;
-}
-
-.about-roti__visual-kicker {
-  justify-self: end;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.46);
-  font-size: 0.72rem;
-  font-weight: 650;
-  letter-spacing: 0.16em;
-  line-height: 1.45;
-  text-align: right;
-  text-transform: uppercase;
-}
-
-.about-roti__wordmark {
+.about-roti-scroll__progress {
   position: absolute;
   top: 50%;
-  left: clamp(1.4rem, 3vw, 3.2rem);
-  z-index: -1;
-  color: rgba(255, 255, 255, 0.022);
-  font-size: 9.5rem;
-  font-weight: 680;
-  letter-spacing: 0.18em;
-  line-height: 0.8;
-  pointer-events: none;
-  transform: translate(-4%, -50%);
-  white-space: nowrap;
-}
-
-.about-roti__visual-list {
+  right: var(--about-story-padding-x);
+  z-index: 4;
   display: grid;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  width: var(--about-progress-width);
+  grid-template-rows: repeat(4, var(--about-progress-width));
+  transform: translateY(-50%);
 }
 
-.about-roti__visual-line {
-  position: relative;
+.about-roti-scroll__progress-button {
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
-  gap: 1.3rem;
-  align-items: center;
-  min-height: clamp(6.35rem, 11.8vh, 7.2rem);
-  padding: clamp(1.1rem, 2.2vh, 1.45rem) 2rem clamp(1.1rem, 2.2vh, 1.45rem) 0;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
-  color: var(--color-text-primary);
-  text-decoration: none;
-  transition:
-    background-color 260ms ease,
-    border-color 260ms ease,
-    color 260ms ease,
-    padding-left 260ms ease,
-    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
-  isolation: isolate;
-  contain: paint;
+  width: 100%;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
-.about-roti__visual-line::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 62%),
-    var(--about-scene-image);
-  background-position: center;
-  background-size: cover;
-  content: "";
-  opacity: 0;
-  filter: grayscale(0.18) contrast(1.05);
-  transform: none;
-  transition:
-    opacity 300ms ease,
-    filter 300ms ease,
-    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+.about-roti-scroll__progress-line {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.22);
+  transform: rotate(90deg) scaleX(1.02);
+  transition: background-color 300ms ease, height 300ms ease;
 }
 
-.about-roti__visual-line::after {
-  position: absolute;
-  top: 1.1rem;
-  right: 0;
-  width: 1px;
-  height: calc(100% - 2.2rem);
+.about-roti-scroll__progress-button[data-active="true"] .about-roti-scroll__progress-line {
+  height: 2.5px;
   background: var(--color-accent-red);
-  content: "";
-  opacity: 0.28;
-  transition:
-    opacity 260ms ease,
-    transform 260ms ease;
-  transform: scaleY(0.42);
-  transform-origin: center;
 }
 
-.about-roti__visual-line:hover,
-.about-roti__visual-line:focus-visible {
-  padding-left: 0.75rem;
-  border-color: rgba(255, 255, 255, 0.36);
-  background-color: rgba(255, 255, 255, 0.045);
-  color: #fff;
-  outline: 0;
-  transform: translate3d(0.28rem, 0, 0);
+.about-roti-scroll__progress-button:not([data-active="true"]):is(:hover, :focus-visible)
+  .about-roti-scroll__progress-line {
+  background: rgba(180, 19, 7, 0.72);
 }
 
-.about-roti__visual-line:hover::before,
-.about-roti__visual-line:focus-visible::before {
-  opacity: 0.22;
-  filter: grayscale(0) contrast(1.14) brightness(1.06);
-  transform: scale(1);
+.about-roti-scroll__progress-button:focus-visible {
+  outline: 1px solid rgba(180, 19, 7, 0.7);
+  outline-offset: 0.25rem;
 }
 
-.about-roti__visual-line:hover::after,
-.about-roti__visual-line:focus-visible::after {
-  opacity: 0.95;
-  transform: scaleY(1);
+@media (max-width: 900px) {
+  .about-roti-scroll__content {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 5.2rem var(--section-gutter) 1.6rem;
+  }
+
+  .about-roti-scroll__main {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .about-roti-scroll__side-index {
+    display: none;
+  }
+
+  .about-roti-scroll__story-frame {
+    --about-progress-width: 2rem;
+    --about-story-padding-x: 0.25rem;
+
+    height: clamp(19rem, 51svh, 27rem);
+  }
+
+  .about-roti-scroll__story {
+    padding-right: calc(var(--about-progress-width) + var(--about-story-padding-x) + 1.25rem);
+    padding-left: var(--about-story-padding-x);
+  }
+
+  .about-roti-scroll__title {
+    font-size: clamp(2rem, 8.4vw, 3.15rem);
+  }
 }
 
-.about-roti__visual-index {
-  color: rgba(180, 19, 7, 0.82);
-  font-size: 0.78rem;
-  font-weight: 720;
-  letter-spacing: 0.12em;
+@media (max-width: 560px) {
+  .about-roti-scroll {
+    --about-gutter: 1.25rem;
+  }
+
+  .about-roti-scroll__content {
+    padding-right: var(--about-gutter);
+    padding-left: var(--about-gutter);
+  }
+
+  .about-roti-scroll__story-frame {
+    --about-progress-width: 1.6rem;
+
+    height: clamp(18rem, 49svh, 22rem);
+  }
+
+  .about-roti-scroll__story {
+    padding-right: calc(var(--about-progress-width) + var(--about-story-padding-x) + 0.9rem);
+  }
+
+  .about-roti-scroll__story-logo {
+    max-width: 42%;
+    max-height: 0.87rem;
+    margin-bottom: 0.95rem;
+  }
+
+  .about-roti-scroll__kicker {
+    font-size: 0.62rem;
+  }
+
+  .about-roti-scroll__title {
+    font-size: clamp(1.8rem, 8.8vw, 2.55rem);
+    line-height: 1.22;
+  }
+
+  .about-roti-scroll__description {
+    margin-top: 0.9rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+
+  .about-roti-scroll__background--group {
+    display: block;
+  }
+
+  .about-roti-scroll__background-panel {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .about-roti-scroll__background-panel:nth-child(2) {
+    opacity: 1;
+  }
 }
 
-.about-roti__visual-copy {
-  display: grid;
-  min-width: 0;
-  gap: 0.72rem;
+@media (max-height: 680px) and (min-width: 901px) {
+  .about-roti-scroll__content {
+    padding-top: 4.8rem;
+    padding-bottom: 1.6rem;
+  }
+
+  .about-roti-scroll__story-frame {
+    height: clamp(14rem, 43vh, 18rem);
+  }
+
+  .about-roti-scroll__title {
+    font-size: clamp(2rem, 3.7vw, 3.6rem);
+  }
 }
 
-.about-roti__visual-logo {
-  display: inline-flex;
-  width: auto;
-  max-width: min(100%, 19rem);
-  height: clamp(1.28rem, 1.85vw, 1.86rem);
-  align-items: center;
-  line-height: 0;
-}
-
-.about-roti__visual-logo[data-logo="roti-camp"] {
-  max-width: min(100%, 15.4rem);
-}
-
-.about-roti__visual-logo[data-logo="leel"] {
-  max-width: min(100%, 10.8rem);
-}
-
-.about-roti__visual-logo img {
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: left center;
-  filter: invert(1) brightness(1.42);
-  opacity: 0.72;
-  transition:
-    filter 260ms ease,
-    opacity 260ms ease,
-    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.about-roti__visual-description {
-  max-width: 24rem;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 0.95rem;
-  font-weight: 360;
-  line-height: 1.66;
-  overflow-wrap: break-word;
-  word-break: keep-all;
-  transition: color 260ms ease;
-}
-
-.about-roti__visual-line:hover .about-roti__visual-description,
-.about-roti__visual-line:focus-visible .about-roti__visual-description {
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.about-roti__visual-line:hover .about-roti__visual-logo img,
-.about-roti__visual-line:focus-visible .about-roti__visual-logo img {
-  filter: invert(1) brightness(1.9);
-  opacity: 1;
-  transform: translate3d(0.18rem, 0, 0);
+@media (prefers-reduced-motion: reduce) {
+  .about-roti-scroll__background,
+  .about-roti-scroll__story,
+  .about-roti-scroll__progress-line {
+    transition-duration: 0.01ms !important;
+  }
 }

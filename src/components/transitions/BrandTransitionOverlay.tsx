@@ -17,6 +17,14 @@ type BrandTransitionOverlayStyle = CSSProperties & {
   "--transition-height": string;
 };
 
+type BrandTransitionImageStyle = CSSProperties & {
+  "--transition-image": string;
+  "--transition-image-mobile": string;
+  "--transition-focal-point": string;
+  "--transition-focal-point-mobile": string;
+  "--transition-filter"?: string;
+};
+
 export function BrandTransitionOverlay({ brand, state }: BrandTransitionOverlayProps) {
   if (state.phase === "idle" || !state.sourceRect) {
     return null;
@@ -40,17 +48,27 @@ export function BrandTransitionOverlay({ brand, state }: BrandTransitionOverlayP
       >
         <span
           className="brand-transition-overlay__image brand-transition-overlay__image--hero"
-          style={{
-            backgroundImage: `url(${brand.heroAsset.src})`,
-            backgroundPosition: brand.transition.heroFocalPoint
-          }}
+          style={
+            {
+              "--transition-image": `url(${brand.heroAsset.src})`,
+              "--transition-image-mobile": `url(${brand.heroAsset.mobileSrc ?? brand.heroAsset.src})`,
+              "--transition-focal-point": brand.heroAsset.focalPoint,
+              "--transition-focal-point-mobile": brand.heroAsset.mobileFocalPoint ?? brand.heroAsset.focalPoint
+            } as BrandTransitionImageStyle
+          }
         />
         <span
           className="brand-transition-overlay__image brand-transition-overlay__image--section"
-          style={{
-            backgroundImage: `url(${brand.sectionImage})`,
-            backgroundPosition: brand.transition.sectionFocalPoint
-          }}
+          style={
+            {
+              "--transition-image": `url(${brand.sectionAsset.src})`,
+              "--transition-image-mobile": `url(${brand.sectionAsset.mobileSrc ?? brand.sectionAsset.src})`,
+              "--transition-focal-point": brand.sectionAsset.focalPoint,
+              "--transition-focal-point-mobile":
+                brand.sectionAsset.mobileFocalPoint ?? brand.sectionAsset.focalPoint,
+              "--transition-filter": brand.sectionAsset.visualFilter ?? "none"
+            } as BrandTransitionImageStyle
+          }
         />
         <span
           className="brand-transition-overlay__shade"

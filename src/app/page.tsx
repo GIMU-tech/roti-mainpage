@@ -6,6 +6,7 @@ import { SmoothScrollProvider } from "@/components/scroll/SmoothScrollProvider";
 import { BrandTransitionProvider } from "@/components/transitions/BrandTransitionProvider";
 import { AboutRotiSection } from "@/components/sections/AboutRotiSection";
 import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
+import { ContactUsSection } from "@/components/sections/ContactUsSection";
 import { RotiBusinessReplicaSection } from "@/components/sections/RotiBusinessReplicaSection";
 import { RotiConnectSection } from "@/components/sections/RotiConnectSection";
 import { brands } from "@/data/brands";
@@ -23,6 +24,7 @@ export default function HomePage() {
           <AboutRotiSection />
           <RotiBusinessReplicaSection />
           <RotiConnectSection />
+          <ContactUsSection />
           <Footer />
         </main>
       </BrandTransitionProvider>

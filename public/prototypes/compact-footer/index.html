@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>ROTI Compact Footer Prototype</title>
+    <style>
+      :root {
+        --bg: #050505;
+        --surface: #080808;
+        --text: #f5f5f2;
+        --muted: rgba(245, 245, 242, 0.58);
+        --dim: rgba(245, 245, 242, 0.36);
+        --line: rgba(255, 255, 255, 0.13);
+        --red: #b41307;
+        --content-max: 95rem;
+        --gutter: clamp(1.875rem, 5vw, 5.9rem);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        min-width: 20rem;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, Pretendard, SUIT, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .contact-context {
+        display: flex;
+        height: 50svh;
+        min-height: 24rem;
+        align-items: flex-end;
+        padding: 0 var(--gutter) clamp(3rem, 6vh, 4.5rem);
+        background:
+          radial-gradient(circle at 72% 42%, rgba(180, 19, 7, 0.08), transparent 24rem),
+          linear-gradient(135deg, #040404, #090909 52%, #050505);
+      }
+
+      .contact-context__inner {
+        width: min(100%, var(--content-max));
+        margin-inline: auto;
+      }
+
+      .contact-context p {
+        margin: 0 0 1rem;
+        color: var(--dim);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+      }
+
+      .contact-context h1 {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.14);
+        font-size: clamp(3.2rem, 5vw, 6rem);
+        font-weight: 680;
+        letter-spacing: 1.15px;
+        line-height: 0.95;
+      }
+
+      .compact-footer {
+        position: relative;
+        display: flex;
+        height: clamp(28rem, 50svh, 34rem);
+        align-items: stretch;
+        padding: 0 var(--gutter);
+        border-top: 1px solid var(--line);
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .compact-footer::before {
+        position: absolute;
+        top: 0;
+        right: 4%;
+        width: 34%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(180, 19, 7, 0.72), transparent);
+        content: "";
+      }
+
+      .compact-footer__inner {
+        display: grid;
+        width: min(100%, var(--content-max));
+        height: 100%;
+        margin-inline: auto;
+        grid-template-rows: 1fr auto;
+      }
+
+      .compact-footer__main {
+        display: grid;
+        grid-template-columns: minmax(0, 5fr) minmax(13rem, 3fr) minmax(17rem, 4fr);
+        gap: clamp(3rem, 5vw, 6rem);
+        align-items: center;
+        padding: clamp(3.2rem, 6vh, 4.5rem) 0 clamp(2.25rem, 4vh, 3rem);
+      }
+
+      .compact-footer__logo {
+        display: block;
+        width: clamp(5.8rem, 7vw, 7.6rem);
+        height: auto;
+        filter: brightness(0) invert(1);
+      }
+
+      .compact-footer__headline {
+        margin: clamp(1.7rem, 3vh, 2.4rem) 0 0;
+        font-size: clamp(2rem, 2.7vw, 2.8rem);
+        font-weight: 460;
+        letter-spacing: -0.025em;
+        line-height: 1.08;
+      }
+
+      .compact-footer__description {
+        max-width: 29rem;
+        margin: 1rem 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.65;
+        word-break: keep-all;
+      }
+
+      .compact-footer__label {
+        margin: 0 0 1.25rem;
+        color: var(--dim);
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+      }
+
+      .compact-footer__brands {
+        display: grid;
+        gap: 1.15rem;
+      }
+
+      .compact-footer__brand {
+        display: flex;
+        min-height: 2.25rem;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        opacity: 0.58;
+        transition: opacity 180ms ease;
+      }
+
+      .compact-footer__brand:hover,
+      .compact-footer__brand:focus-visible {
+        opacity: 1;
+      }
+
+      .compact-footer__brand img {
+        display: block;
+        width: auto;
+        max-width: 8.6rem;
+        max-height: 1.05rem;
+        object-fit: contain;
+        object-position: left center;
+        filter: grayscale(1) brightness(1.8);
+      }
+
+      .compact-footer__brand[data-brand="leel"] img {
+        max-width: 3.2rem;
+        max-height: 1.25rem;
+      }
+
+      .compact-footer__office address {
+        max-width: 25rem;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: clamp(0.92rem, 1vw, 1.05rem);
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.7;
+        word-break: keep-all;
+      }
+
+      .compact-footer__office-name {
+        display: block;
+        margin-bottom: 0.6rem;
+        color: #fff;
+        font-size: 1.08rem;
+        font-weight: 700;
+      }
+
+      .compact-footer__bottom {
+        display: grid;
+        min-height: 4.8rem;
+        grid-template-columns: 1fr auto auto;
+        gap: clamp(1.5rem, 3vw, 3rem);
+        align-items: center;
+        border-top: 1px solid var(--line);
+        color: var(--dim);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+      }
+
+      .compact-footer__links {
+        display: flex;
+        gap: 1.25rem;
+      }
+
+      .compact-footer__links a:hover,
+      .compact-footer__links a:focus-visible,
+      .compact-footer__top:hover,
+      .compact-footer__top:focus-visible {
+        color: #fff;
+      }
+
+      .compact-footer__top {
+        color: rgba(255, 255, 255, 0.64);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+      }
+
+      @media (max-width: 56rem) {
+        .contact-context {
+          height: 34svh;
+          min-height: 18rem;
+        }
+
+        .compact-footer {
+          height: auto;
+          min-height: 0;
+        }
+
+        .compact-footer__main {
+          grid-template-columns: 1fr 1fr;
+          padding-block: 3.5rem 2.5rem;
+        }
+
+        .compact-footer__identity {
+          grid-column: 1 / -1;
+        }
+
+        .compact-footer__description {
+          max-width: 34rem;
+        }
+      }
+
+      @media (max-width: 40rem) {
+        .compact-footer__main {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+
+        .compact-footer__identity {
+          grid-column: auto;
+        }
+
+        .compact-footer__bottom {
+          grid-template-columns: 1fr auto;
+          padding-block: 1.25rem;
+        }
+
+        .compact-footer__links {
+          grid-column: 1 / -1;
+          grid-row: 1;
+          flex-wrap: wrap;
+        }
+
+        .compact-footer__copyright {
+          grid-column: 1;
+          grid-row: 2;
+        }
+
+        .compact-footer__top {
+          grid-column: 2;
+          grid-row: 2;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .compact-footer__brand {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body id="top">
+    <section class="contact-context" aria-label="CONTACT US 영역의 하단 미리보기">
+      <div class="contact-context__inner">
+        <p>PREVIOUS SECTION</p>
+        <h1>CONTACT US</h1>
+      </div>
+    </section>
+
+    <footer class="compact-footer" aria-label="ROTI compact footer">
+      <div class="compact-footer__inner">
+        <div class="compact-footer__main">
+          <section class="compact-footer__identity">
+            <img class="compact-footer__logo" src="/images/logos/roti-logo.png" alt="ROTI" />
+            <p class="compact-footer__headline">THREE BRANDS<br />ONE STANDARD</p>
+            <p class="compact-footer__description">
+              ROTI CAMP, ROTI HOMESYS, LeEL을 통해 서로 다른 생활 영역을 하나의 기준으로 연결합니다.
+            </p>
+          </section>
+
+          <nav aria-label="ROTI 브랜드">
+            <p class="compact-footer__label">BRANDS</p>
+            <div class="compact-footer__brands">
+              <a class="compact-footer__brand" href="#" aria-label="ROTI CAMP">
+                <img src="/images/logos/roti-camp-logo.png" alt="ROTI CAMP" />
+              </a>
+              <a class="compact-footer__brand" href="#" aria-label="ROTI HOMESYS">
+                <img src="/images/logos/roti-homesys-logo-v2.png" alt="ROTI HOMESYS" />
+              </a>
+              <a class="compact-footer__brand" data-brand="leel" href="#" aria-label="LeEL">
+                <img src="/images/logos/leel-logo.png" alt="LeEL" />
+              </a>
+            </div>
+          </nav>
+
+          <section class="compact-footer__office">
+            <p class="compact-footer__label">HEAD OFFICE</p>
+            <address>
+              <span class="compact-footer__office-name">본점</span>
+              경기도 양주시 은현면 화합로 941번길 234<br />
+              주식회사 로티
+            </address>
+          </section>
+        </div>
+
+        <div class="compact-footer__bottom">
+          <span class="compact-footer__copyright">COPYRIGHT © ROTI. ALL RIGHTS RESERVED.</span>
+          <nav class="compact-footer__links" aria-label="ROTI 보조 메뉴">
+            <a href="#">BRAND</a>
+            <a href="#">STANDARD</a>
+            <a href="#">개인정보처리방침</a>
+          </nav>
+          <a class="compact-footer__top" href="#top">TOP</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

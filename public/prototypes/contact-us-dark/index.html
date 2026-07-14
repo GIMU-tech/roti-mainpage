@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>ROTI CONTACT US — Dark Prototype</title>
+    <script>
+      const selectedVariant = new URLSearchParams(window.location.search).get("variant");
+      document.documentElement.dataset.variant = selectedVariant === "two-line" ? "two-line" : selectedVariant === "wide-info" ? "wide-info" : "default";
+    </script>
+    <style>
+      :root {
+        --bg: #050505;
+        --surface: rgba(255, 255, 255, 0.055);
+        --surface-strong: rgba(255, 255, 255, 0.085);
+        --line: rgba(255, 255, 255, 0.14);
+        --line-strong: rgba(255, 255, 255, 0.24);
+        --text: #f5f5f2;
+        --muted: rgba(245, 245, 242, 0.62);
+        --dim: rgba(245, 245, 242, 0.4);
+        --red: #b41307;
+        --grid-max: 95rem;
+        --gutter: clamp(1.875rem, 5vw, 5.9rem);
+        --radius: 2rem;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        min-width: 20rem;
+        margin: 0;
+        background:
+          radial-gradient(circle at 72% 42%, rgba(180, 19, 7, 0.09), transparent 25rem),
+          radial-gradient(circle at 52% 10%, rgba(255, 255, 255, 0.055), transparent 28rem),
+          linear-gradient(135deg, #040404 0%, #090909 52%, #050505 100%);
+        color: var(--text);
+        font-family: Pretendard, SUIT, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .contact-page {
+        position: relative;
+        display: grid;
+        min-height: 100svh;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .contact-page::before {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(90deg, transparent 0 49.96%, rgba(255, 255, 255, 0.035) 50%, transparent 50.04%),
+          linear-gradient(180deg, transparent 0 74.96%, rgba(255, 255, 255, 0.025) 75%, transparent 75.04%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .contact-page::after {
+        position: absolute;
+        inset: -20%;
+        z-index: -1;
+        background: repeating-radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 5px);
+        content: "";
+        opacity: 0.22;
+        pointer-events: none;
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-rows: 1fr;
+        width: min(var(--grid-max), calc(100% - (var(--gutter) * 2)));
+        min-height: 100svh;
+        margin-inline: auto;
+        padding-block: clamp(2rem, 5.6vh, 3.75rem);
+      }
+
+      .contact-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(31rem, 1fr);
+        gap: clamp(4rem, 5vw, 6rem);
+        align-items: start;
+        align-self: center;
+        padding-block: clamp(2.25rem, 5vh, 4.25rem);
+      }
+
+      .contact-intro {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+        max-width: 36rem;
+        padding-left: clamp(0rem, 2vw, 2rem);
+      }
+
+      .contact-title {
+        margin: 0;
+        font-family: Inter, Pretendard, sans-serif;
+        font-size: clamp(4rem, 5vw, 6rem);
+        font-weight: 680;
+        letter-spacing: 1.15px;
+        line-height: 0.94;
+        white-space: nowrap;
+      }
+
+      .contact-title__line + .contact-title__line::before {
+        content: " ";
+      }
+
+      html[data-variant="two-line"] .contact-title {
+        line-height: 0.92;
+      }
+
+      html[data-variant="two-line"] .contact-title__line {
+        display: block;
+      }
+
+      html[data-variant="two-line"] .contact-title__line + .contact-title__line::before {
+        content: none;
+      }
+
+      html[data-variant="wide-info"] .contact-intro {
+        width: max-content;
+        max-width: 100%;
+      }
+
+      html[data-variant="wide-info"] .contact-details {
+        width: 100%;
+        max-width: none;
+      }
+
+      .contact-lead {
+        max-width: 31rem;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.12vw, 1.2rem);
+        font-weight: 400;
+        line-height: 1.75;
+        word-break: keep-all;
+      }
+
+      .contact-details {
+        display: grid;
+        max-width: 31rem;
+        margin: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .contact-detail {
+        display: grid;
+        grid-template-columns: 7.5rem 1fr;
+        gap: 1rem;
+        padding: 1.35rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .contact-detail dt,
+      .contact-detail dd {
+        margin: 0;
+      }
+
+      .contact-detail dt {
+        color: var(--dim);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+      }
+
+      .contact-detail dd {
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 0.88rem;
+        line-height: 1.55;
+        word-break: keep-all;
+      }
+
+      .contact-panel {
+        position: relative;
+        align-self: start;
+        padding: clamp(2rem, 3.1vw, 3rem);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.026)),
+          rgba(8, 8, 8, 0.78);
+        box-shadow:
+          0 2.5rem 7rem rgba(0, 0, 0, 0.44),
+          inset 0 1px rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(1.2rem);
+      }
+
+      .contact-panel::before {
+        position: absolute;
+        top: 0;
+        right: 3rem;
+        left: 3rem;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+        content: "";
+      }
+
+      .panel-heading {
+        margin-bottom: 2rem;
+      }
+
+      .panel-heading h2 {
+        margin: 0;
+        font-size: clamp(1.35rem, 1.7vw, 1.75rem);
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      .panel-heading p {
+        margin: 0.65rem 0 0;
+        color: var(--dim);
+        font-size: 0.82rem;
+        line-height: 1.6;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.35rem 1.1rem;
+      }
+
+      .field {
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      .field label {
+        color: rgba(255, 255, 255, 0.57);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+      }
+
+      .field input,
+      .field select {
+        width: 100%;
+        min-height: 3.35rem;
+        padding: 0 1rem;
+        border: 1px solid var(--line);
+        border-radius: 0.45rem;
+        outline: none;
+        background: rgba(0, 0, 0, 0.28);
+        color: var(--text);
+        transition:
+          border-color 180ms ease,
+          background 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .field select {
+        color-scheme: dark;
+      }
+
+      .field input::placeholder {
+        color: rgba(255, 255, 255, 0.27);
+      }
+
+      .field input:hover,
+      .field select:hover {
+        border-color: var(--line-strong);
+      }
+
+      .field input:focus-visible,
+      .field select:focus-visible {
+        border-color: rgba(180, 19, 7, 0.82);
+        background: rgba(255, 255, 255, 0.045);
+        box-shadow: 0 0 0 3px rgba(180, 19, 7, 0.16);
+      }
+
+      .form-consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.55;
+        cursor: pointer;
+      }
+
+      .form-consent input {
+        width: 1rem;
+        height: 1rem;
+        margin: 0.1rem 0 0;
+        accent-color: var(--red);
+      }
+
+      .consent-action-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: center;
+        margin-top: 1.6rem;
+      }
+
+      .consent-copy {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .form-status {
+        min-height: 1rem;
+        margin: 0;
+        color: var(--dim);
+        font-size: 0.72rem;
+        line-height: 1.45;
+      }
+
+      .submit-button {
+        min-width: 11.8rem;
+        min-height: 3.4rem;
+        padding: 0 1.4rem;
+        border: 1px solid var(--red);
+        border-radius: 0.45rem;
+        background: var(--red);
+        color: #fff;
+        font-weight: 650;
+        letter-spacing: -0.015em;
+        cursor: pointer;
+        transition:
+          transform 220ms var(--ease),
+          background 180ms ease,
+          border-color 180ms ease;
+      }
+
+      .submit-button:hover {
+        background: #c51a0d;
+        border-color: #c51a0d;
+        transform: translateY(-2px);
+      }
+
+      .submit-button:focus-visible {
+        outline: 3px solid rgba(255, 255, 255, 0.38);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 68rem) {
+        .contact-page {
+          overflow: visible;
+        }
+
+        .contact-grid {
+          padding-block: 2rem;
+        }
+
+        .contact-layout {
+          grid-template-columns: minmax(0, 0.88fr) minmax(27rem, 1.12fr);
+          gap: 2.5rem;
+        }
+
+        .contact-title {
+          font-size: clamp(3.4rem, 6vw, 4.5rem);
+        }
+
+        .contact-detail {
+          grid-template-columns: 6.4rem 1fr;
+        }
+      }
+
+      @media (max-width: 56rem) {
+        .contact-grid {
+          min-height: auto;
+        }
+
+        .contact-layout {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+          padding-block: 4rem;
+        }
+
+        .contact-intro {
+          max-width: 42rem;
+          gap: 1.75rem;
+          padding-left: 0;
+        }
+
+        .contact-details {
+          max-width: none;
+          margin-top: 3rem;
+        }
+
+        .contact-panel {
+          padding: 2rem;
+        }
+      }
+
+      @media (max-width: 40rem) {
+        :root {
+          --gutter: 1.35rem;
+          --radius: 1.25rem;
+        }
+
+        .contact-grid {
+          padding-block: 1.5rem;
+        }
+
+        .contact-layout {
+          gap: 2.5rem;
+          padding-block: 3.4rem;
+        }
+
+        .contact-title {
+          font-size: clamp(3.15rem, 16vw, 4.25rem);
+        }
+
+        .contact-lead {
+          margin-top: 1.6rem;
+          font-size: 0.96rem;
+        }
+
+        .contact-detail {
+          grid-template-columns: 1fr;
+          gap: 0.55rem;
+        }
+
+        .contact-panel {
+          padding: 1.4rem;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+          gap: 1.1rem;
+        }
+
+        .consent-action-row {
+          grid-template-columns: 1fr;
+        }
+
+        .submit-button {
+          width: 100%;
+        }
+
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="contact-page">
+      <div class="contact-grid">
+        <section class="contact-layout" aria-labelledby="contact-title">
+          <div class="contact-intro">
+            <h1 class="contact-title" id="contact-title"><span class="contact-title__line">CONTACT</span><span class="contact-title__line">US</span></h1>
+            <p class="contact-lead">
+              제품 문의부터 기업 구매, 유통 및 협업까지<br />
+              목적에 맞는 내용을 남겨주세요.
+            </p>
+
+            <dl class="contact-details">
+              <div class="contact-detail">
+                <dt>CONTACT</dt>
+                <dd>제품 · 기업 구매 · 유통 · 협업 문의</dd>
+              </div>
+              <div class="contact-detail">
+                <dt>SEOUL OFFICE</dt>
+                <dd>서울특별시 도봉구 마들로 13길 61, 씨드큐브 창동 B동 603, 604호</dd>
+              </div>
+            </dl>
+          </div>
+
+          <form class="contact-panel" id="contact-form" novalidate>
+            <div class="panel-heading">
+              <h2>문의 정보를 입력해 주세요.</h2>
+              <p>표시된 항목을 기준으로 문의 목적을 구분합니다.</p>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="inquiry-type">문의 유형</label>
+                <select id="inquiry-type" name="inquiryType" required>
+                  <option value="">선택해 주세요</option>
+                  <option>고객·제품 문의</option>
+                  <option>기업·단체 구매</option>
+                  <option>유통·입점·협업</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="brand">관심 브랜드</label>
+                <select id="brand" name="brand" required>
+                  <option value="">선택해 주세요</option>
+                  <option>ROTI CAMP</option>
+                  <option>ROTI HOMESYS</option>
+                  <option>LeEL</option>
+                  <option>ROTI</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="name">이름</label>
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="이름을 입력해 주세요" required />
+              </div>
+
+              <div class="field">
+                <label for="department">소속 / 부서</label>
+                <input id="department" name="department" type="text" autocomplete="organization" placeholder="소속 또는 부서명" />
+              </div>
+
+              <div class="field">
+                <label for="phone">연락처</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="연락 가능한 번호" required />
+              </div>
+
+              <div class="field">
+                <label for="email">이메일</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="name@company.com" required />
+              </div>
+            </div>
+
+            <div class="consent-action-row">
+              <div class="consent-copy">
+                <label class="form-consent">
+                  <input id="privacy" name="privacy" type="checkbox" required />
+                  <span>문의 확인을 위한 개인정보 수집 및 이용에 동의합니다.</span>
+                </label>
+                <p class="form-status" id="form-status" aria-live="polite"></p>
+              </div>
+              <button class="submit-button" type="submit">문의 내용 확인</button>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </main>
+
+    <script>
+      const form = document.querySelector("#contact-form");
+      const status = document.querySelector("#form-status");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          status.textContent = "필수 항목과 개인정보 동의를 확인해 주세요.";
+          return;
+        }
+
+        status.textContent = "HTML 시안입니다. 실제 문의 전송은 연결되지 않았습니다.";
+      });
+    </script>
+  </body>
+</html>

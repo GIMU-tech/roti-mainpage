@@ -1,3 +1,13 @@
+@keyframes intro-backdrop-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes intro-word-reveal {
   0% {
     opacity: 0;
@@ -9,20 +19,6 @@
     opacity: 1;
     filter: blur(0);
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes intro-tagline-drop {
-  0% {
-    opacity: 0;
-    filter: blur(4px);
-    transform: translate3d(0, -0.9rem, 0);
-  }
-
-  100% {
-    opacity: 1;
-    filter: blur(0);
-    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -84,6 +80,17 @@
   }
 }
 
+@keyframes roti-scroll-cue-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -0.42rem, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -98,13 +105,17 @@
     transform: translate(calc(-50% + var(--card-x)), -50%) scale(var(--card-scale));
   }
 
-  .intro-sequence__word,
+  .intro-sequence__backdrop,
   .intro-sequence__brand,
-  .intro-sequence__tagline,
+  .intro-sequence__word,
   .intro-sequence__logo-letter {
     opacity: 1;
     filter: none;
     transform: none;
+    animation: none !important;
+  }
+
+  .hero-portal__scroll-note-inner {
     animation: none !important;
   }
 

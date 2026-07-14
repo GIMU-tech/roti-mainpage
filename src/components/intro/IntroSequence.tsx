@@ -1,33 +1,36 @@
 "use client";
 
+import Image from "next/image";
 import type { CSSProperties } from "react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { scrollToTarget } from "@/lib/scroll/smoothScroll";
 
+type IntroPhase = "always" | "alert" | "changes" | "logo";
+
 type IntroScene = {
+  phase: IntroPhase;
   text: string;
   duration: number;
-  isLogoScene?: boolean;
 };
 
-type IntroWordStyle = CSSProperties & {
+type IntroSceneStyle = CSSProperties & {
   "--intro-scene-duration": string;
 };
 
 const INTRO_WORD_SCENE_MS = 800;
-const INTRO_LOGO_SCENE_MS = 820 * 1.3;
+const INTRO_LOGO_SCENE_MS = 1150;
+const INTRO_SESSION_STORAGE_KEY = "roti:intro:played";
+const SHOULD_REPLAY_INTRO_ON_REFRESH = process.env.NODE_ENV !== "production";
 
 const INTRO_SCENES: IntroScene[] = [
-  { text: "ALWAYS", duration: INTRO_WORD_SCENE_MS },
-  { text: "ALERT", duration: INTRO_WORD_SCENE_MS },
-  { text: "FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
-  { text: "ROTI", duration: INTRO_LOGO_SCENE_MS, isLogoScene: true }
+  { phase: "always", text: "ALWAYS", duration: INTRO_WORD_SCENE_MS },
+  { phase: "alert", text: "ALERT", duration: INTRO_WORD_SCENE_MS },
+  { phase: "changes", text: "FOR CHANGES", duration: INTRO_WORD_SCENE_MS },
+  { phase: "logo", text: "ROTI", duration: INTRO_LOGO_SCENE_MS }
 ];
 
-const REDUCED_MOTION_SCENES: IntroScene[] = [
-  { text: "ROTI", duration: 1, isLogoScene: true }
-];
+const REDUCED_MOTION_SCENES: IntroScene[] = [{ phase: "logo", text: "ROTI", duration: 650 }];
 
 const NORMAL_HERO_SPREAD_DELAY_MS = 180;
 const NORMAL_HERO_SETTLE_MS = 1840;
@@ -37,6 +40,7 @@ const QUICK_HERO_SPREAD_DELAY_MS = 80;
 const QUICK_HERO_SETTLE_MS = 180;
 const QUICK_HERO_INTERACTIVE_DELAY_MS = QUICK_HERO_SPREAD_DELAY_MS + QUICK_HERO_SETTLE_MS;
 const QUICK_OVERLAY_EXIT_MS = 360;
+
 function setDocumentIntroState({
   heroInteractive,
   heroSpread,
@@ -121,6 +125,14 @@ export function IntroSequence() {
       clearAutoAdvanceTimer();
       setIsExiting(true);
 
+      if (!SHOULD_REPLAY_INTRO_ON_REFRESH) {
+        try {
+          window.sessionStorage.setItem(INTRO_SESSION_STORAGE_KEY, "true");
+        } catch {
+          // Storage can be unavailable in privacy-restricted browsing contexts.
+        }
+      }
+
       const shouldMoveQuickly = isSkipped || prefersReducedMotionRef.current;
       const heroSpreadDelay = shouldMoveQuickly ? QUICK_HERO_SPREAD_DELAY_MS : NORMAL_HERO_SPREAD_DELAY_MS;
       const heroSettleDelay = shouldMoveQuickly ? QUICK_HERO_SETTLE_MS : NORMAL_HERO_SETTLE_MS;
@@ -183,12 +195,10 @@ export function IntroSequence() {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" || event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         completeIntro(true);
-        return;
       }
-
     },
     [completeIntro]
   );
@@ -196,6 +206,50 @@ export function IntroSequence() {
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const activeScenes = prefersReducedMotion ? REDUCED_MOTION_SCENES : INTRO_SCENES;
+
+    let hasPlayedIntro = false;
+
+    if (!SHOULD_REPLAY_INTRO_ON_REFRESH) {
+      try {
+        hasPlayedIntro = window.sessionStorage.getItem(INTRO_SESSION_STORAGE_KEY) === "true";
+      } catch {
+        hasPlayedIntro = false;
+      }
+    }
+
+    if (hasPlayedIntro) {
+      finishedRef.current = true;
+      setScenes(activeScenes);
+      setSceneIndex(Math.max(activeScenes.length - 1, 0));
+      setIsExiting(false);
+      setIsVisible(false);
+      setMainInteractionBlocked(false);
+      setDocumentHeroSettling(false);
+      setDocumentIntroState({
+        heroInteractive: true,
+        heroSpread: true,
+        introActive: false,
+        introComplete: true
+      });
+      resetHeroScrollPosition();
+      window.dispatchEvent(new CustomEvent("roti:hero-spread"));
+      window.dispatchEvent(new CustomEvent("roti:hero-interactive"));
+
+      return () => {
+        setMainInteractionBlocked(false);
+        delete document.body.dataset.rotiHeroInteractive;
+        delete document.body.dataset.rotiIntroActive;
+        delete document.body.dataset.rotiIntroComplete;
+        delete document.body.dataset.rotiHeroSpread;
+        delete document.body.dataset.rotiHeroSettling;
+        delete document.documentElement.dataset.rotiHeroInteractive;
+        delete document.documentElement.dataset.rotiIntroActive;
+        delete document.documentElement.dataset.rotiIntroComplete;
+        delete document.documentElement.dataset.rotiHeroSpread;
+        delete document.documentElement.dataset.rotiHeroSettling;
+      };
+    }
+
     const focusFrame = window.requestAnimationFrame(() => {
       introRef.current?.focus({ preventScroll: true });
     });
@@ -217,10 +271,6 @@ export function IntroSequence() {
       introComplete: false
     });
     resetHeroScrollPosition();
-
-    if (prefersReducedMotion) {
-      completeIntro(true);
-    }
 
     const preventIntroMomentumScroll = (event: Event) => {
       if (document.body.dataset.rotiHeroInteractive === "false") {
@@ -300,10 +350,9 @@ export function IntroSequence() {
   }
 
   const currentScene = scenes[Math.min(sceneIndex, scenes.length - 1)] ?? INTRO_SCENES[0];
-  const isSentenceScene = !currentScene.isLogoScene && currentScene.text.includes(" ");
   const wordStyle = {
     "--intro-scene-duration": `${currentScene.duration}ms`
-  } as IntroWordStyle;
+  } as IntroSceneStyle;
 
   return (
     <div
@@ -316,14 +365,24 @@ export function IntroSequence() {
       tabIndex={-1}
       onKeyDown={handleKeyDown}
     >
+      <div className="intro-sequence__backdrop" aria-hidden="true">
+        <Image
+          className="intro-sequence__backdrop-image"
+          src="/images/intro/roti-intro-architecture.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+        />
+        <span className="intro-sequence__backdrop-shade" />
+      </div>
       <div className="intro-sequence__content" aria-live="polite">
-        {currentScene.isLogoScene ? (
+        {currentScene.phase === "logo" ? (
           <div
-            key={`${currentScene.text}-${sceneIndex}`}
+            key={`${currentScene.phase}-${sceneIndex}`}
             className="intro-sequence__brand"
             style={wordStyle}
           >
-            <p className="intro-sequence__tagline">ALWAYS ALERT FOR CHANGES</p>
             <span className="intro-sequence__logo-letters" role="img" aria-label="ROTI">
               <span className="intro-sequence__logo-letter" data-letter="r" aria-hidden="true" />
               <span className="intro-sequence__logo-letter" data-letter="o" aria-hidden="true" />
@@ -332,11 +391,7 @@ export function IntroSequence() {
             </span>
           </div>
         ) : (
-          <p
-            key={`${currentScene.text}-${sceneIndex}`}
-            className={isSentenceScene ? "intro-sequence__word intro-sequence__word--sentence" : "intro-sequence__word"}
-            style={wordStyle}
-          >
+          <p key={`${currentScene.phase}-${sceneIndex}`} className="intro-sequence__word" style={wordStyle}>
             {currentScene.text}
           </p>
         )}

@@ -26,10 +26,31 @@
   outline: none;
 }
 
-.intro-sequence::before,
-.intro-sequence::after {
-  display: none;
-  content: "";
+.intro-sequence__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #000;
+  animation: intro-backdrop-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-sequence__backdrop-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  object-position: center;
+  opacity: 1;
+  transform: none;
+}
+
+.intro-sequence__backdrop-shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
 }
 
 .intro-sequence__content {
@@ -49,41 +70,22 @@
   font-weight: 760;
   letter-spacing: clamp(0.16em, 0.55vw, 0.34em);
   line-height: 1.18;
-  text-transform: uppercase;
+  text-align: center;
   text-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.58);
+  text-transform: uppercase;
   animation: intro-word-reveal var(--intro-scene-duration) cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.intro-sequence__word--sentence {
-  max-width: min(100%, 38rem);
-  font-size: clamp(1.08rem, 3.35vw, 3.2rem);
-  letter-spacing: clamp(0.08em, 0.28vw, 0.18em);
-  text-wrap: balance;
+  will-change: opacity, filter, transform;
 }
 
 .intro-sequence__brand {
   display: grid;
   justify-items: center;
-  gap: clamp(0.5rem, 1.25vw, 0.86rem);
-}
-
-.intro-sequence__tagline {
-  margin: 0;
-  color: rgba(244, 241, 234, 0.68);
-  font-size: clamp(0.6rem, 0.83vw, 0.78rem);
-  font-weight: 260;
-  letter-spacing: clamp(0.14em, 0.28vw, 0.24em);
-  line-height: 1.3;
-  text-transform: uppercase;
-  animation: intro-tagline-drop 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: 130ms;
-  will-change: opacity, filter, transform;
 }
 
 .intro-sequence__logo-letters {
   position: relative;
   display: block;
-  width: clamp(13.8rem, 31.5vw, 29.5rem);
+  width: clamp(9.66rem, 22.05vw, 20.65rem);
   aspect-ratio: 295 / 70;
   filter: invert(1) brightness(1.45);
   line-height: 0;

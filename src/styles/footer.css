@@ -1,196 +1,234 @@
 .roti-footer {
   position: relative;
   display: flex;
-  min-height: 100svh;
-  align-items: center;
-  justify-content: center;
+  height: clamp(28rem, 50svh, 34rem);
+  align-items: stretch;
   overflow: hidden;
-  padding: clamp(6rem, 11vh, 10rem) var(--section-gutter);
-  background: #050505;
+  padding: 0 var(--section-gutter);
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  scroll-snap-align: end;
+  background: #080808;
   color: #ffffff;
-  isolation: isolate;
 }
 
 .roti-footer::before {
   position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(90deg, rgba(5, 5, 5, 0.7) 0%, rgba(8, 8, 8, 0.56) 48%, rgba(5, 5, 5, 0.68) 100%),
-    linear-gradient(180deg, rgba(5, 5, 5, 0.3), rgba(0, 0, 0, 0.64));
+  top: 0;
+  right: 4%;
+  width: 34%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(180, 19, 7, 0.72), transparent);
   content: "";
 }
 
-.roti-footer__background {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-position: center center;
-  background-size: cover;
-  transform: scale(1.04);
-}
-
-.roti-footer__background--one {
-  background-image: url("/images/footer/roti-footer-office-bg.webp");
-}
-
 .roti-footer__inner {
-  position: relative;
-  z-index: 2;
+  display: grid;
   width: min(100%, var(--section-content-max));
-  min-height: min(42rem, calc(100svh - 12rem));
-  transform: translateY(clamp(1.5rem, 4vh, 3rem));
+  height: 100%;
+  margin-inline: auto;
+  grid-template-rows: 1fr auto;
+}
+
+.roti-footer__main {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(13rem, 3fr) minmax(17rem, 4fr);
+  gap: clamp(3rem, 5vw, 6rem);
+  align-items: start;
+  padding: clamp(3.2rem, 6vh, 4.5rem) 0 clamp(2.25rem, 4vh, 3rem);
 }
 
 .roti-footer__logo {
-  width: clamp(5.9rem, 8.55vw, 9.85rem);
-  margin: 0 0 clamp(5rem, 14vh, 10rem);
+  width: clamp(5.8rem, 7vw, 7.6rem);
+  margin: 0;
   line-height: 0;
 }
 
-.roti-footer__logo img,
-.roti-footer__brand-logos img {
+.roti-footer__logo img {
+  display: block;
   width: 100%;
   height: auto;
   filter: invert(1) brightness(1.6);
 }
 
 .roti-footer__headline {
-  margin: 0;
+  margin: clamp(1.7rem, 3vh, 2.4rem) 0 0;
   color: #ffffff;
-  font-size: clamp(3.1rem, 5.2vw, 5.15rem);
-  font-weight: 420;
-  letter-spacing: 0;
-  line-height: 1.12;
+  font-size: clamp(2rem, 2.7vw, 2.8rem);
+  font-weight: 460;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
 }
 
-.roti-footer__right {
-  position: absolute;
-  right: 0;
-  bottom: clamp(5rem, 8.7vh, 7.1rem);
-  width: min(35rem, 42vw);
+.roti-footer__description {
+  max-width: 29rem;
+  margin: 1rem 0 0;
+  color: rgba(245, 245, 242, 0.58);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  word-break: keep-all;
 }
 
-.roti-footer__right ul {
+.roti-footer__label {
+  margin: 0 0 1.25rem;
+  color: rgba(245, 245, 242, 0.36);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.roti-footer__brands {
   display: grid;
-  gap: clamp(1.9rem, 4vh, 3rem);
+  gap: 1.15rem;
+}
+
+.roti-footer__brand {
+  display: flex;
+  min-height: 2.25rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0.58;
+  transition: opacity 180ms ease;
+}
+
+.roti-footer__brand:hover,
+.roti-footer__brand:focus-visible {
+  opacity: 1;
+}
+
+.roti-footer__brand img {
+  display: block;
+  width: auto;
+  max-width: 8.6rem;
+  max-height: 1.05rem;
+  object-fit: contain;
+  object-position: left center;
+  filter: invert(1) grayscale(1) brightness(1.8);
+}
+
+.roti-footer__brand[data-logo="leel"] img {
+  max-width: 3.2rem;
+  max-height: 1.25rem;
+}
+
+.roti-footer__office address {
+  max-width: 25rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(0.92rem, 1vw, 1.05rem);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.roti-footer__locations {
+  display: grid;
+  gap: clamp(1.25rem, 2.4vh, 1.8rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.roti-footer__address-label {
-  margin: 0;
-  font-size: clamp(1.25rem, 1.8vw, 1.65rem);
+.roti-footer__office-name {
+  margin: 0 0 0.6rem;
+  color: #ffffff;
+  font-size: 1.08rem;
   font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.25;
 }
 
-.roti-footer__address {
-  max-width: 33rem;
-  margin: 0.55rem 0 0;
-  color: rgba(255, 255, 255, 0.84);
-  font-size: clamp(0.96rem, 1.12vw, 1.1rem);
-  font-weight: 460;
-  line-height: 1.55;
+.roti-footer__bottom {
+  display: grid;
+  min-height: 4.8rem;
+  grid-template-columns: 1fr auto auto;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  color: rgba(245, 245, 242, 0.36);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.roti-footer__copyright {
+  margin: 0;
 }
 
 .roti-footer__links {
-  position: absolute;
-  bottom: calc(clamp(5rem, 8.7vh, 7.1rem) + 2.05rem);
-  left: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem 1.1rem;
-  margin-top: 0;
-  color: #ffffff;
-  font-size: clamp(0.86rem, 0.98vw, 1rem);
-  font-weight: 720;
+  gap: 1.25rem;
 }
 
 .roti-footer__links a,
 .roti-footer__links span {
   color: inherit;
-  text-decoration: none;
 }
 
-.roti-footer__links a:hover {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.roti-footer__copyright {
-  position: absolute;
-  bottom: clamp(5rem, 8.7vh, 7.1rem);
-  left: 0;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: clamp(0.78rem, 0.92vw, 0.92rem);
-  font-weight: 620;
-  letter-spacing: -0.01em;
-}
-
-.roti-footer__brand-logos {
-  position: static;
-  display: flex;
-  width: min(36rem, 56vw);
-  align-items: flex-end;
-  gap: clamp(1.1rem, 2.1vw, 1.95rem);
-  margin-top: clamp(4.3rem, 10vh, 7.1rem);
-  opacity: 0.62;
-}
-
-.roti-footer__brand-logos img {
-  width: auto;
-  height: clamp(0.78rem, 1vw, 1.05rem);
-  max-width: none;
-  max-height: none;
-  object-fit: contain;
-  object-position: left center;
-}
-
-.roti-footer__brand-logos img[data-logo="roti-homesys"] {
-  height: clamp(0.84rem, 1.08vw, 1.12rem);
+.roti-footer__links a:hover,
+.roti-footer__links a:focus-visible,
+.roti-footer__top:hover,
+.roti-footer__top:focus-visible {
+  color: #ffffff;
 }
 
 .roti-footer__top {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-grid;
-  width: 3.2rem;
-  height: 3.2rem;
-  place-items: center;
-  color: #ffffff;
-  text-decoration: none;
+  color: rgba(255, 255, 255, 0.64);
+  font-weight: 700;
+  letter-spacing: 0.14em;
 }
 
-.roti-footer__top span {
-  position: relative;
-  display: block;
-  width: 1.2rem;
-  height: 2.1rem;
+@media (max-width: 56rem) {
+  .roti-footer {
+    height: auto;
+    min-height: 0;
+  }
+
+  .roti-footer__main {
+    grid-template-columns: 1fr 1fr;
+    padding-block: 3.5rem 2.5rem;
+  }
+
+  .roti-footer__identity {
+    grid-column: 1 / -1;
+  }
+
+  .roti-footer__description {
+    max-width: 34rem;
+  }
 }
 
-.roti-footer__top span::before {
-  position: absolute;
-  top: 0.18rem;
-  left: 50%;
-  width: 0.82rem;
-  height: 0.82rem;
-  border-top: 4px solid currentColor;
-  border-left: 4px solid currentColor;
-  content: "";
-  transform: translateX(-50%) rotate(45deg);
+@media (max-width: 40rem) {
+  .roti-footer__main {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .roti-footer__identity {
+    grid-column: auto;
+  }
+
+  .roti-footer__bottom {
+    grid-template-columns: 1fr auto;
+    padding-block: 1.25rem;
+  }
+
+  .roti-footer__links {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    flex-wrap: wrap;
+  }
+
+  .roti-footer__copyright {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .roti-footer__top {
+    grid-column: 2;
+    grid-row: 2;
+  }
 }
 
-.roti-footer__top span::after {
-  position: absolute;
-  top: 0.35rem;
-  left: 50%;
-  width: 4px;
-  height: 1.72rem;
-  background: currentColor;
-  content: "";
-  transform: translateX(-50%);
+@media (prefers-reduced-motion: reduce) {
+  .roti-footer__brand {
+    transition: none;
+  }
 }

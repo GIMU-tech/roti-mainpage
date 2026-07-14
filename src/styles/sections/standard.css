@@ -225,11 +225,23 @@
   min-height: 48rem;
   overflow: hidden;
   padding: clamp(5.25rem, 8vh, 6.25rem) var(--section-gutter) clamp(3.25rem, 5vh, 4.5rem);
-  background: #ffffff;
+  background: var(--color-surface-warm);
   color: #1b1b1b;
 }
 
+.roti-business-replica::before {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: clamp(1.5rem, 4vh, 2.75rem);
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0.1), transparent);
+  content: "";
+  pointer-events: none;
+}
+
 .roti-business-replica__container {
+  position: relative;
+  z-index: 1;
   width: min(100%, var(--section-content-max));
   height: 100%;
   margin-inline: auto;
@@ -348,7 +360,7 @@
   height: 100%;
   margin: 0;
   overflow: hidden;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-media);
 }
 
 .roti-business-replica__image:nth-child(1) {

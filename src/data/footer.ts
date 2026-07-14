@@ -1,4 +1,5 @@
 import { HOME_SECTION_HREFS, type HomeSectionHref } from "@/data/sections";
+import { brands } from "@/data/brands";
 
 export type FooterBrandLogo = {
   id: string;
@@ -18,29 +19,13 @@ export type FooterLink = {
   href?: HomeSectionHref;
 };
 
-export const footerBrandLogos = [
-  {
-    id: "roti-camp",
-    src: "/images/logos/roti-camp-logo.png",
-    alt: "ROTI CAMP",
-    width: 1164,
-    height: 170
-  },
-  {
-    id: "roti-homesys",
-    src: "/images/logos/roti-homesys-logo-v2.png",
-    alt: "ROTI HOMESYS",
-    width: 1455,
-    height: 172
-  },
-  {
-    id: "leel",
-    src: "/images/logos/leel-logo.png",
-    alt: "LeEL",
-    width: 381,
-    height: 70
-  }
-] as const satisfies readonly FooterBrandLogo[];
+export const footerBrandLogos: readonly FooterBrandLogo[] = brands.map((brand) => ({
+  id: brand.id,
+  src: brand.logoSrc,
+  alt: brand.logoAlt,
+  width: brand.logoWidth,
+  height: brand.logoHeight
+}));
 
 export const footerLocations = [
   {

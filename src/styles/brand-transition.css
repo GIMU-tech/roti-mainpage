@@ -2,6 +2,16 @@ body[data-roti-brand-transition="true"] {
   overscroll-behavior: none;
 }
 
+.brand-transition-status {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .brand-transition-overlay {
   position: fixed;
   inset: 0;
@@ -32,11 +42,6 @@ body[data-roti-brand-transition="true"] {
   will-change: left, top, width, height, opacity;
 }
 
-.brand-transition-overlay[data-phase="revealing"] .brand-transition-overlay__card,
-.brand-transition-overlay[data-phase="complete"] .brand-transition-overlay__card {
-  opacity: 0;
-}
-
 .brand-transition-overlay__image,
 .brand-transition-overlay__shade {
   position: absolute;
@@ -50,16 +55,28 @@ body[data-roti-brand-transition="true"] {
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 26%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.86)),
     linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 32%, rgba(0, 0, 0, 0.38)),
     var(--transition-image, none);
-  background-position: center, center, center;
-  background-size: cover;
+  background-position: center, center, var(--transition-focal-point);
+  background-size: auto, auto, cover;
+}
+
+@media (max-width: 900px) {
+  .brand-transition-overlay__image {
+    background-image:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 26%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.86)),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 32%, rgba(0, 0, 0, 0.38)),
+      var(--transition-image-mobile, none);
+    background-position: center, center, var(--transition-focal-point-mobile);
+  }
 }
 
 .brand-transition-overlay__image--hero,
 .brand-transition-overlay__image--section {
   background-size: auto, auto, cover;
+  will-change: transform, opacity;
 }
 
 .brand-transition-overlay__image--section {
+  filter: var(--transition-filter, none);
   opacity: 0;
 }
 

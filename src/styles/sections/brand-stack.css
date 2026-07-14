@@ -154,19 +154,26 @@
 }
 
 .brand-slide-stack__image {
-  background:
+  background-image:
     linear-gradient(180deg, rgba(5, 5, 5, 0.04), rgba(5, 5, 5, 0.2)),
-    var(--brand-scene-image) center / cover no-repeat;
+    var(--brand-scene-image);
+  background-position: center, var(--brand-scene-focal-point);
+  background-repeat: no-repeat;
+  background-size: auto, cover;
+  filter: var(--brand-scene-filter, none);
   opacity: 0.9;
   transform: scale(1.02);
   transform-origin: center center;
   will-change: transform;
 }
 
-.brand-slide-stack__slide[data-brand="roti-camp"] .brand-slide-stack__image,
-.brand-slide-stack__slide[data-brand="roti-homesys"] .brand-slide-stack__image,
-.brand-slide-stack__slide[data-brand="leel"] .brand-slide-stack__image {
-  background-position: center center;
+@media (max-width: 900px) {
+  .brand-slide-stack__image {
+    background-image:
+      linear-gradient(180deg, rgba(5, 5, 5, 0.04), rgba(5, 5, 5, 0.2)),
+      var(--brand-scene-image-mobile);
+    background-position: center, var(--brand-scene-focal-point-mobile);
+  }
 }
 
 .brand-slide-stack__shade {
