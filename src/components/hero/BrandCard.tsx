@@ -1,7 +1,7 @@
 import type { Brand } from "@/types/brand";
 import type { HeroCardMotion, HeroCardSlot } from "@/lib/animations/heroAnimations";
 import type { CSSProperties, KeyboardEvent } from "react";
-import Image from "next/image";
+import { BrandCardIdentity } from "./BrandCardIdentity";
 
 type BrandCardProps = {
   brand: Brand;
@@ -83,21 +83,7 @@ export function BrandCard({
         aria-hidden="true"
       />
       <span className="brand-card__sheen" aria-hidden="true" />
-      <span className="brand-card__content">
-        <span className="brand-card__eyebrow">ROTI BRAND PORTAL</span>
-        <strong className="brand-card__title">
-          <Image
-            src={brand.logoSrc}
-            alt={brand.logoAlt}
-            width={brand.logoWidth}
-            height={brand.logoHeight}
-            sizes="(max-width: 768px) 9rem, 13rem"
-          />
-        </strong>
-        <span className="brand-card__line" aria-hidden="true" />
-        <span className="brand-card__description">{brand.visualTagline}</span>
-        <span className="brand-card__scene">{brand.visualScene}</span>
-      </span>
+      <BrandCardIdentity brand={brand} className="brand-card__content" />
       <span className="brand-card__side brand-card__side--left" aria-hidden="true" />
       <span className="brand-card__side brand-card__side--right" aria-hidden="true" />
       <span className="brand-card__glass-edge brand-card__glass-edge--left" aria-hidden="true" />
@@ -111,21 +97,7 @@ export function BrandCard({
             data-has-image={hasReadyAsset}
           />
           <span className="brand-card__sheen" />
-          <span className="brand-card__content">
-            <span className="brand-card__eyebrow">ROTI BRAND PORTAL</span>
-            <strong className="brand-card__title">
-              <Image
-                src={brand.logoSrc}
-                alt=""
-                width={brand.logoWidth}
-                height={brand.logoHeight}
-                sizes="(max-width: 768px) 9rem, 13rem"
-              />
-            </strong>
-            <span className="brand-card__line" />
-            <span className="brand-card__description">{brand.visualTagline}</span>
-            <span className="brand-card__scene">{brand.visualScene}</span>
-          </span>
+          <BrandCardIdentity brand={brand} className="brand-card__content" decorative />
           <span className="brand-card__side brand-card__side--left" />
           <span className="brand-card__side brand-card__side--right" />
           <span className="brand-card__glass-edge brand-card__glass-edge--left" />

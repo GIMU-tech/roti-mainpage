@@ -29,12 +29,12 @@ export const footerBrandLogos: readonly FooterBrandLogo[] = brands.map((brand) =
 
 export const footerLocations = [
   {
-    label: "서울 오피스",
-    address: "서울특별시 도봉구 마들로 13길 61, 씨드큐브 창동 B동 603, 604호"
+    label: "본사",
+    address: "경기도 양주시 은현면 화합로 941번길 234 (주)로티"
   },
   {
-    label: "본점",
-    address: "경기도 양주시 은현면 화합로 941번길 234 (주)로티"
+    label: "서울지사",
+    address: "서울특별시 도봉구 마들로 13길 61, 씨드큐브 창동 B동 603, 604호"
   }
 ] as const satisfies readonly FooterLocation[];
 

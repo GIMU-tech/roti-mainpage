@@ -108,11 +108,12 @@ export function RotiBusinessReplicaSection() {
 
         serviceContents.forEach((content, index) => {
           const meta = content.querySelector(".roti-business-replica__content-meta");
+          const english = content.querySelector(".roti-business-replica__content-english");
           const title = content.querySelector(".roti-business-replica__content-title");
           const description = content.querySelector(".roti-business-replica__content-description");
 
           gsap.set(content, { autoAlpha: index === 0 ? 1 : 0 });
-          gsap.set([meta, title, description], {
+          gsap.set([meta, english, title, description], {
             autoAlpha: index === 0 ? 1 : 0,
             clipPath: index === 0 ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)"
           });
@@ -160,6 +161,7 @@ export function RotiBusinessReplicaSection() {
 
           const nextContent = serviceContents[nextIndex];
           const nextMeta = nextContent.querySelector(".roti-business-replica__content-meta");
+          const nextEnglish = nextContent.querySelector(".roti-business-replica__content-english");
           const nextTitle = nextContent.querySelector(".roti-business-replica__content-title");
           const nextDescription = nextContent.querySelector(".roti-business-replica__content-description");
 
@@ -171,16 +173,22 @@ export function RotiBusinessReplicaSection() {
             `step-${index}+=0.12`
           );
           timeline.fromTo(
+            nextEnglish,
+            { autoAlpha: 0, clipPath: "inset(0 100% 0 0)" },
+            { autoAlpha: 1, clipPath: "inset(0 0% 0 0)", duration: 0.36, ease: "power2.out" },
+            `step-${index}+=0.18`
+          );
+          timeline.fromTo(
             nextTitle,
             { autoAlpha: 0, clipPath: "inset(0 100% 0 0)" },
             { autoAlpha: 1, clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out" },
-            `step-${index}+=0.2`
+            `step-${index}+=0.3`
           );
           timeline.fromTo(
             nextDescription,
             { autoAlpha: 0, clipPath: "inset(0 100% 0 0)" },
             { autoAlpha: 1, clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out" },
-            `step-${index}+=0.4`
+            `step-${index}+=0.52`
           );
 
           const exitingImage = serviceImages[index];
@@ -274,33 +282,36 @@ export function RotiBusinessReplicaSection() {
     >
       <div className="roti-business-replica__container">
         <div className="roti-business-replica__layout">
-          <div className="roti-business-replica__header">
-            <h2 id="roti-business-replica-title" className="roti-business-replica__title">
-              {siteContent.standard.title}
-            </h2>
-          </div>
-          <div className="roti-business-replica__content-wrapper">
-            {rotiBusinessSlides.map((item, index) => (
-              <div key={item.title} className="roti-business-replica__content" data-active={index === 0}>
-                <span className="roti-business-replica__content-meta">
-                  STANDARD {String(index + 1).padStart(2, "0")} / {String(rotiBusinessSlides.length).padStart(2, "0")}
-                </span>
-                <h3 className="roti-business-replica__content-title">{item.title}</h3>
-                <p className="roti-business-replica__content-description" aria-label={item.copyLines.join(" ")}>
-                  {item.copyLines.map((line, lineIndex) => (
-                    <span key={line} aria-hidden="true">
-                      {line}
-                      {lineIndex < item.copyLines.length - 1 ? (
-                        <>
-                          <br />
-                          {" "}
-                        </>
-                      ) : null}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ))}
+          <div className="roti-business-replica__copy-column">
+            <div className="roti-business-replica__header">
+              <h2 id="roti-business-replica-title" className="roti-business-replica__title">
+                {siteContent.standard.title}
+              </h2>
+            </div>
+            <div className="roti-business-replica__content-wrapper">
+              {rotiBusinessSlides.map((item, index) => (
+                <div key={item.title} className="roti-business-replica__content" data-active={index === 0}>
+                  <span className="roti-business-replica__content-meta">
+                    STANDARD {String(index + 1).padStart(2, "0")} / {String(rotiBusinessSlides.length).padStart(2, "0")}
+                  </span>
+                  <p className="roti-business-replica__content-english">{item.englishTitle}</p>
+                  <h3 className="roti-business-replica__content-title">{item.title}</h3>
+                  <p className="roti-business-replica__content-description" aria-label={item.copyLines.join(" ")}>
+                    {item.copyLines.map((line, lineIndex) => (
+                      <span key={line} aria-hidden="true">
+                        {line}
+                        {lineIndex < item.copyLines.length - 1 ? (
+                          <>
+                            <br />
+                            {" "}
+                          </>
+                        ) : null}
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="roti-business-replica__image-stage" aria-hidden="true">

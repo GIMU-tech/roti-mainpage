@@ -162,7 +162,6 @@ export function AboutRotiSection() {
         <div className="about-roti-scroll__content">
           <div className="about-roti-scroll__main">
             <div className="about-roti-scroll__side-index" aria-hidden="true">
-              <span>STORY</span>
               <strong>{String(activeSceneIndex + 1).padStart(2, "0")}</strong>
             </div>
 

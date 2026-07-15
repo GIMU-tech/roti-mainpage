@@ -133,21 +133,14 @@
   color: rgba(255, 255, 255, 0.48);
 }
 
-.about-roti-scroll__side-index span {
-  display: block;
-  margin-bottom: 0.65rem;
-  color: var(--color-accent-red);
-  font-size: 0.68rem;
-  font-weight: 720;
-  letter-spacing: 0.18em;
-}
-
 .about-roti-scroll__side-index strong {
   display: block;
+  color: #ffffff;
   font-size: clamp(2.5rem, 5.2vw, 5.1rem);
   font-weight: 300;
   line-height: 0.9;
   letter-spacing: -0.04em;
+  transform: translateY(-0.25rem);
 }
 
 .about-roti-scroll__story-frame {
@@ -165,7 +158,7 @@
   left: 0;
   z-index: 3;
   height: 1px;
-  background: linear-gradient(90deg, rgba(180, 19, 7, 0.88), rgba(180, 19, 7, 0.28) 22%, rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.42);
   content: "";
 }
 

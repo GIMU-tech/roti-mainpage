@@ -29,14 +29,14 @@ export const heroCardMotion = {
     z: "-26px",
     rotateY: "37deg",
     scale: 0.82,
-    opacity: 0.84
+    opacity: 1
   },
   right: {
     x: "112%",
     z: "-26px",
     rotateY: "-37deg",
     scale: 0.82,
-    opacity: 0.84
+    opacity: 1
   }
 } satisfies Record<HeroCardSlot, HeroCardMotion>;
 

@@ -10,7 +10,7 @@ export const siteContent = {
     signature: "필요한 기능을 더 쉽게, 익숙한 생활을 더 편리하게."
   },
   standard: {
-    title: "제품은 쓰이는 장면에서 시작합니다."
+    title: "ROTI STANDARD"
   },
   footer: {
     description: "ROTI는 캠핑·홈리빙·키친을 전개하는 브랜드 그룹입니다."

@@ -14,17 +14,17 @@ export const brands: Brand[] = [
     mood: ["outdoor", "movement", "nature", "rest"],
     keywords: ["캠핑", "이동", "휴식"],
     heroAsset: {
-      src: "/images/brands/camp-hero.jpg",
-      alt: "ROTI CAMP 어두운 야외와 장비 분위기의 장면",
+      src: "/images/brands/roti-camp-card-v2.webp",
+      alt: "ROTI CAMP 국내 산악 호수의 블루아워 텐트 장면",
       status: "ready",
       focalPoint: "center bottom"
     },
     sectionAsset: {
-      src: "/images/sections/roti-camp-brand-section.webp",
-      alt: "ROTI CAMP 산과 캠핑 장비가 어우러진 야외 장면",
+      src: "/images/sections/roti-camp-brand-section-v3.webp",
+      alt: "ROTI CAMP 국내 산악 호수와 텐트가 어우러진 블루아워 장면",
       focalPoint: "center center",
-      mobileFocalPoint: "58% center",
-      visualFilter: "brightness(0.68) saturate(0.72) contrast(1.05)"
+      mobileFocalPoint: "68% center",
+      visualFilter: "brightness(0.9) saturate(0.92) contrast(1.02)"
     },
     transition: {
       overlayShade: "rgba(0, 0, 0, 0.32)",
@@ -106,17 +106,17 @@ export const brands: Brand[] = [
     mood: ["kitchen", "clean", "density", "calm"],
     keywords: ["주방", "소재", "여백"],
     heroAsset: {
-      src: "/images/brands/leel-hero.jpg",
-      alt: "LeEL 조용한 주방과 리빙 오브젝트 장면",
+      src: "/images/brands/leel-card-v2.webp",
+      alt: "LeEL 화이트 프레임과 밝은 목재 트롤리가 놓인 차분한 월넛 리빙 공간",
       status: "ready",
-      focalPoint: "center center"
+      focalPoint: "center 62%"
     },
     sectionAsset: {
-      src: "/images/sections/leel-bg.webp",
-      alt: "LeEL 스틸과 스톤 소재가 놓인 차분한 키친 장면",
+      src: "/images/sections/leel-brand-section-v1.webp",
+      alt: "LeEL 트롤리 제품군이 놓인 월넛 키친과 리빙 공간",
       focalPoint: "center center",
-      mobileFocalPoint: "45% center",
-      visualFilter: "brightness(0.8) saturate(0.78) contrast(1.05)"
+      mobileFocalPoint: "58% center",
+      visualFilter: "brightness(0.9) saturate(0.86) contrast(1.03)"
     },
     transition: {
       overlayShade: "rgba(0, 0, 0, 0.22)",
@@ -135,7 +135,7 @@ export const brands: Brand[] = [
       title: "주방과 생활 공간을",
       accent: "정갈하게.",
       description: "소재와 형태, 여백의 균형으로 일상 공간을 차분하게 정돈합니다.",
-      image: "/images/sections/leel-brand-section.webp"
+      image: "/images/sections/leel-bg.webp"
     },
     brandUrl: "#leel"
   }

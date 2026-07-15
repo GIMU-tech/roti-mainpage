@@ -4,13 +4,32 @@
   }
 
   .brand-carousel__controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: max-content;
+    align-content: center;
+    width: calc(100vw - (var(--section-gutter) * 2));
     row-gap: 0;
   }
 
-  .brand-carousel__arrow--previous,
-  .brand-carousel__arrow--next {
+  .brand-carousel__control-group--previous {
+    position: static;
+    grid-column: 1;
     grid-row: 1;
+    justify-self: start;
+    transform: none;
+  }
+
+  .brand-carousel__arrow--next {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    transform: none;
+  }
+
+  .brand-carousel__arrow--next:hover {
+    transform: none;
   }
 
   .brand-slide-stack {
@@ -300,13 +319,8 @@
     transform: translate3d(calc(-50% + 0.42rem), calc(-50% + 0.28rem), -8px) rotateY(0deg) rotateZ(1.6deg) scale(0.76);
   }
 
-  .brand-card[data-slot="left"] .brand-card__content,
-  .brand-card[data-slot="right"] .brand-card__content {
-    opacity: 0.78;
-  }
-
   .brand-card__content {
-    inset: 31% 14% auto 15%;
+    inset: 26% 15% auto;
     max-width: 78%;
   }
 
@@ -484,24 +498,27 @@
     display: grid;
     min-height: calc(100svh - 9.125rem);
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto minmax(12rem, auto);
+    grid-template-rows: auto minmax(19.125rem, auto);
     grid-template-areas:
-      "header"
-      "media"
-      "copy";
+      "copy"
+      "media";
     gap: 1.25rem;
     transform: none;
   }
 
+  .roti-business-replica__copy-column {
+    grid-area: copy;
+    min-width: 0;
+    gap: 1.65rem;
+  }
+
   .roti-business-replica__header {
-    grid-area: header;
     min-width: 0;
   }
 
   .roti-business-replica__title {
-    font-size: 2rem;
-    letter-spacing: 0;
-    line-height: 1.35;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
   }
 
   .roti-business-replica__image-stage {
@@ -525,24 +542,29 @@
   }
 
   .roti-business-replica__content-wrapper {
-    grid-area: copy;
     width: 100%;
-    min-height: 12rem;
+    min-height: 15.5rem;
   }
 
   .roti-business-replica__content-meta {
     margin-bottom: 0.82rem;
-    padding-top: 1rem;
+    padding-top: 0;
     font-size: 0.64rem;
   }
 
-  .roti-business-replica__content h3 {
-    font-size: 1.75rem;
-    letter-spacing: 0;
-    line-height: 1.45;
+  .roti-business-replica__content-english {
+    margin-bottom: 0.72rem;
+    font-size: 0.62rem;
   }
 
-  .roti-business-replica__content p {
+  .roti-business-replica__content h3 {
+    max-width: 18ch;
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    letter-spacing: -0.04em;
+    line-height: 1.18;
+  }
+
+  .roti-business-replica__content-description {
     margin-top: 1rem;
     font-size: 1rem;
     line-height: 1.68;

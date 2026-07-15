@@ -10,7 +10,11 @@ type HeroPortalProps = {
 export function HeroPortal({ brands }: HeroPortalProps) {
   return (
     <section className="section-shell hero-portal" aria-labelledby="hero-title">
-      <div className="hero-portal__stage-bg" aria-hidden="true" />
+      <div className="hero-portal__stage-bg" aria-hidden="true">
+        <span className="hero-portal__stage-scene hero-portal__stage-scene--camp" />
+        <span className="hero-portal__stage-scene hero-portal__stage-scene--homesys" />
+        <span className="hero-portal__stage-scene hero-portal__stage-scene--leel" />
+      </div>
       <div className="hero-portal__ambient" aria-hidden="true" />
       <div className="hero-portal__mist hero-portal__mist--back" aria-hidden="true" />
       <div className="hero-portal__mist hero-portal__mist--front" aria-hidden="true" />

@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import type { Brand } from "@/types/brand";
 import type { BrandTransitionState } from "@/types/brandTransition";
+import { BrandCardIdentity } from "@/components/hero/BrandCardIdentity";
 
 type BrandTransitionOverlayProps = {
   brand: Brand;
@@ -75,20 +75,7 @@ export function BrandTransitionOverlay({ brand, state }: BrandTransitionOverlayP
           style={{ background: brand.transition.overlayShade ?? "rgba(0, 0, 0, 0.2)" }}
         />
         <span className="brand-transition-overlay__sheen" />
-        <span className="brand-transition-overlay__content">
-          <span className="brand-transition-overlay__eyebrow">ROTI BRAND PORTAL</span>
-          <strong className="brand-transition-overlay__title">
-            <Image
-              src={brand.logoSrc}
-              alt=""
-              width={brand.logoWidth}
-              height={brand.logoHeight}
-              sizes="(max-width: 768px) 9rem, 13rem"
-            />
-          </strong>
-          <span className="brand-transition-overlay__line" />
-          <span className="brand-transition-overlay__description">{brand.visualTagline}</span>
-        </span>
+        <BrandCardIdentity brand={brand} className="brand-transition-overlay__content" decorative />
       </div>
     </div>
   );

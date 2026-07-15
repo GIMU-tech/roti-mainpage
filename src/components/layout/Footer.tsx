@@ -9,7 +9,6 @@ export function Footer() {
       <div className="roti-footer__inner">
         <div className="roti-footer__main">
           <section className="roti-footer__identity" aria-labelledby="roti-footer-title">
-            <p className="roti-footer__label">ROTI GROUP</p>
             <h2 className="roti-footer__logo" id="roti-footer-title">
               <Image src="/images/logos/roti-logo.png" alt="ROTI" width={589} height={140} />
             </h2>
@@ -22,7 +21,6 @@ export function Footer() {
           </section>
 
           <nav className="roti-footer__brand-nav" aria-label="ROTI 브랜드">
-            <p className="roti-footer__label">BRANDS</p>
             <div className="roti-footer__brands">
               {footerBrandLogos.map((logo) => (
                 <a
@@ -39,7 +37,6 @@ export function Footer() {
           </nav>
 
           <section className="roti-footer__office" aria-label="ROTI 사무실 정보">
-            <p className="roti-footer__label">LOCATIONS</p>
             <ul className="roti-footer__locations">
               {footerLocations.map((location) => (
                 <li key={location.label}>

@@ -1,10 +1,10 @@
 export const rotiStandards = [
   {
     id: "practicality",
-    title: "실용적인 사용",
+    title: "필요한 기능은 분명하게, 사용은 자연스럽게.",
     englishTitle: "Practicality",
     copy: "필요한 기능이 쉽게 읽히고 반복 사용에도 자연스러운지 살핍니다.",
-    copyLines: ["필요한 기능이 쉽게 읽히고", "반복 사용에도 자연스러운지 살핍니다."],
+    copyLines: ["필요한 기능이 한눈에 읽히고", "반복되는 사용도 자연스럽게 이어지도록 설계합니다."],
     visualLabel: "Daily Use",
     visualTitle: "사용 장면에서 출발",
     visualCopy: "도구가 놓이는 위치와 손의 순서가 자연스러운지 장면 안에서 판단합니다.",
@@ -13,7 +13,7 @@ export const rotiStandards = [
   },
   {
     id: "ordered-design",
-    title: "생활 흐름 개선",
+    title: "생활의 흐름은 더 단정하게.",
     englishTitle: "Ordered Design",
     copy: "보관 위치, 사용 순서, 이동 방식을 다시 정리합니다.",
     copyLines: ["보관 위치, 사용 순서,", "이동 방식을 다시 정리합니다."],
@@ -25,7 +25,7 @@ export const rotiStandards = [
   },
   {
     id: "verifiable-quality",
-    title: "확인 가능한 디테일",
+    title: "보이는 구조와 마감으로 확인되게.",
     englishTitle: "Verifiable Quality",
     copy: "소재, 구조, 마감처럼 눈과 손으로 확인할 수 있는 기준을 설명합니다.",
     copyLines: ["소재, 구조, 마감처럼", "눈과 손으로 확인할 수 있는 기준을 설명합니다."],

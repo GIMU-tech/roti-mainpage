@@ -30,17 +30,25 @@
 }
 
 .roti-footer__main {
+  --footer-content-bottom-offset: clamp(3.75rem, 7vh, 4.5rem);
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(13rem, 3fr) minmax(17rem, 4fr);
-  gap: clamp(3rem, 5vw, 6rem);
-  align-items: start;
-  padding: clamp(3.2rem, 6vh, 4.5rem) 0 clamp(2.25rem, 4vh, 3rem);
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: end;
+  padding-block: clamp(2.25rem, 4vh, 3rem);
 }
 
 .roti-footer__logo {
   width: clamp(5.8rem, 7vw, 7.6rem);
   margin: 0;
   line-height: 0;
+}
+
+.roti-footer__identity {
+  display: block;
+  min-width: 0;
+  align-self: end;
+  transform: translateY(calc(-1 * var(--footer-content-bottom-offset)));
 }
 
 .roti-footer__logo img {
@@ -68,24 +76,22 @@
   word-break: keep-all;
 }
 
-.roti-footer__label {
-  margin: 0 0 1.25rem;
-  color: rgba(245, 245, 242, 0.36);
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-}
-
 .roti-footer__brands {
-  display: grid;
-  gap: 1.15rem;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  gap: clamp(2rem, 3vw, 3.5rem);
 }
 
 .roti-footer__brand {
   display: flex;
-  min-height: 2.25rem;
+  min-height: 1.25rem;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0;
   opacity: 0.58;
   transition: opacity 180ms ease;
 }
@@ -106,18 +112,36 @@
 }
 
 .roti-footer__brand[data-logo="leel"] img {
-  max-width: 3.2rem;
-  max-height: 1.25rem;
+  max-width: 8.6rem;
+  max-height: 1.05rem;
 }
 
 .roti-footer__office address {
-  max-width: 25rem;
+  max-width: none;
   color: rgba(255, 255, 255, 0.82);
   font-size: clamp(0.92rem, 1vw, 1.05rem);
   font-style: normal;
   font-weight: 500;
   line-height: 1.7;
+  white-space: nowrap;
   word-break: keep-all;
+}
+
+.roti-footer__brand-nav {
+  align-self: end;
+  justify-self: center;
+  width: 100%;
+  min-width: 0;
+  transform: translateY(calc(-1 * var(--footer-content-bottom-offset)));
+}
+
+.roti-footer__office {
+  align-self: end;
+  justify-self: end;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  transform: translateY(calc(-1 * var(--footer-content-bottom-offset)));
 }
 
 .roti-footer__locations {
@@ -183,15 +207,41 @@
 
   .roti-footer__main {
     grid-template-columns: 1fr 1fr;
+    align-items: start;
     padding-block: 3.5rem 2.5rem;
   }
 
   .roti-footer__identity {
     grid-column: 1 / -1;
+    align-self: start;
+    transform: none;
   }
 
   .roti-footer__description {
     max-width: 34rem;
+  }
+
+  .roti-footer__brand-nav,
+  .roti-footer__office {
+    align-self: start;
+    justify-self: stretch;
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+
+  .roti-footer__brands {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: none;
+    gap: 1.25rem;
+  }
+
+  .roti-footer__office address {
+    white-space: normal;
   }
 }
 
