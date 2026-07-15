@@ -54,7 +54,13 @@ export function useBrandTransitionTimeline({
     };
 
     const runTimeline = () => {
-      void Promise.all([preloadImage(brand.heroAsset.src), preloadImage(brand.sectionImage)]);
+      const useMobileAsset = window.matchMedia("(max-width: 900px)").matches;
+      const heroSrc = useMobileAsset ? (brand.heroAsset.mobileSrc ?? brand.heroAsset.src) : brand.heroAsset.src;
+      const sectionSrc = useMobileAsset
+        ? (brand.sectionAsset.mobileSrc ?? brand.sectionAsset.src)
+        : brand.sectionAsset.src;
+
+      void Promise.all([preloadImage(heroSrc), preloadImage(sectionSrc)]);
 
       const animationFrame = window.requestAnimationFrame(() => {
         if (!isActive) {
@@ -82,8 +88,8 @@ export function useBrandTransitionTimeline({
         const expandedState = {
           left: 0,
           top: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: document.documentElement.clientWidth,
+          height: document.documentElement.clientHeight,
           borderRadius: 0,
           boxShadow: "none"
         };
@@ -143,4 +149,72 @@ export function useBrandTransitionTimeline({
     state.sourceSlot,
     state.transitionId
   ]);
+
+  useEffect(() => {
+    if (state.phase !== "revealing" || !state.transitionId || !state.brandId) {
+      return;
+    }
+
+    const transitionId = state.transitionId;
+    const overlayCard = document.querySelector<HTMLElement>(
+      `.brand-transition-overlay__card[data-transition-id="${transitionId}"]`
+    );
+    const overlayImage = overlayCard?.querySelector<HTMLElement>(".brand-transition-overlay__image--section");
+    const targetSlide = document.querySelector<HTMLElement>(
+      `.brand-slide-stack__slide[data-brand="${state.brandId}"]`
+    );
+    const targetFrame = targetSlide?.querySelector<HTMLElement>(".brand-slide-stack__frame");
+    const targetImage = targetSlide?.querySelector<HTMLElement>(".brand-slide-stack__image");
+
+    if (!overlayCard || !overlayImage || !targetFrame || !targetImage) {
+      setBrandTransitionPhase(transitionId, "complete");
+      return;
+    }
+
+    const targetRect = targetFrame.getBoundingClientRect();
+    const targetFrameStyle = window.getComputedStyle(targetFrame);
+    const targetImageScale = Number(gsap.getProperty(targetImage, "scaleX")) || 1;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(overlayCard, { opacity: 0 });
+      setBrandTransitionPhase(transitionId, "complete");
+      return;
+    }
+
+    const timeline = gsap.timeline({
+      defaults: { ease: brandTransitionEasing.standard },
+      onComplete: () => setBrandTransitionPhase(transitionId, "complete")
+    });
+
+    timeline
+      .to(overlayCard, {
+        left: targetRect.left,
+        top: targetRect.top,
+        width: targetRect.width,
+        height: targetRect.height,
+        borderRadius: targetFrameStyle.borderRadius,
+        duration: brandTransitionTiming.settle
+      })
+      .to(
+        overlayImage,
+        {
+          scale: targetImageScale,
+          duration: brandTransitionTiming.settle
+        },
+        "<"
+      )
+      .to(
+        overlayCard,
+        {
+          opacity: 0,
+          duration: brandTransitionTiming.reveal
+        },
+        `>-${brandTransitionTiming.reveal * 0.45}`
+      );
+
+    return () => {
+      timeline.kill();
+    };
+  }, [setBrandTransitionPhase, state.brandId, state.phase, state.transitionId]);
 }

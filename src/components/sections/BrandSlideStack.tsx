@@ -17,6 +17,10 @@ type BrandSlideStackStyle = CSSProperties & {
 
 type BrandSceneStyle = CSSProperties & {
   "--brand-scene-image": string;
+  "--brand-scene-image-mobile": string;
+  "--brand-scene-focal-point": string;
+  "--brand-scene-focal-point-mobile": string;
+  "--brand-scene-filter": string;
 };
 
 type BrandAnchorStyle = CSSProperties & {
@@ -268,6 +272,10 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
                 },
                 `${label}+=0.98`
               );
+
+            if (index < brands.length - 2) {
+              timeline.to({}, { duration: BRAND_SETTLED_HOLD_SECONDS });
+            }
           });
         }, root);
 
@@ -640,13 +648,22 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
               className="brand-slide-stack__slide"
               data-brand={brand.id}
               aria-labelledby={`${brand.id}-slide-title`}
-              style={{ "--brand-scene-image": `url(${brand.sectionImage})` } as BrandSceneStyle}
+              style={
+                {
+                  "--brand-scene-image": `url(${brand.sectionAsset.src})`,
+                  "--brand-scene-image-mobile": `url(${brand.sectionAsset.mobileSrc ?? brand.sectionAsset.src})`,
+                  "--brand-scene-focal-point": brand.sectionAsset.focalPoint,
+                  "--brand-scene-focal-point-mobile":
+                    brand.sectionAsset.mobileFocalPoint ?? brand.sectionAsset.focalPoint,
+                  "--brand-scene-filter": brand.sectionAsset.visualFilter ?? "none"
+                } as BrandSceneStyle
+              }
             >
               <div className="brand-slide-stack__frame">
                 <span className="brand-slide-stack__image" aria-hidden="true" />
                 <span className="brand-slide-stack__shade" aria-hidden="true" />
                 <div className="brand-slide-stack__copy">
-                  <h2 id={`${brand.id}-slide-title`} className="brand-slide-stack__title">
+                  <h2 id={`${brand.id}-slide-title`} className="brand-slide-stack__title" tabIndex={-1}>
                     <Image
                       src={brand.logoSrc}
                       alt={brand.logoAlt}

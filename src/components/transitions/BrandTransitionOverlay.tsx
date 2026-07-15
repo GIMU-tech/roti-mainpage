@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import type { Brand } from "@/types/brand";
 import type { BrandTransitionState } from "@/types/brandTransition";
+import { BrandCardIdentity } from "@/components/hero/BrandCardIdentity";
 
 type BrandTransitionOverlayProps = {
   brand: Brand;
@@ -15,6 +15,14 @@ type BrandTransitionOverlayStyle = CSSProperties & {
   "--transition-top": string;
   "--transition-width": string;
   "--transition-height": string;
+};
+
+type BrandTransitionImageStyle = CSSProperties & {
+  "--transition-image": string;
+  "--transition-image-mobile": string;
+  "--transition-focal-point": string;
+  "--transition-focal-point-mobile": string;
+  "--transition-filter"?: string;
 };
 
 export function BrandTransitionOverlay({ brand, state }: BrandTransitionOverlayProps) {
@@ -40,37 +48,34 @@ export function BrandTransitionOverlay({ brand, state }: BrandTransitionOverlayP
       >
         <span
           className="brand-transition-overlay__image brand-transition-overlay__image--hero"
-          style={{
-            backgroundImage: `url(${brand.heroAsset.src})`,
-            backgroundPosition: brand.transition.heroFocalPoint
-          }}
+          style={
+            {
+              "--transition-image": `url(${brand.heroAsset.src})`,
+              "--transition-image-mobile": `url(${brand.heroAsset.mobileSrc ?? brand.heroAsset.src})`,
+              "--transition-focal-point": brand.heroAsset.focalPoint,
+              "--transition-focal-point-mobile": brand.heroAsset.mobileFocalPoint ?? brand.heroAsset.focalPoint
+            } as BrandTransitionImageStyle
+          }
         />
         <span
           className="brand-transition-overlay__image brand-transition-overlay__image--section"
-          style={{
-            backgroundImage: `url(${brand.sectionImage})`,
-            backgroundPosition: brand.transition.sectionFocalPoint
-          }}
+          style={
+            {
+              "--transition-image": `url(${brand.sectionAsset.src})`,
+              "--transition-image-mobile": `url(${brand.sectionAsset.mobileSrc ?? brand.sectionAsset.src})`,
+              "--transition-focal-point": brand.sectionAsset.focalPoint,
+              "--transition-focal-point-mobile":
+                brand.sectionAsset.mobileFocalPoint ?? brand.sectionAsset.focalPoint,
+              "--transition-filter": brand.sectionAsset.visualFilter ?? "none"
+            } as BrandTransitionImageStyle
+          }
         />
         <span
           className="brand-transition-overlay__shade"
           style={{ background: brand.transition.overlayShade ?? "rgba(0, 0, 0, 0.2)" }}
         />
         <span className="brand-transition-overlay__sheen" />
-        <span className="brand-transition-overlay__content">
-          <span className="brand-transition-overlay__eyebrow">ROTI BRAND PORTAL</span>
-          <strong className="brand-transition-overlay__title">
-            <Image
-              src={brand.logoSrc}
-              alt=""
-              width={brand.logoWidth}
-              height={brand.logoHeight}
-              sizes="(max-width: 768px) 9rem, 13rem"
-            />
-          </strong>
-          <span className="brand-transition-overlay__line" />
-          <span className="brand-transition-overlay__description">{brand.visualTagline}</span>
-        </span>
+        <BrandCardIdentity brand={brand} className="brand-transition-overlay__content" decorative />
       </div>
     </div>
   );

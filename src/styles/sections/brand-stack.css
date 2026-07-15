@@ -154,27 +154,34 @@
 }
 
 .brand-slide-stack__image {
-  background:
-    linear-gradient(180deg, rgba(5, 5, 5, 0.04), rgba(5, 5, 5, 0.2)),
-    var(--brand-scene-image) center / cover no-repeat;
+  background-image:
+    linear-gradient(180deg, rgba(5, 5, 5, 0.02), rgba(5, 5, 5, 0.1)),
+    var(--brand-scene-image);
+  background-position: center, var(--brand-scene-focal-point);
+  background-repeat: no-repeat;
+  background-size: auto, cover;
+  filter: var(--brand-scene-filter, none);
   opacity: 0.9;
   transform: scale(1.02);
   transform-origin: center center;
   will-change: transform;
 }
 
-.brand-slide-stack__slide[data-brand="roti-camp"] .brand-slide-stack__image,
-.brand-slide-stack__slide[data-brand="roti-homesys"] .brand-slide-stack__image,
-.brand-slide-stack__slide[data-brand="leel"] .brand-slide-stack__image {
-  background-position: center center;
+@media (max-width: 900px) {
+  .brand-slide-stack__image {
+    background-image:
+      linear-gradient(180deg, rgba(5, 5, 5, 0.02), rgba(5, 5, 5, 0.1)),
+      var(--brand-scene-image-mobile);
+    background-position: center, var(--brand-scene-focal-point-mobile);
+  }
 }
 
 .brand-slide-stack__shade {
   z-index: 2;
   background:
     radial-gradient(ellipse at 50% 24%, rgba(255, 255, 255, 0.12), transparent 27rem),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.16) 36%, rgba(0, 0, 0, 0.78) 100%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.42), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.4));
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.08) 36%, rgba(0, 0, 0, 0.39) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.21), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.2));
   pointer-events: none;
 }
 
@@ -183,8 +190,8 @@
   inset: auto 0 0;
   height: 50vh;
   background:
-    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.94), transparent 58%),
-    linear-gradient(180deg, transparent, rgba(5, 5, 5, 0.92));
+    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.47), transparent 58%),
+    linear-gradient(180deg, transparent, rgba(5, 5, 5, 0.46));
   content: "";
 }
 

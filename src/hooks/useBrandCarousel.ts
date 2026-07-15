@@ -7,7 +7,7 @@ import { getHeroCardState, heroCardMotion } from "@/lib/animations/heroAnimation
 const HERO_CARD_REFLECTION_SETTLE_MS = 680;
 
 export function useBrandCarousel(brands: Brand[]) {
-  const initialBrandId = brands[1]?.id ?? brands[0]?.id;
+  const initialBrandId = brands.find((brand) => brand.id === "roti-camp")?.id ?? brands[0]?.id;
   const [activeBrandId, setActiveBrandId] = useState<BrandId | undefined>(initialBrandId);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const transitionTimerRef = useRef<number | null>(null);

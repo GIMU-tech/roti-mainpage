@@ -4,14 +4,23 @@ export type BrandAssetStatus = "pending" | "ready";
 
 export type BrandHeroAsset = {
   src: string;
+  mobileSrc?: string;
   alt: string;
   status: BrandAssetStatus;
   focalPoint: string;
+  mobileFocalPoint?: string;
+};
+
+export type BrandSectionAsset = {
+  src: string;
+  mobileSrc?: string;
+  alt: string;
+  focalPoint: string;
+  mobileFocalPoint?: string;
+  visualFilter?: string;
 };
 
 export type BrandTransitionAsset = {
-  heroFocalPoint: string;
-  sectionFocalPoint: string;
   overlayShade?: string;
   accessibilityLabel: string;
 };
@@ -21,6 +30,13 @@ export type BrandScene = {
   copy: string;
   direction: string;
   align: "left" | "right" | "center";
+};
+
+export type BrandAbout = {
+  title: string;
+  accent: string;
+  description: string;
+  image: string;
 };
 
 export type Brand = {
@@ -35,13 +51,13 @@ export type Brand = {
   description: string;
   mood: string[];
   keywords: string[];
-  heroImage: string;
-  sectionImage: string;
   heroAsset: BrandHeroAsset;
+  sectionAsset: BrandSectionAsset;
   transition: BrandTransitionAsset;
   visualTagline: string;
   visualMaterial: string;
   visualScene: string;
   scene: BrandScene;
+  about: BrandAbout;
   brandUrl: string;
 };

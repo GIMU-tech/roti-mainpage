@@ -110,6 +110,7 @@ export function RotiConnectSection() {
       className="roti-connect"
       id={HOME_SECTION_IDS.group}
       aria-labelledby="roti-connect-title"
+      data-autoplay-paused={isPaused ? "true" : "false"}
       onFocusCapture={() => setIsPaused(true)}
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -230,7 +231,19 @@ export function RotiConnectSection() {
                 <li key={keyword}>{keyword}</li>
               ))}
             </ul>
-            <a href={activeItem.href}>{activeItem.ctaLabel}</a>
+            {activeItem.href ? (
+              <a className="roti-connect__cta" href={activeItem.href}>
+                {activeItem.ctaLabel}
+              </a>
+            ) : (
+              <span
+                className="roti-connect__cta roti-connect__cta--disabled"
+                aria-disabled="true"
+                title="현재 문의처 확인이 필요합니다."
+              >
+                문의처 확인 중
+              </span>
+            )}
           </div>
         </article>
         <div className="roti-connect__progress" aria-hidden="true">

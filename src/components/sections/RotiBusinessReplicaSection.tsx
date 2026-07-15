@@ -4,30 +4,10 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { SectionShell } from "@/components/layout/SectionShell";
 import { HOME_SECTION_IDS } from "@/data/sections";
+import { rotiStandards } from "@/data/standards";
+import { siteContent } from "@/data/siteContent";
 
-const rotiBusinessSlides = [
-  {
-    tab: "Practicality",
-    title: "실용성",
-    description: ["매일 손이 닿는 순간부터", "싣고, 꺼내고, 정리하는 흐름까지 먼저 확인합니다."],
-    image: "/images/standards/standard-practicality.png",
-    alt: "ROTI 실용성 기준을 보여주는 생활 장면"
-  },
-  {
-    tab: "Ordered design",
-    title: "정돈된 설계",
-    description: ["공간과 동선이 흐트러지지 않도록", "보관 위치, 사용 순서, 이동 방식을 정리합니다."],
-    image: "/images/standards/standard-ordered-design.png",
-    alt: "ROTI 정돈된 설계 기준을 보여주는 정리된 공간"
-  },
-  {
-    tab: "Verifiable quality",
-    title: "확인 가능한 품질 기준",
-    description: ["소재와 마감, 접합부처럼", "눈과 손으로 확인되는 디테일을 중심에 둡니다."],
-    image: "/images/standards/standard-trusted-quality.png",
-    alt: "ROTI 품질 기준을 보여주는 소재와 마감 디테일"
-  }
-] as const;
+const rotiBusinessSlides = rotiStandards;
 
 const STANDARD_SCROLL_RANGE_PERCENT = 40 + rotiBusinessSlides.length * 80;
 const STANDARD_SNAP_PROGRESS = [0.5, 0.75] as const;
@@ -128,11 +108,12 @@ export function RotiBusinessReplicaSection() {
 
         serviceContents.forEach((content, index) => {
           const meta = content.querySelector(".roti-business-replica__content-meta");
+          const english = content.querySelector(".roti-business-replica__content-english");
           const title = content.querySelector(".roti-business-replica__content-title");
           const description = content.querySelector(".roti-business-replica__content-description");
 
           gsap.set(content, { autoAlpha: index === 0 ? 1 : 0 });
-          gsap.set([meta, title, description], {
+          gsap.set([meta, english, title, description], {
             autoAlpha: index === 0 ? 1 : 0,
             clipPath: index === 0 ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)"
           });
@@ -180,6 +161,7 @@ export function RotiBusinessReplicaSection() {
 
           const nextContent = serviceContents[nextIndex];
           const nextMeta = nextContent.querySelector(".roti-business-replica__content-meta");
+          const nextEnglish = nextContent.querySelector(".roti-business-replica__content-english");
           const nextTitle = nextContent.querySelector(".roti-business-replica__content-title");
           const nextDescription = nextContent.querySelector(".roti-business-replica__content-description");
 
@@ -191,16 +173,22 @@ export function RotiBusinessReplicaSection() {
             `step-${index}+=0.12`
           );
           timeline.fromTo(
+            nextEnglish,
+            { autoAlpha: 0, clipPath: "inset(0 100% 0 0)" },
+            { autoAlpha: 1, clipPath: "inset(0 0% 0 0)", duration: 0.36, ease: "power2.out" },
+            `step-${index}+=0.18`
+          );
+          timeline.fromTo(
             nextTitle,
             { autoAlpha: 0, clipPath: "inset(0 100% 0 0)" },
             { autoAlpha: 1, clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out" },
-            `step-${index}+=0.2`
+            `step-${index}+=0.3`
           );
           timeline.fromTo(
             nextDescription,
             { autoAlpha: 0, clipPath: "inset(0 100% 0 0)" },
             { autoAlpha: 1, clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out" },
-            `step-${index}+=0.4`
+            `step-${index}+=0.52`
           );
 
           const exitingImage = serviceImages[index];
@@ -294,39 +282,42 @@ export function RotiBusinessReplicaSection() {
     >
       <div className="roti-business-replica__container">
         <div className="roti-business-replica__layout">
-          <div className="roti-business-replica__header">
-            <h2 id="roti-business-replica-title" className="roti-business-replica__title">
-              일상을 위한 세 가지 기준
-            </h2>
-          </div>
-          <div className="roti-business-replica__content-wrapper">
-            {rotiBusinessSlides.map((item, index) => (
-              <div key={item.title} className="roti-business-replica__content" data-active={index === 0}>
-                <span className="roti-business-replica__content-meta">
-                  STANDARD {String(index + 1).padStart(2, "0")} / {String(rotiBusinessSlides.length).padStart(2, "0")}
-                </span>
-                <h3 className="roti-business-replica__content-title">{item.title}</h3>
-                <p className="roti-business-replica__content-description" aria-label={item.description.join(" ")}>
-                  {item.description.map((line, lineIndex) => (
-                    <span key={line} aria-hidden="true">
-                      {line}
-                      {lineIndex < item.description.length - 1 ? (
-                        <>
-                          <br />
-                          {" "}
-                        </>
-                      ) : null}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ))}
+          <div className="roti-business-replica__copy-column">
+            <div className="roti-business-replica__header">
+              <h2 id="roti-business-replica-title" className="roti-business-replica__title">
+                {siteContent.standard.title}
+              </h2>
+            </div>
+            <div className="roti-business-replica__content-wrapper">
+              {rotiBusinessSlides.map((item, index) => (
+                <div key={item.title} className="roti-business-replica__content" data-active={index === 0}>
+                  <span className="roti-business-replica__content-meta">
+                    STANDARD {String(index + 1).padStart(2, "0")} / {String(rotiBusinessSlides.length).padStart(2, "0")}
+                  </span>
+                  <p className="roti-business-replica__content-english">{item.englishTitle}</p>
+                  <h3 className="roti-business-replica__content-title">{item.title}</h3>
+                  <p className="roti-business-replica__content-description" aria-label={item.copyLines.join(" ")}>
+                    {item.copyLines.map((line, lineIndex) => (
+                      <span key={line} aria-hidden="true">
+                        {line}
+                        {lineIndex < item.copyLines.length - 1 ? (
+                          <>
+                            <br />
+                            {" "}
+                          </>
+                        ) : null}
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="roti-business-replica__image-stage" aria-hidden="true">
             {rotiBusinessSlides.map((item, index) => (
               <figure key={`${item.image}-${index}`} className="roti-business-replica__image">
-                <Image src={item.image} alt={item.alt} width={968} height={550} sizes="(max-width: 768px) 80vw, 60vw" />
+                <Image src={item.image} alt={item.imageAlt} width={968} height={550} sizes="(max-width: 768px) 80vw, 60vw" />
               </figure>
             ))}
           </div>

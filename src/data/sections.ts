@@ -4,6 +4,7 @@ export const HOME_SECTION_IDS = {
   about: "about",
   standard: "standard",
   group: "group",
+  contact: "contact",
   footer: "roti-footer"
 } as const;
 
@@ -13,6 +14,7 @@ export const HOME_SECTION_HREFS = {
   about: "#about",
   standard: "#standard",
   group: "#group",
+  contact: "#contact",
   footer: "#roti-footer"
 } as const;
 
@@ -82,14 +84,24 @@ export const homeSections = [
     showOnMobile: false
   },
   {
-    key: "footer",
+    key: "contact",
     label: "CONTACT",
-    id: HOME_SECTION_IDS.footer,
-    href: HOME_SECTION_HREFS.footer,
-    snapSelector: HOME_SECTION_HREFS.footer,
+    id: HOME_SECTION_IDS.contact,
+    href: HOME_SECTION_HREFS.contact,
+    snapSelector: HOME_SECTION_HREFS.contact,
     showInNavigation: true,
     showOnDesktop: true,
     showOnMobile: true
+  },
+  {
+    key: "footer",
+    label: "FOOTER",
+    id: HOME_SECTION_IDS.footer,
+    href: HOME_SECTION_HREFS.footer,
+    snapSelector: HOME_SECTION_HREFS.footer,
+    showInNavigation: false,
+    showOnDesktop: false,
+    showOnMobile: false
   }
 ] as const satisfies readonly HomeSectionConfig[];
 

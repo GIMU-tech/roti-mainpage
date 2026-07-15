@@ -52,7 +52,13 @@ export function Header() {
               connectSectionRect.bottom > headerToneProbeY)
         )
       );
-      setIsOnFooter(Boolean(footerSectionRect && footerSectionRect.top <= 96 && footerSectionRect.bottom > 96));
+      setIsOnFooter(
+        Boolean(
+          footerSectionRect &&
+            footerSectionRect.top <= headerToneProbeY &&
+            footerSectionRect.bottom > headerToneProbeY
+        )
+      );
     };
 
     updateHeaderState();

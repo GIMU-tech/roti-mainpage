@@ -14,9 +14,6 @@ export type HeroCardMotion = {
   rotateY: string;
   scale: number;
   opacity: number;
-  shadowY: string;
-  shadowScaleX: number;
-  shadowOpacity: number;
 };
 
 export const heroCardMotion = {
@@ -25,30 +22,21 @@ export const heroCardMotion = {
     z: "170px",
     rotateY: "0deg",
     scale: 1.08,
-    opacity: 1,
-    shadowY: "clamp(13.4rem, 30vh, 17.3rem)",
-    shadowScaleX: 0.96,
-    shadowOpacity: 0.92
+    opacity: 1
   },
   left: {
     x: "-112%",
     z: "-26px",
     rotateY: "37deg",
     scale: 0.82,
-    opacity: 0.84,
-    shadowY: "clamp(10.2rem, 23vh, 13.3rem)",
-    shadowScaleX: 0.58,
-    shadowOpacity: 0.64
+    opacity: 1
   },
   right: {
     x: "112%",
     z: "-26px",
     rotateY: "-37deg",
     scale: 0.82,
-    opacity: 0.84,
-    shadowY: "clamp(10.2rem, 23vh, 13.3rem)",
-    shadowScaleX: 0.58,
-    shadowOpacity: 0.64
+    opacity: 1
   }
 } satisfies Record<HeroCardSlot, HeroCardMotion>;
 
