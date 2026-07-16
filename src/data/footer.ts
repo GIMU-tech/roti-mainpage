@@ -1,4 +1,3 @@
-import { HOME_SECTION_HREFS, type HomeSectionHref } from "@/data/sections";
 import { brands } from "@/data/brands";
 
 export type FooterBrandLogo = {
@@ -16,7 +15,19 @@ export type FooterLocation = {
 
 export type FooterLink = {
   label: string;
-  href?: HomeSectionHref;
+  href: string;
+  group: "legal" | "category";
+};
+
+export type FooterCompanyInfo = {
+  companyName: string;
+  representative: string;
+  businessRegistrationNumber: string;
+  mailOrderRegistrationNumber: string;
+  phone: string;
+  phoneHref: string;
+  email: string;
+  emailHref: string;
 };
 
 export const footerBrandLogos: readonly FooterBrandLogo[] = brands.map((brand) => ({
@@ -38,10 +49,23 @@ export const footerLocations = [
   }
 ] as const satisfies readonly FooterLocation[];
 
+export const footerCompanyInfo: FooterCompanyInfo = {
+  companyName: "(주)로티",
+  representative: "정영진",
+  businessRegistrationNumber: "571-86-00618",
+  mailOrderRegistrationNumber: "제 2017-경기양주-0088 호",
+  phone: "1800-8523",
+  phoneHref: "tel:18008523",
+  email: "RT@rotimall.com",
+  emailHref: "mailto:RT@rotimall.com"
+};
+
 export const footerLinks: readonly FooterLink[] = [
-  { label: "BRAND", href: HOME_SECTION_HREFS.brand },
-  { label: "STANDARD", href: HOME_SECTION_HREFS.standard },
-  { label: "개인정보처리방침" }
+  { label: "이용약관", href: "#", group: "legal" },
+  { label: "개인정보처리방침", href: "#", group: "legal" },
+  { label: "캠핑", href: "#", group: "category" },
+  { label: "공구", href: "#", group: "category" },
+  { label: "주방", href: "#", group: "category" }
 ] as const;
 
 export const footerCopyright = "COPYRIGHT © ROTI. ALL RIGHTS RESERVED.";

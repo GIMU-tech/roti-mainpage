@@ -73,7 +73,7 @@ Users should understand quickly:
 - Commerce-style carousel controls or product slider UI
 - Unverified claims such as No. 1, certified, supplied to, awarded, or sales numbers
 - Abrupt section tone changes that make the page feel like multiple unrelated websites
-- Black-frame flashes, image flicker, or visible anchor jumps during Hero-to-brand transitions
+- Black-frame flashes, image flicker, or visible anchor jumps during Hero card selection or brand-scene scrolling
 
 ---
 
@@ -194,11 +194,11 @@ Users should understand quickly:
 - Left and right cards move backward and appear slightly darker.
 - Use restrained left/right arrow controls to rotate the Hero cards, matching the approved visual mockup direction.
 - Arrow controls rotate cards only and must not turn the Hero into a commerce carousel.
-- Every brand card enters its matching brand scene with one click or tap.
-- Clicking a center card begins the fullscreen expansion immediately.
-- Clicking a left or right card first moves that card to the center, resolves `rotateY` to `0deg`, and then continues directly into fullscreen expansion.
-- A second click must never be required.
-- Card selection must not immediately jump or scroll to the target anchor.
+- Clicking or tapping a left or right card makes that card the center main card and resolves `rotateY` to `0deg` through the established rotation animation.
+- Card selection ends after the clicked card becomes the center main card.
+- Clicking a Hero card must not start fullscreen expansion, a transition overlay, or navigation to a brand section.
+- Clicking the current center card must keep the user in the Hero and must not change the scroll position.
+- Brand scenes are entered through the normal page scroll flow or explicit navigation controls, not through Hero card clicks.
 - The background prioritizes dynamic smoke / mist / soft spotlight rather than a static smoke image.
 - Smoke / mist should move very slowly and subtly.
 - Cards must feel grounded on the floor with natural contact shadows.
@@ -207,21 +207,15 @@ Users should understand quickly:
 - Do not use red tint on the top of cards.
 - Red accent is limited to small UI elements.
 
-### Hero-to-Brand Transition
-- The selected Hero card becomes the visual source of the transition into the brand section.
-- A transition overlay may visually clone the selected card so the source card remains structurally stable in the React tree.
-- Non-selected cards and Hero controls should recede through restrained opacity, brightness, or blur changes.
-- A side card must center before fullscreen expansion; a center card may skip the centering phase.
-- During expansion, card width and height grow to the viewport while radius, border, shadow, side depth, glass edge, and sheen are gradually removed.
-- The final transition frame should match a full-viewport brand scene with no visible card chrome.
-- Hero and section imagery must connect without an empty frame, black flash, or abrupt crop jump.
-- When Hero and section images differ, crossfade only after the expanding card substantially covers the viewport.
-- The real scroll position may be synchronized only after the transition image fully covers the viewport.
-- After synchronization, the real brand scene must be visually aligned before the transition overlay is removed.
-- The brand logo, description, and CTA may reveal in a restrained sequence after the scene is stable.
-- Recommended total transition duration is approximately 1.2-1.6 seconds on desktop and shorter on mobile.
-- Do not use bounce, elastic, shake, or aggressive overshoot.
-- Transition failure must fall back to a safe move to the matching brand section and must never leave the page locked.
+### Hero Card Selection Motion
+- A clicked side card becomes the center main card through the existing 3D turntable rotation and centering motion.
+- The clicked card resolves to the center slot and `rotateY: 0deg`; the other cards move to their corresponding side slots.
+- The selection motion should remain smooth and restrained, with no bounce, elastic, shake, or aggressive overshoot.
+- The card remains a card throughout the interaction. Its radius, border, shadow, depth, glass edge, and sheen must not be removed for fullscreen expansion.
+- Card selection must not create a fixed transition overlay, synchronize the real scroll position, or lock document scrolling.
+- Once the centering motion is complete, card and arrow input must be restored.
+- Mobile may use a shorter 2D-heavy version of the same center-selection behavior.
+- In `prefers-reduced-motion`, update the center main card immediately or with a brief fade while preserving the same selected result.
 
 ### Brand Fullscreen Sections
 - One brand per screen.
@@ -256,13 +250,12 @@ Do not include:
 ### Hero Card Switching
 - Left/right arrow controls change only the active Hero card.
 - Arrow controls preserve the 3D turntable / carousel feeling.
-- Clicking any brand card starts a one-click transition into the matching brand section.
-- A clicked side card centers and resolves its rotation before fullscreen expansion.
-- A clicked center card begins fullscreen expansion directly.
-- Card click must not perform an immediate anchor jump before the visual transition covers the viewport.
+- Clicking a side brand card changes the active brand and moves it to the center main-card slot.
+- Clicking the current center card keeps the current active brand and never navigates away from the Hero.
+- Card clicks must not perform an anchor jump, fullscreen expansion, or brand-section transition.
 - Keyboard access must remain available through accessible controls.
-- During a brand transition, card input and arrow controls are temporarily disabled.
-- After completion or failure, all controls and scrolling must be restored.
+- During the center-selection animation, repeated card and arrow input may be temporarily disabled.
+- After the center-selection animation, all card and arrow controls must be restored without changing document scrolling.
 
 ### Header / Navigation Scroll Behavior
 - In the desktop Hero initial state, the nav link group may sit at the bottom-right.
@@ -278,7 +271,7 @@ Do not include:
 - No aggressive bounce
 - No gimmicky shake
 - Hero card arrows should feel restrained and editorial, not like a shopping carousel.
-- Hero-to-brand movement should read as one continuous object transition, not a scroll jump followed by a separate animation.
+- Card-selection movement should read as one continuous turntable motion that ends in the Hero center slot.
 
 ### Micro Interactions
 - Hover may use subtle tilt or brightness.
@@ -287,8 +280,8 @@ Do not include:
 - Use only a small red accent line where necessary.
 - Background smoke / mist motion must be slow and subtle.
 - Use very mild background parallax only if needed.
-- In `prefers-reduced-motion`, disable or minimize smoke / mist, 3D centering, and fullscreen expansion.
-- Reduced-motion users must still arrive at the correct brand section through a brief, understandable fade or direct transition.
+- In `prefers-reduced-motion`, disable or minimize smoke / mist and 3D centering.
+- Reduced-motion users must still be able to change the center main card through an immediate update or brief fade.
 
 ---
 
@@ -332,24 +325,22 @@ Must not include:
 - Red floor reflection
 - Commerce elements
 
-### Brand Transition Overlay
+### Hero Card Selection
 Must include:
 
-- A visual continuation of the selected Hero card
-- Source-card geometry alignment
 - Side-card-to-center handling
-- Fullscreen expansion
-- Hero-to-section image continuity
-- Safe cleanup after success, cancellation, resize, unmount, or failure
+- Active-card state synchronization
+- Existing card rotation, scale, opacity, and depth motion
+- Safe interaction-state cleanup after completion, resize, unmount, or interruption
 - Mobile and `prefers-reduced-motion` fallbacks
 
 Must not include:
 
-- A second independent visual design unrelated to the Hero card
-- A blank interstitial screen
-- A hard anchor jump before the viewport is covered
+- Fullscreen card expansion
+- A fixed Hero-to-brand transition overlay
+- A hard anchor jump or automatic brand-section navigation
+- Scroll-position synchronization caused by a card click
 - Permanent scroll locking
-- A requirement for a second click
 
 ### Hero Smoke / Mist Layer
 Must include:
@@ -393,18 +384,15 @@ Must not include:
 - Provide labels for assistive technology.
 - Respect `prefers-reduced-motion`.
 - Header nav movement must not create a confusing keyboard order.
-- Transition status should be available to assistive technology through a restrained live-region announcement.
-- During transition, focus must not enter hidden Hero or inactive brand-slide controls.
-- After transition, move focus to the target brand heading or an equivalent focusable landmark without causing another scroll.
+- The active center card must expose its selected state through `aria-current` or an equivalent accessible state.
+- Card labels must describe changing the main card and must not announce brand-section navigation.
 - Inactive brand slides must not expose hidden links in the keyboard tab order.
-- Escape during a committed transition should fast-complete safely rather than leave an ambiguous half-transition state.
 
 ### Performance
 - Prefer CSS-based effects where possible.
 - Avoid excessive WebGL use.
-- Do not add Three.js or another animation framework for this transition.
+- Do not add Three.js or another animation framework for Hero card selection.
 - Optimize image slots when real images are added.
-- Preload the selected section image before or at transition start.
 - Implement smoke / mist primarily with CSS animation.
 - Reduce blur layer count, 3D side depth, and motion duration on mobile.
 - If pixel ratio is increased for card sharpness, check performance impact.
@@ -416,10 +404,9 @@ Must not include:
 
 ### Do
 - Keep arrow-based Hero card rotation.
-- Use one-click card entry into the matching brand scene.
-- Center a clicked side card before expansion.
-- Expand the selected card into the fullscreen brand scene.
-- Synchronize scroll only while the transition overlay fully covers the viewport.
+- Use card clicks to select and center the clicked brand card only.
+- Replay the established side-card-to-center rotation when a side card is clicked.
+- Keep brand-scene entry in the normal scroll flow or explicit navigation.
 - Keep a shared layout system while giving each brand a distinct mood.
 - Use Ember Red sparingly.
 - Emphasize connected scroll transitions.
@@ -433,9 +420,9 @@ Must not include:
 
 ### Don't
 - Use commerce-style carousel controls, product-slider chrome, or auto-advancing sales carousel behavior.
-- Require two clicks to enter a brand section.
-- Jump to the target anchor before the selected card covers the viewport.
-- Move the real BrandCard DOM node outside its normal React structure for the transition.
+- Start fullscreen expansion or brand-section navigation from a Hero card click.
+- Jump to a target anchor or synchronize scroll from a Hero card click.
+- Move the real BrandCard DOM node outside its normal React structure for card selection.
 - Add product prices, reviews, discounts, cart, checkout, member, order, or payment UI.
 - Add a separate product-listing shop page feel to the Hero.
 - Add unapproved third-party brand names or logos.
@@ -444,7 +431,7 @@ Must not include:
 - Add Hero card top red tint.
 - Replace smoke / mist with a static smoke image.
 - Force bottom nav on mobile.
-- Leave scrolling, controls, or document interaction locked after transition failure.
+- Lock scrolling or document interaction during Hero card selection.
 - Reintroduce a manual multi-step intro that requires repeated scrolling.
 
 ---
@@ -460,8 +447,8 @@ Any design or interaction change must follow this order:
    - Dark premium tone
    - Automatic and skippable intro
    - Arrow-to-rotate Hero card structure
-   - One-click card-to-brand transition
-   - Side-card centering before fullscreen expansion
+   - Card-click-to-center-only interaction
+   - Side-card centering animation without fullscreen expansion
    - One-brand-per-screen scroll structure
    - Red accent restraint
    - Hero nav bottom-to-top transition
@@ -475,10 +462,10 @@ Any design or interaction change must follow this order:
 - [ ] After scroll, does nav move naturally to the top header area?
 - [ ] Is mobile nav simplified rather than forced into the bottom?
 - [ ] Is arrow-based card rotation preserved?
-- [ ] Does every card enter the matching brand section with one click/tap?
-- [ ] Does a side card center before fullscreen expansion?
-- [ ] Is immediate anchor jumping avoided until the viewport is covered?
-- [ ] Does the transition avoid blank frames, image flicker, and crop jumps?
+- [ ] Does clicking a side card animate it into the center main-card slot?
+- [ ] Does card selection stop in the Hero without fullscreen expansion or brand-section navigation?
+- [ ] Is the scroll position unchanged by Hero card clicks?
+- [ ] Is repeated input safely restored after the center-selection motion?
 - [ ] Is one-brand-per-screen section intent preserved?
 - [ ] Do brand sections use fullscreen visual slide structure without becoming a project portfolio clone?
 - [ ] Is red limited to small accents?
@@ -498,12 +485,11 @@ The mainpage first pass can be considered complete when:
 - The intro plays automatically, remains skippable, and does not require repeated scroll input.
 - The first screen shows three brand cards in a premium stage.
 - Brand switching works through restrained left/right arrow controls.
-- Any card enters its matching brand scene with one click or tap.
-- A clicked side card centers and resolves its rotation before fullscreen expansion.
-- A clicked center card expands directly.
-- The selected card expands into the brand scene without a blank frame, flicker, or visible anchor jump.
-- Scroll position is synchronized only while the transition image covers the viewport.
-- Transition success and failure both restore scrolling, controls, and document state.
+- Clicking a side card animates it into the center main-card slot and resolves its rotation.
+- Clicking a Hero card never starts fullscreen expansion or automatic brand-section navigation.
+- Clicking the current center card keeps the Hero and scroll position unchanged.
+- Brand scenes remain available through the normal one-brand-per-screen scroll flow or explicit navigation.
+- Card-selection completion and interruption both restore card and arrow controls without locking scrolling.
 - Hero background has subtle smoke / mist motion, not a static smoke image.
 - Hero cards have natural contact shadows.
 - Hero card bottom red glow / red strip / red floor reflection are absent.
@@ -513,6 +499,6 @@ The mainpage first pass can be considered complete when:
 - Brand fullscreen sections appear one brand per screen.
 - Brand fullscreen sections use full-bleed scene imagery with lower-centered copy and smooth slide continuity.
 - Each brand has a clear CTA when a verified destination exists.
-- Keyboard, inactive-slide focus, live-region announcement, and reduced-motion behavior are verified.
+- Keyboard card selection, active-state announcement, inactive-slide focus, and reduced-motion behavior are verified.
 - Logo, menu icon, nav transition, card system, color, and motion are consistent.
 - Changes can be reviewed against this `Design.md`.

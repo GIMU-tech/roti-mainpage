@@ -8,7 +8,9 @@ type BrandCardIdentityProps = {
 };
 
 export function BrandCardIdentity({ brand, className, decorative = false }: BrandCardIdentityProps) {
-  const rootClassName = ["brand-card-identity", className].filter(Boolean).join(" ");
+  const rootClassName = ["brand-card-identity", `brand-card-identity--${brand.id}`, className]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <span className={rootClassName}>

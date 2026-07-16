@@ -43,6 +43,46 @@ final result: passed
 
 ---
 
+# Figma Footer Integration Design QA
+
+- source visual truth: Figma `LKb5bf9CBGtYayJFxQHELu`, node `14096:1106`
+- supplied reference capture: `C:/Users/Design/AppData/Local/Temp/codex-clipboard-53292fa1-9348-4250-9416-61a16f1b2479.png`
+- desktop implementation: `qa-screenshots/figma-footer-2026-07-16/implementation-desktop-1920x1080-v3.png`
+- focused comparison: `qa-screenshots/figma-footer-2026-07-16/comparison-footer-v3.png`
+- full comparison: `qa-screenshots/figma-footer-2026-07-16/comparison-full-v3.png`
+- comparison viewport: `1920 x 1080`
+- compared state: footer visible in the lower `540px` of the viewport
+
+## Implemented relationship
+
+The footer was rebuilt around the Figma frame's two-band composition: a large ROTI identity area above one divider, followed by contact information, the three brand logos, legal company information, links, and the TOP control. The bright outer rectangle in the supplied screenshot was treated as the Figma selection/bounds guide rather than a rendered footer border.
+
+## Comparison history
+
+1. The first comparison showed the brand-logo group too far left and small vertical drift in the identity copy.
+2. The desktop footer height, headline line-height, description offset, brand navigation inset, and lower-row spacing were measured against the Figma node and corrected.
+3. The final focused comparison shows matching left gutter, section height, single-divider structure, contact columns, brand-logo distribution, and lower information rows.
+
+## Fidelity and interaction checks
+
+- Desktop footer height resolves to `540px` at the comparison viewport.
+- ROTI, ROTI CAMP, ROTI HOMESYS, and LeEL use the repository's existing source assets.
+- Telephone and email use `tel:` and `mailto:` targets.
+- Brand links retain their existing section destinations and accessible names.
+- The TOP control retains the Korean accessible name `맨 위로 이동` and uses the project's Phosphor icon dependency.
+- Browser warning/error log was empty during the final desktop review.
+- The mobile DOM retained all footer regions and links, and the CSS changes stack contact columns, brand logos, company information, and legal links below `640px` without introducing a new interaction model.
+
+## Findings
+
+- No actionable P0, P1, or P2 difference remains for the requested desktop Figma match.
+- P3: A clean mobile footer screenshot was not archived because the existing full-screen intro remained over the page in the resized browser session. The responsive layout is implemented and covered by the final static checks, but a separate settled-state mobile visual pass can be done if required.
+- Content above the footer differs from the all-black area in the supplied Figma capture; it is outside this footer-only request.
+
+final result: passed
+
+---
+
 # ABOUT ROTI Main Integration Design QA
 
 - source visual truth: `public/prototypes/about-roti-scroll/index.html`

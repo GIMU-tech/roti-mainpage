@@ -63,7 +63,7 @@
 }
 
 .hero-portal__stage-scene--camp {
-  background: url("/images/hero/roti-camp-stage-floor-v3.webp") center / cover no-repeat;
+  background: url("/images/hero/roti-camp-stage-floor-v6.webp") center / cover no-repeat;
 }
 
 .hero-portal__stage-scene--homesys {
@@ -896,6 +896,14 @@ body[data-roti-hero-settling="true"] .brand-card[data-slot="right"] {
   width: 1.08rem;
   height: 2px;
   background: var(--color-accent-red);
+}
+
+.brand-card-identity--roti-camp .brand-card-identity__line {
+  background: #435a3b;
+}
+
+.brand-card-identity--leel .brand-card-identity__line {
+  background: #45392e;
 }
 
 .brand-card-identity__description {

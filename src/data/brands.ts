@@ -14,17 +14,17 @@ export const brands: Brand[] = [
     mood: ["outdoor", "movement", "nature", "rest"],
     keywords: ["캠핑", "이동", "휴식"],
     heroAsset: {
-      src: "/images/brands/roti-camp-card-v2.webp",
-      alt: "ROTI CAMP 국내 산악 호수의 블루아워 텐트 장면",
+      src: "/images/brands/roti-camp-card-v7.webp",
+      alt: "ROTI CAMP 숲 캠프장에 탄색 육각 쉘터가 놓인 낮 풍경",
       status: "ready",
-      focalPoint: "center bottom"
+      focalPoint: "58% center"
     },
     sectionAsset: {
-      src: "/images/sections/roti-camp-brand-section-v3.webp",
-      alt: "ROTI CAMP 국내 산악 호수와 텐트가 어우러진 블루아워 장면",
+      src: "/images/sections/roti-camp-brand-section-v8.webp",
+      alt: "ROTI CAMP 자연스러운 숲 캠프장에 탄색 육각 쉘터가 놓인 낮 풍경",
       focalPoint: "center center",
-      mobileFocalPoint: "68% center",
-      visualFilter: "brightness(0.9) saturate(0.92) contrast(1.02)"
+      mobileFocalPoint: "66% center",
+      visualFilter: "brightness(0.88) saturate(0.9) contrast(1)"
     },
     transition: {
       overlayShade: "rgba(0, 0, 0, 0.32)",
@@ -76,7 +76,7 @@ export const brands: Brand[] = [
       overlayShade: "rgba(0, 0, 0, 0.22)",
       accessibilityLabel: "ROTI HOMESYS 브랜드 섹션으로 이동합니다."
     },
-    visualTagline: "생활의 불편을 편리하게",
+    visualTagline: "생활을 더 편리하게, 하루를 더 가볍게.",
     visualMaterial: "warm interior / charcoal structure",
     visualScene: "수납 · 이동 · 생활 동선",
     scene: {
@@ -122,7 +122,7 @@ export const brands: Brand[] = [
       overlayShade: "rgba(0, 0, 0, 0.22)",
       accessibilityLabel: "LeEL 브랜드 섹션으로 이동합니다."
     },
-    visualTagline: "주방과 생활 공간을 정갈하게.",
+    visualTagline: "공간을 더 단정하게, 일상을 더 곱게.",
     visualMaterial: "dark stone / brushed steel",
     visualScene: "주방 · 소재 · 여백",
     scene: {
