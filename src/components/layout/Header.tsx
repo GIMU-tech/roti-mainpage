@@ -37,6 +37,10 @@ export function Header() {
       const headerToneProbeY = Math.min(96, window.innerHeight * 0.14);
       const standardSection = document.getElementById(HOME_SECTION_IDS.standard);
       const standardSectionRect = standardSection?.getBoundingClientRect();
+      const statsSection = document.getElementById(HOME_SECTION_IDS.stats);
+      const statsSectionRect = statsSection?.getBoundingClientRect();
+      const channelsSection = document.getElementById(HOME_SECTION_IDS.channels);
+      const channelsSectionRect = channelsSection?.getBoundingClientRect();
       const connectSection = document.getElementById(HOME_SECTION_IDS.group);
       const connectSectionRect = connectSection?.getBoundingClientRect();
       const footerSection = document.getElementById(HOME_SECTION_IDS.footer);
@@ -47,6 +51,12 @@ export function Header() {
           (standardSectionRect &&
             standardSectionRect.top <= headerToneProbeY &&
             standardSectionRect.bottom > headerToneProbeY) ||
+            (statsSectionRect &&
+              statsSectionRect.top <= headerToneProbeY &&
+              statsSectionRect.bottom > headerToneProbeY) ||
+            (channelsSectionRect &&
+              channelsSectionRect.top <= headerToneProbeY &&
+              channelsSectionRect.bottom > headerToneProbeY) ||
             (connectSectionRect &&
               connectSectionRect.top <= headerToneProbeY &&
               connectSectionRect.bottom > headerToneProbeY)

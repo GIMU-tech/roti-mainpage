@@ -63,7 +63,9 @@ export function BrandCard({
     <button
       className="brand-card"
       type="button"
-      aria-label={`${brand.name} 카드를 메인으로 보기`}
+      aria-label={
+        isActive ? `${brand.name} 브랜드 섹션으로 이동` : `${brand.name} 카드를 메인으로 보기`
+      }
       aria-current={isActive ? "true" : undefined}
       data-brand={brand.id}
       data-slot={slot}

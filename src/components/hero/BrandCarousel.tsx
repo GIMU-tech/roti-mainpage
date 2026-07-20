@@ -1,9 +1,11 @@
 "use client";
 
 import type { Brand } from "@/types/brand";
+import type { HeroCardSlot } from "@/lib/animations/heroAnimations";
 import { useCallback, useEffect, useRef } from "react";
 import { BrandCard } from "./BrandCard";
 import { useBrandCarousel } from "@/hooks/useBrandCarousel";
+import { useBrandTransition } from "@/hooks/useBrandTransition";
 
 type BrandCarouselProps = {
   brands: Brand[];
@@ -14,6 +16,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
   const controlsRef = useRef<HTMLDivElement | null>(null);
   const controlLayoutFrameRef = useRef<number | null>(null);
   const isCardRotationActiveRef = useRef(false);
+  const { state: brandTransitionState, startBrandTransition } = useBrandTransition();
   const {
     activeBrand,
     cardStates,
@@ -27,7 +30,8 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
 
     return brand ? [{ ...state, brand }] : [];
   });
-  isCardRotationActiveRef.current = isTransitioning;
+  const isBrandTransitionActive = brandTransitionState.phase !== "idle";
+  isCardRotationActiveRef.current = isTransitioning || isBrandTransitionActive;
 
   const syncControlLayout = useCallback(() => {
     const controls = controlsRef.current;
@@ -132,17 +136,42 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
     };
   }, [isTransitioning, scheduleControlLayout]);
 
-  const handleCardSelect = (brandId: Brand["id"]) => {
-    selectBrand(brandId);
+  const handleCardSelect = (brandId: Brand["id"], slot: HeroCardSlot) => {
+    if (isTransitioning || isBrandTransitionActive) {
+      return;
+    }
+
+    if (slot !== "center" || activeBrand?.id !== brandId) {
+      selectBrand(brandId);
+      return;
+    }
+
+    const centerCard = cardsRef.current?.querySelector<HTMLElement>(
+      `.brand-card[data-brand="${brandId}"][data-slot="center"]`
+    );
+
+    if (!centerCard) {
+      return;
+    }
+
+    startBrandTransition({
+      brandId,
+      sourceElement: centerCard,
+      sourceSlot: "center",
+      centerElement: centerCard
+    });
   };
 
   return (
     <div
       className="brand-carousel"
       aria-label="ROTI 브랜드 선택"
-      data-transition-active="false"
+      data-transition-active={isBrandTransitionActive ? "true" : "false"}
     >
-      <div className="brand-carousel__stage" aria-label="화살표나 카드를 선택해 메인 브랜드 카드를 변경">
+      <div
+        className="brand-carousel__stage"
+        aria-label="측면 카드는 메인 카드로 변경하고, 메인 카드는 해당 브랜드 섹션으로 이동"
+      >
         <div
           ref={controlsRef}
           className="brand-carousel__controls"
@@ -163,7 +192,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
               type="button"
               aria-label="이전 브랜드 카드 보기"
               onClick={selectPreviousBrand}
-              disabled={isTransitioning}
+              disabled={isTransitioning || isBrandTransitionActive}
             >
               <span aria-hidden="true">‹</span>
             </button>
@@ -173,7 +202,7 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
             type="button"
             aria-label="다음 브랜드 카드 보기"
             onClick={selectNextBrand}
-            disabled={isTransitioning}
+            disabled={isTransitioning || isBrandTransitionActive}
           >
             <span aria-hidden="true">›</span>
           </button>
@@ -186,11 +215,11 @@ export function BrandCarousel({ brands }: BrandCarouselProps) {
               brand={brand}
               isActive={isActive}
               isTransitioning={isTransitioning}
-              isTransitionSelected={false}
-              isDisabled={isTransitioning}
+              isTransitionSelected={isBrandTransitionActive && brandTransitionState.brandId === brand.id}
+              isDisabled={isTransitioning || isBrandTransitionActive}
               slot={slot}
               motion={motion}
-              onSelect={() => handleCardSelect(brand.id)}
+              onSelect={() => handleCardSelect(brand.id, slot)}
             />
           ))}
         </div>

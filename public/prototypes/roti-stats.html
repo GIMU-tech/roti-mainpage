@@ -143,9 +143,55 @@
       }
 
       .stat > div {
+        position: relative;
+        z-index: 2;
         display: grid;
+        width: 52%;
         gap: clamp(1rem, 1.8vh, 1.35rem);
         align-content: center;
+      }
+
+      .stat::before {
+        position: absolute;
+        top: auto;
+        right: clamp(0.5rem, 1.4vw, 1.5rem);
+        bottom: clamp(0.5rem, 1.2vw, 1.25rem);
+        z-index: 1;
+        width: 32%;
+        height: 60%;
+        background-position: right bottom;
+        background-repeat: no-repeat;
+        background-size: contain;
+        content: "";
+        transform: none;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .stats-board__secondary .stat:nth-child(1)::before,
+      .stats-board__secondary .stat:nth-child(4)::before {
+        width: 34%;
+      }
+
+      .stats-board__secondary .stat:nth-child(2)::before,
+      .stats-board__secondary .stat:nth-child(3)::before {
+        width: 30%;
+      }
+
+      .stats-board__secondary .stat:nth-child(1)::before {
+        background-image: url("../images/stats/stats-products-400.png");
+      }
+
+      .stats-board__secondary .stat:nth-child(2)::before {
+        background-image: url("../images/stats/stats-partners-40.png");
+      }
+
+      .stats-board__secondary .stat:nth-child(3)::before {
+        background-image: url("../images/stats/stats-brands-3.png");
+      }
+
+      .stats-board__secondary .stat:nth-child(4)::before {
+        background-image: url("../images/stats/stats-ip-5.png");
       }
 
       .stat__value {
@@ -185,23 +231,47 @@
       }
 
       .stat--primary {
+        display: grid;
+        padding: 0;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        justify-content: stretch;
         border-right: 1px solid var(--line-strong);
         background: transparent;
       }
 
+      .stat--primary > div {
+        width: 44%;
+        margin-left: clamp(1.6rem, 2.7vw, 2.8rem);
+        align-self: center;
+        justify-self: start;
+        grid-row: 1;
+        text-align: left;
+      }
+
       .stat--primary .stat__value {
-        display: block;
-        font-size: clamp(5.7rem, 8.4vw, 10rem);
-        line-height: 0.8;
+        font-size: clamp(3.4rem, 5.1vw, 6.5rem);
+        line-height: 0.86;
       }
 
       .stat--primary .stat__prefix {
-        display: block;
-        margin-bottom: 1.05rem;
-        color: rgba(27, 27, 25, 0.46);
-        font-size: 0.7rem;
-        font-weight: 750;
-        letter-spacing: 0.22em;
+        margin: 0;
+        color: rgba(27, 27, 25, 0.76);
+        font-size: clamp(0.82rem, 0.95vw, 1rem);
+        font-weight: 520;
+        letter-spacing: 0.08em;
+        line-height: 1.55;
+      }
+
+      .stat--primary::before {
+        top: auto;
+        right: 1%;
+        bottom: 1%;
+        width: 51%;
+        height: 55%;
+        background-image: url("../images/stats/stats-since-2010.png");
+        background-position: right bottom;
+        transform: none;
       }
 
       .stats-board__secondary {
@@ -304,9 +374,23 @@
         }
 
         .stat--primary {
+          display: flex;
           min-height: 20rem;
+          justify-content: center;
+          padding: clamp(1.6rem, 6vw, 2.4rem);
           border-right: 0;
           border-bottom: 1px solid var(--line-strong);
+        }
+
+        .stat--primary > div {
+          width: 44%;
+          margin-left: 0;
+          align-self: auto;
+        }
+
+        .stat--primary::before {
+          right: 0.5rem;
+          bottom: 0.5rem;
         }
 
         .stats-board__secondary {
@@ -326,6 +410,22 @@
 
         .stat__value {
           font-size: clamp(3.8rem, 17vw, 5.4rem);
+        }
+
+        .stat > div {
+          width: 48%;
+        }
+
+        .stat::before {
+          right: 0.25rem;
+          bottom: 0.5rem;
+          width: 34%;
+          height: 62%;
+        }
+
+        .stat.stat--primary::before {
+          width: 48%;
+          height: 58%;
         }
 
       }
@@ -364,9 +464,9 @@
             <article class="stat stat--primary">
               <div>
                 <p class="stat__value" aria-label="SINCE 2010">
-                  <span class="stat__prefix">SINCE</span>
                   <span class="stat__number" data-counter data-from="2000" data-to="2010" data-delay="0">2010</span>
                 </p>
+                <p class="stat__prefix">SINCE</p>
               </div>
             </article>
 
