@@ -125,11 +125,29 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
 
         return lenis.scroll >= brandTop - SECTION_SNAP_DEAD_ZONE && lenis.scroll <= brandBottom + SECTION_SNAP_DEAD_ZONE;
       };
+      const shouldUseNativeScrollRegion = (deltaY = 0) => {
+        const currentY = lenis.scroll;
+        const entryBuffer = window.innerHeight * 0.55;
+
+        return Array.from(document.querySelectorAll<HTMLElement>("[data-native-scroll-region]")).some((region) => {
+          const regionTop = getElementScrollTop(region);
+          const regionBottom = regionTop + region.offsetHeight;
+          const isInsideRegion =
+            currentY >= regionTop - SECTION_SNAP_DEAD_ZONE && currentY <= regionBottom + SECTION_SNAP_DEAD_ZONE;
+          const isEnteringFromAbove = deltaY > 0 && currentY < regionTop && regionTop - currentY <= entryBuffer;
+          const isEnteringFromBelow = deltaY < 0 && currentY > regionBottom && currentY - regionBottom <= entryBuffer;
+
+          return isInsideRegion || isEnteringFromAbove || isEnteringFromBelow;
+        });
+      };
       const getSectionSnapPoints = () => {
         const maxScroll = lenis.limit;
         const elementPoints = Array.from(document.querySelectorAll<HTMLElement>(sectionSnapSelector)).map(
           getElementScrollTop
         );
+        const nativeScrollRegionEntryPoints = Array.from(
+          document.querySelectorAll<HTMLElement>("[data-native-scroll-region]")
+        ).map(getElementScrollTop);
         const steppedSectionPoints = Array.from(
           document.querySelectorAll<HTMLElement>("[data-section-snap-progress][data-section-snap-range-vh]")
         ).flatMap((section) => {
@@ -149,7 +167,10 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           return snapProgress.map((progress) => sectionTop + snapRange * progress);
         });
 
-        return getUniqueSnapPoints([0, ...elementPoints, ...steppedSectionPoints], maxScroll);
+        return getUniqueSnapPoints(
+          [0, ...elementPoints, ...nativeScrollRegionEntryPoints, ...steppedSectionPoints],
+          maxScroll
+        );
       };
       const getSectionSnapTarget = (deltaY: number) => {
         const currentY = lenis.scroll;
@@ -212,6 +233,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           event.ctrlKey ||
           !canUseSectionSnap() ||
           isInsideDesktopBrandStack() ||
+          shouldUseNativeScrollRegion(event.deltaY) ||
           Math.abs(event.deltaY) < SECTION_SNAP_MIN_DELTA ||
           Math.abs(event.deltaX) > Math.abs(event.deltaY)
         ) {
@@ -243,6 +265,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
           !canUseSectionSnap() ||
           isSectionSnapping ||
           isInsideDesktopBrandStack() ||
+          shouldUseNativeScrollRegion(deltaY) ||
           Math.abs(deltaY) < SECTION_SNAP_MIN_DELTA
         ) {
           return;
@@ -257,7 +280,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
             mobileSectionSnapQuery.matches ||
             !canUseSectionSnap() ||
             isSectionSnapping ||
-            isInsideDesktopBrandStack()
+            isInsideDesktopBrandStack() ||
+            shouldUseNativeScrollRegion(lastSectionSnapDirection)
           ) {
             return;
           }
@@ -272,7 +296,12 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         }, 160);
       };
       const scheduleMobileSectionSnap = () => {
-        if (!mobileSectionSnapQuery.matches || !canUseSectionSnap() || isSectionSnapping) {
+        if (
+          !mobileSectionSnapQuery.matches ||
+          !canUseSectionSnap() ||
+          isSectionSnapping ||
+          shouldUseNativeScrollRegion()
+        ) {
           return;
         }
 
@@ -280,7 +309,12 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         mobileSectionSnapTimer = window.setTimeout(() => {
           mobileSectionSnapTimer = undefined;
 
-          if (!mobileSectionSnapQuery.matches || !canUseSectionSnap() || isSectionSnapping) {
+          if (
+            !mobileSectionSnapQuery.matches ||
+            !canUseSectionSnap() ||
+            isSectionSnapping ||
+            shouldUseNativeScrollRegion()
+          ) {
             return;
           }
 

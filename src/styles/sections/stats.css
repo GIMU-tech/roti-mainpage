@@ -1,0 +1,292 @@
+.roti-stats {
+  --stats-text: #1b1b19;
+  --stats-muted: rgba(27, 27, 25, 0.6);
+  --stats-dim: rgba(27, 27, 25, 0.38);
+  --stats-line: rgba(27, 27, 25, 0.13);
+  --stats-line-strong: rgba(27, 27, 25, 0.24);
+
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(6.8rem, 10vh, 8rem) var(--section-gutter) clamp(3.4rem, 6vh, 5rem);
+  scroll-snap-align: start;
+  background:
+    radial-gradient(circle at 77% 32%, rgba(180, 19, 7, 0.045), transparent 25rem),
+    radial-gradient(circle at 56% 58%, rgba(255, 255, 255, 0.82), transparent 32rem),
+    linear-gradient(135deg, #f2f1ee 0%, #faf9f6 54%, #f3f2ef 100%);
+  color: var(--stats-text);
+}
+
+.roti-stats::before {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, transparent calc(100% - 1px), rgba(27, 27, 25, 0.035) 1px);
+  background-size: calc((100vw - (var(--section-gutter) * 2)) / 12) 100%;
+  content: "";
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.roti-stats__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, var(--section-content-max));
+  margin-inline: auto;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(2rem, 4vh, 3.2rem) 0;
+  align-items: stretch;
+}
+
+.roti-stats__intro,
+.roti-stats__board {
+  grid-column: 1 / -1;
+}
+
+.roti-stats__intro h2 {
+  margin: 0;
+  font-size: clamp(2.7rem, 3.7vw, 4.5rem);
+  font-weight: 570;
+  letter-spacing: -0.055em;
+  line-height: 1.04;
+  word-break: keep-all;
+}
+
+.roti-stats__intro p {
+  margin: clamp(0.85rem, 1.6vh, 1.2rem) 0 0;
+  color: var(--stats-muted);
+  font-size: clamp(0.92rem, 1vw, 1.04rem);
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+.roti-stats__board {
+  display: grid;
+  min-height: clamp(28rem, 58vh, 37rem);
+  grid-template-columns: minmax(18rem, 0.85fr) minmax(0, 1.65fr);
+  border-top: 1px solid var(--stats-line-strong);
+  border-bottom: 1px solid var(--stats-line-strong);
+}
+
+.roti-stats__stat {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(1.6rem, 2.7vw, 2.8rem);
+}
+
+.roti-stats__stat-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 52%;
+  gap: clamp(1rem, 1.8vh, 1.35rem);
+  align-content: center;
+}
+
+.roti-stats__value {
+  margin: 0;
+  font-size: clamp(3.4rem, 5.1vw, 6.5rem);
+  font-weight: 560;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.065em;
+  line-height: 0.86;
+}
+
+.roti-stats__label,
+.roti-stats__prefix {
+  margin: 0;
+  color: rgba(27, 27, 25, 0.76);
+  font-size: clamp(0.82rem, 0.95vw, 1rem);
+  font-weight: 520;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.roti-stats__prefix {
+  letter-spacing: 0.08em;
+}
+
+.roti-stats__detail {
+  display: block;
+  margin-top: 0.55rem;
+  color: var(--stats-dim);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+}
+
+.roti-stats__art {
+  position: absolute;
+  right: clamp(0.5rem, 1.4vw, 1.5rem);
+  bottom: clamp(0.5rem, 1.2vw, 1.25rem);
+  z-index: 1;
+  width: 32%;
+  height: 60%;
+  pointer-events: none;
+}
+
+.roti-stats__art img {
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.roti-stats__stat[data-stat="products"] .roti-stats__art,
+.roti-stats__stat[data-stat="ip"] .roti-stats__art {
+  width: 34%;
+}
+
+.roti-stats__stat[data-stat="partners"] .roti-stats__art,
+.roti-stats__stat[data-stat="brands"] .roti-stats__art {
+  width: 30%;
+}
+
+.roti-stats__stat--primary {
+  display: grid;
+  padding: 0;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  border-right: 1px solid var(--stats-line-strong);
+}
+
+.roti-stats__stat--primary .roti-stats__stat-content {
+  width: 44%;
+  margin-left: clamp(1.6rem, 2.7vw, 2.8rem);
+  align-self: center;
+  justify-self: start;
+  grid-row: 1;
+}
+
+.roti-stats__stat--primary .roti-stats__art {
+  right: 1%;
+  bottom: 1%;
+  width: 51%;
+  height: 55%;
+}
+
+.roti-stats__secondary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.roti-stats__secondary .roti-stats__stat:nth-child(odd) {
+  border-right: 1px solid var(--stats-line);
+}
+
+.roti-stats__secondary .roti-stats__stat:nth-child(-n + 2) {
+  border-bottom: 1px solid var(--stats-line);
+}
+
+@media (max-width: 900px) {
+  .roti-stats {
+    align-items: flex-start;
+    padding-top: 7rem;
+  }
+
+  .roti-stats__board {
+    min-height: 34rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .roti-stats {
+    min-height: 100svh;
+    padding: 5.8rem var(--space-5) max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .roti-stats::before {
+    display: none;
+  }
+
+  .roti-stats__inner {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .roti-stats__intro,
+  .roti-stats__board {
+    grid-column: 1;
+  }
+
+  .roti-stats__intro h2 {
+    font-size: clamp(2.2rem, 10vw, 3rem);
+  }
+
+  .roti-stats__intro p {
+    max-width: 31rem;
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+
+  .roti-stats__board {
+    min-height: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .roti-stats__stat--primary {
+    min-height: 13.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--stats-line-strong);
+  }
+
+  .roti-stats__stat--primary .roti-stats__stat-content {
+    width: 44%;
+    margin-left: 1rem;
+  }
+
+  .roti-stats__stat--primary .roti-stats__art {
+    right: 0.5rem;
+    bottom: 0.5rem;
+    width: 48%;
+    height: 62%;
+  }
+
+  .roti-stats__secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .roti-stats__stat {
+    min-height: 9.4rem;
+    padding: 1rem;
+  }
+
+  .roti-stats__stat-content {
+    width: 58%;
+    gap: 0.65rem;
+  }
+
+  .roti-stats__value {
+    font-size: clamp(2.55rem, 12vw, 3.6rem);
+  }
+
+  .roti-stats__label,
+  .roti-stats__prefix {
+    font-size: 0.67rem;
+  }
+
+  .roti-stats__detail {
+    display: none;
+  }
+
+  .roti-stats__art {
+    right: 0.35rem;
+    bottom: 0.4rem;
+    width: 31%;
+    height: 55%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roti-stats__value {
+    transition: none;
+  }
+}

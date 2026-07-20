@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>숫자로 보는 ROTI — Stats Prototype</title>
+    <style>
+      :root {
+        --bg: #f5f4f1;
+        --surface: rgba(24, 24, 22, 0.018);
+        --text: #1b1b19;
+        --muted: rgba(27, 27, 25, 0.6);
+        --dim: rgba(27, 27, 25, 0.38);
+        --line: rgba(27, 27, 25, 0.13);
+        --line-strong: rgba(27, 27, 25, 0.24);
+        --red: #b41307;
+        --content-max: 95rem;
+        --gutter: clamp(1.875rem, 5vw, 5.9rem);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        min-width: 20rem;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, Pretendard, SUIT, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        position: relative;
+        min-height: 100svh;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 77% 32%, rgba(180, 19, 7, 0.045), transparent 25rem),
+          radial-gradient(circle at 56% 58%, rgba(255, 255, 255, 0.82), transparent 32rem),
+          linear-gradient(135deg, #f2f1ee 0%, #faf9f6 54%, #f3f2ef 100%);
+      }
+
+      .page::before {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(90deg, transparent calc(100% - 1px), rgba(27, 27, 25, 0.035) 1px);
+        background-size: calc((100vw - (var(--gutter) * 2)) / 12) 100%;
+        content: "";
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      .site-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 4;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding: clamp(1.55rem, 3.2vh, 2.35rem) var(--gutter);
+      }
+
+      .site-header__logo {
+        display: block;
+        width: clamp(4.4rem, 5.2vw, 5.7rem);
+        height: auto;
+        filter: brightness(0);
+      }
+
+      .stats-section {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        min-height: 100svh;
+        align-items: center;
+        padding: clamp(6.8rem, 10vh, 8rem) var(--gutter) clamp(3.4rem, 6vh, 5rem);
+      }
+
+      .stats-section__inner {
+        display: grid;
+        width: min(100%, var(--content-max));
+        margin-inline: auto;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: clamp(2rem, 4vh, 3.2rem) clamp(1.5rem, 2vw, 2.4rem);
+        align-items: stretch;
+      }
+
+      .stats-intro {
+        grid-column: 1 / -1;
+        padding: 0;
+      }
+
+      .stats-intro__top {
+        max-width: none;
+      }
+
+      .stats-intro h1 {
+        margin: 0;
+        font-size: clamp(2.7rem, 3.7vw, 4.5rem);
+        font-weight: 570;
+        letter-spacing: -0.055em;
+        line-height: 1.04;
+        white-space: nowrap;
+        word-break: keep-all;
+      }
+
+      .stats-intro__description {
+        max-width: none;
+        margin: clamp(0.85rem, 1.6vh, 1.2rem) 0 0;
+        color: var(--muted);
+        font-size: clamp(0.92rem, 1vw, 1.04rem);
+        line-height: 1.75;
+        white-space: nowrap;
+        word-break: keep-all;
+      }
+
+      .stats-board {
+        display: grid;
+        min-height: clamp(28rem, 58vh, 37rem);
+        grid-column: 1 / -1;
+        grid-template-columns: minmax(18rem, 0.85fr) minmax(0, 1.65fr);
+        border-top: 1px solid var(--line-strong);
+        border-bottom: 1px solid var(--line-strong);
+      }
+
+      .stat {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(1.6rem, 2.7vw, 2.8rem);
+        overflow: hidden;
+        transition: background-color 240ms ease;
+      }
+
+      .stat > div {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        width: 52%;
+        gap: clamp(1rem, 1.8vh, 1.35rem);
+        align-content: center;
+      }
+
+      .stat::before {
+        position: absolute;
+        top: auto;
+        right: clamp(0.5rem, 1.4vw, 1.5rem);
+        bottom: clamp(0.5rem, 1.2vw, 1.25rem);
+        z-index: 1;
+        width: 32%;
+        height: 60%;
+        background-position: right bottom;
+        background-repeat: no-repeat;
+        background-size: contain;
+        content: "";
+        transform: none;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .stats-board__secondary .stat:nth-child(1)::before,
+      .stats-board__secondary .stat:nth-child(4)::before {
+        width: 34%;
+      }
+
+      .stats-board__secondary .stat:nth-child(2)::before,
+      .stats-board__secondary .stat:nth-child(3)::before {
+        width: 30%;
+      }
+
+      .stats-board__secondary .stat:nth-child(1)::before {
+        background-image: url("../images/stats/stats-products-400.png");
+      }
+
+      .stats-board__secondary .stat:nth-child(2)::before {
+        background-image: url("../images/stats/stats-partners-40.png");
+      }
+
+      .stats-board__secondary .stat:nth-child(3)::before {
+        background-image: url("../images/stats/stats-brands-3.png");
+      }
+
+      .stats-board__secondary .stat:nth-child(4)::before {
+        background-image: url("../images/stats/stats-ip-5.png");
+      }
+
+      .stat__value {
+        display: flex;
+        margin: 0;
+        align-items: flex-start;
+        gap: 0.4rem;
+        font-size: clamp(3.4rem, 5.1vw, 6.5rem);
+        font-weight: 560;
+        letter-spacing: -0.065em;
+        line-height: 0.86;
+      }
+
+      .stat__number {
+        display: inline-block;
+        min-width: 1ch;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat__label {
+        margin: 0;
+        color: rgba(27, 27, 25, 0.76);
+        font-size: clamp(0.82rem, 0.95vw, 1rem);
+        font-weight: 520;
+        line-height: 1.55;
+        word-break: keep-all;
+      }
+
+      .stat__detail {
+        display: block;
+        margin-top: 0.55rem;
+        color: var(--dim);
+        font-size: 0.66rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        line-height: 1.55;
+      }
+
+      .stat--primary {
+        display: grid;
+        padding: 0;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        justify-content: stretch;
+        border-right: 1px solid var(--line-strong);
+        background: transparent;
+      }
+
+      .stat--primary > div {
+        width: 44%;
+        margin-left: clamp(1.6rem, 2.7vw, 2.8rem);
+        align-self: center;
+        justify-self: start;
+        grid-row: 1;
+        text-align: left;
+      }
+
+      .stat--primary .stat__value {
+        font-size: clamp(3.4rem, 5.1vw, 6.5rem);
+        line-height: 0.86;
+      }
+
+      .stat--primary .stat__prefix {
+        margin: 0;
+        color: rgba(27, 27, 25, 0.76);
+        font-size: clamp(0.82rem, 0.95vw, 1rem);
+        font-weight: 520;
+        letter-spacing: 0.08em;
+        line-height: 1.55;
+      }
+
+      .stat--primary::before {
+        top: auto;
+        right: 1%;
+        bottom: 1%;
+        width: 51%;
+        height: 55%;
+        background-image: url("../images/stats/stats-since-2010.png");
+        background-position: right bottom;
+        transform: none;
+      }
+
+      .stats-board__secondary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+      }
+
+      .stats-board__secondary .stat:nth-child(odd) {
+        border-right: 1px solid var(--line);
+      }
+
+      .stats-board__secondary .stat:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stats-intro,
+      .stat {
+        animation: reveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .stats-board__secondary .stat:nth-child(1) {
+        animation-delay: 90ms;
+      }
+
+      .stats-board__secondary .stat:nth-child(2) {
+        animation-delay: 150ms;
+      }
+
+      .stats-board__secondary .stat:nth-child(3) {
+        animation-delay: 210ms;
+      }
+
+      .stats-board__secondary .stat:nth-child(4) {
+        animation-delay: 270ms;
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 68rem) {
+        .stats-section {
+          align-items: flex-start;
+          padding-top: 8rem;
+        }
+
+        .stats-section__inner {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-intro,
+        .stats-board {
+          grid-column: 1;
+        }
+
+        .stats-board {
+          min-height: 34rem;
+        }
+      }
+
+      @media (max-width: 44rem) {
+        .page {
+          overflow: visible;
+        }
+
+        .page::before {
+          display: none;
+        }
+
+        .stats-section {
+          padding-top: 7.2rem;
+          padding-bottom: 3.5rem;
+        }
+
+        .stats-intro {
+          display: block;
+        }
+
+        .stats-intro h1 {
+          font-size: clamp(2.45rem, 12vw, 3.75rem);
+          white-space: normal;
+        }
+
+        .stats-intro__description {
+          margin-top: 1.4rem;
+          white-space: normal;
+        }
+
+        .stats-board {
+          min-height: 0;
+          grid-template-columns: 1fr;
+        }
+
+        .stat--primary {
+          display: flex;
+          min-height: 20rem;
+          justify-content: center;
+          padding: clamp(1.6rem, 6vw, 2.4rem);
+          border-right: 0;
+          border-bottom: 1px solid var(--line-strong);
+        }
+
+        .stat--primary > div {
+          width: 44%;
+          margin-left: 0;
+          align-self: auto;
+        }
+
+        .stat--primary::before {
+          right: 0.5rem;
+          bottom: 0.5rem;
+        }
+
+        .stats-board__secondary {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto;
+        }
+
+        .stats-board__secondary .stat {
+          min-height: 13.5rem;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .stats-board__secondary .stat:last-child {
+          border-bottom: 0;
+        }
+
+        .stat__value {
+          font-size: clamp(3.8rem, 17vw, 5.4rem);
+        }
+
+        .stat > div {
+          width: 48%;
+        }
+
+        .stat::before {
+          right: 0.25rem;
+          bottom: 0.5rem;
+          width: 34%;
+          height: 62%;
+        }
+
+        .stat.stat--primary::before {
+          width: 48%;
+          height: 58%;
+        }
+
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .stats-intro,
+        .stat {
+          animation: none;
+        }
+
+        .stat,
+        .stat::after {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="site-header" aria-label="ROTI 시안 헤더">
+        <img class="site-header__logo" src="/images/logos/roti-logo.png" alt="ROTI" />
+      </header>
+
+      <section class="stats-section" aria-labelledby="stats-title">
+        <div class="stats-section__inner">
+          <div class="stats-intro">
+            <div class="stats-intro__top">
+              <h1 id="stats-title">숫자로 보는 로티</h1>
+              <p class="stats-intro__description">
+                세 브랜드와 생활 제품을 통해 쌓아온 로티의 현재를 숫자로 소개합니다.
+              </p>
+            </div>
+          </div>
+
+          <div class="stats-board" aria-label="ROTI 주요 현황">
+            <article class="stat stat--primary">
+              <div>
+                <p class="stat__value" aria-label="SINCE 2010">
+                  <span class="stat__number" data-counter data-from="2000" data-to="2010" data-delay="0">2010</span>
+                </p>
+                <p class="stat__prefix">SINCE</p>
+              </div>
+            </article>
+
+            <div class="stats-board__secondary">
+              <article class="stat">
+                <div>
+                  <p class="stat__value" aria-label="400개 이상">
+                    <span class="stat__number" data-counter data-from="0" data-to="400" data-suffix="+" data-delay="100">400+</span>
+                  </p>
+                  <p class="stat__label">기획·생산 제품</p>
+                </div>
+              </article>
+
+              <article class="stat">
+                <div>
+                  <p class="stat__value" aria-label="40곳 이상">
+                    <span class="stat__number" data-counter data-from="0" data-to="40" data-suffix="+" data-delay="180">40+</span>
+                  </p>
+                  <p class="stat__label">협력 파트너사</p>
+                </div>
+              </article>
+
+              <article class="stat">
+                <div>
+                  <p class="stat__value" aria-label="자체 브랜드 3개">
+                    <span class="stat__number" data-counter data-from="0" data-to="3" data-delay="260">3</span>
+                  </p>
+                  <p class="stat__label">
+                    자체 브랜드
+                    <span class="stat__detail">ROTI CAMP · ROTI HOMESYS · LeEL</span>
+                  </p>
+                </div>
+              </article>
+
+              <article class="stat">
+                <div>
+                  <p class="stat__value" aria-label="특허 및 디자인 출원 5건">
+                    <span class="stat__number" data-counter data-from="0" data-to="5" data-delay="340">5</span>
+                  </p>
+                  <p class="stat__label">특허·디자인 출원</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const board = document.querySelector(".stats-board");
+        const counters = [...document.querySelectorAll("[data-counter]")];
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!board || counters.length === 0 || prefersReducedMotion) {
+          return;
+        }
+
+        const renderValue = (counter, value) => {
+          counter.textContent = `${Math.round(value)}${counter.dataset.suffix ?? ""}`;
+        };
+
+        const animateCounter = (counter) => {
+          const from = Number(counter.dataset.from ?? 0);
+          const to = Number(counter.dataset.to ?? 0);
+          const delay = Number(counter.dataset.delay ?? 0);
+          const duration = 1400;
+
+          renderValue(counter, from);
+
+          window.setTimeout(() => {
+            const startedAt = performance.now();
+
+            const tick = (now) => {
+              const progress = Math.min((now - startedAt) / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+
+              renderValue(counter, from + (to - from) * eased);
+
+              if (progress < 1) {
+                window.requestAnimationFrame(tick);
+              }
+            };
+
+            window.requestAnimationFrame(tick);
+          }, delay);
+        };
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) {
+              return;
+            }
+
+            counters.forEach(animateCounter);
+            observer.disconnect();
+          },
+          { threshold: 0.4 }
+        );
+
+        observer.observe(board);
+      })();
+    </script>
+  </body>
+</html>

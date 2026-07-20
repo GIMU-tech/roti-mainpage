@@ -8,7 +8,9 @@ import { AboutRotiSection } from "@/components/sections/AboutRotiSection";
 import { BrandSlideStack } from "@/components/sections/BrandSlideStack";
 import { ContactUsSection } from "@/components/sections/ContactUsSection";
 import { RotiBusinessReplicaSection } from "@/components/sections/RotiBusinessReplicaSection";
+import { RotiChannelsSection } from "@/components/sections/RotiChannelsSection";
 import { RotiConnectSection } from "@/components/sections/RotiConnectSection";
+import { RotiStatsSection } from "@/components/sections/RotiStatsSection";
 import { brands } from "@/data/brands";
 import { HOME_SECTION_IDS } from "@/data/sections";
 
@@ -22,6 +24,10 @@ export default function HomePage() {
           <HeroPortal brands={brands} />
           <BrandSlideStack brands={brands} />
           <AboutRotiSection />
+          <div className="roti-continuous-flow" data-native-scroll-region>
+            <RotiStatsSection />
+            <RotiChannelsSection />
+          </div>
           <RotiBusinessReplicaSection />
           <RotiConnectSection />
           <ContactUsSection />

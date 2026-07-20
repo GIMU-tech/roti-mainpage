@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>어디서나 만나는 로티 — Channels Prototype</title>
+    <style>
+      :root {
+        --bg: #f5f4f1;
+        --text: #1b1b19;
+        --muted: rgba(27, 27, 25, 0.56);
+        --dim: rgba(27, 27, 25, 0.32);
+        --line: rgba(27, 27, 25, 0.14);
+        --red: #b41307;
+        --content-max: 95rem;
+        --gutter: clamp(1.5rem, 5vw, 5.9rem);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-width: 20rem;
+        min-height: 100%;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, Pretendard, SUIT, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        position: relative;
+        display: grid;
+        min-height: 100svh;
+        overflow: hidden;
+        grid-template-rows: auto 1fr;
+        background: #f5f4f1;
+        isolation: isolate;
+      }
+
+      .page::before {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-image: linear-gradient(90deg, transparent calc(100% - 1px), rgba(27, 27, 25, 0.035) 1px);
+        background-size: calc((100vw - (var(--gutter) * 2)) / 12) 100%;
+        content: "";
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .page::after {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: radial-gradient(circle at 73% 45%, rgba(180, 19, 7, 0.045), transparent 28rem);
+        content: "";
+        pointer-events: none;
+      }
+
+      .site-header {
+        display: flex;
+        width: min(calc(100% - (var(--gutter) * 2)), var(--content-max));
+        margin-inline: auto;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: clamp(1.5rem, 3.2vh, 2.35rem);
+      }
+
+      .site-header__logo {
+        display: block;
+        width: clamp(4.4rem, 5.2vw, 5.7rem);
+        height: auto;
+        filter: brightness(0);
+      }
+
+      .site-header__index {
+        color: var(--dim);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+      }
+
+      .channels {
+        display: flex;
+        min-height: 0;
+        align-items: center;
+        padding: clamp(4.8rem, 9vh, 7.5rem) 0 clamp(2.4rem, 5vh, 4.8rem);
+      }
+
+      .channels__inner {
+        display: grid;
+        width: 100%;
+        gap: clamp(3.4rem, 7vh, 6.7rem);
+      }
+
+      .channels__heading,
+      .channels__closing {
+        width: min(calc(100% - (var(--gutter) * 2)), var(--content-max));
+        margin-inline: auto;
+      }
+
+      .channels__heading {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+
+      .channels__heading-copy {
+        grid-column: 1 / -1;
+        text-align: center;
+      }
+
+      .channels__heading h1 {
+        margin: 0;
+        font-size: clamp(2.7rem, 3.7vw, 4.5rem);
+        font-weight: 560;
+        letter-spacing: -0.058em;
+        line-height: 1;
+        word-break: keep-all;
+      }
+
+      .channels__heading p {
+        margin: clamp(1rem, 1.8vh, 1.35rem) auto 0;
+        color: var(--muted);
+        font-size: clamp(0.92rem, 1vw, 1.04rem);
+        line-height: 1.75;
+      }
+
+      .marquees {
+        position: relative;
+        display: grid;
+        gap: clamp(1.25rem, 2.8vh, 2rem);
+        padding-block: clamp(1.2rem, 2vh, 1.8rem);
+      }
+
+      .marquee {
+        position: relative;
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+        outline: none;
+        -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+        mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+      }
+
+      .marquee__track {
+        display: flex;
+        width: max-content;
+        min-width: max-content;
+        animation: marquee-left 38s linear infinite;
+        will-change: transform;
+      }
+
+      .marquee--reverse .marquee__track {
+        animation-name: marquee-right;
+        animation-duration: 44s;
+      }
+
+      .marquee:hover .marquee__track,
+      .marquee:focus-visible .marquee__track,
+      .page.is-paused .marquee__track {
+        animation-play-state: paused;
+      }
+
+      .marquee:focus-visible {
+        box-shadow: inset 0 0 0 1px rgba(180, 19, 7, 0.55);
+      }
+
+      .marquee__group {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        gap: clamp(2.2rem, 4.2vw, 5rem);
+        padding-right: clamp(2.2rem, 4.2vw, 5rem);
+      }
+
+      .channel {
+        position: relative;
+        flex: none;
+        color: rgba(27, 27, 25, 0.58);
+        font-size: clamp(1.075rem, 1.725vw, 2rem);
+        font-weight: 570;
+        letter-spacing: -0.045em;
+        line-height: 1;
+        white-space: nowrap;
+        transition: color 240ms ease, opacity 240ms ease, transform 240ms ease;
+      }
+
+      .marquee:hover .channel {
+        color: rgba(27, 27, 25, 0.3);
+      }
+
+      .marquee .channel:hover {
+        color: var(--text);
+        transform: translateY(-0.08em);
+      }
+
+      .channels__closing {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .channels__closing p {
+        margin: 0;
+        color: rgba(27, 27, 25, 0.72);
+        font-size: clamp(0.92rem, 1vw, 1.04rem);
+        letter-spacing: -0.018em;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      @keyframes marquee-left {
+        from { transform: translate3d(0, 0, 0); }
+        to { transform: translate3d(-50%, 0, 0); }
+      }
+
+      @keyframes marquee-right {
+        from { transform: translate3d(-50%, 0, 0); }
+        to { transform: translate3d(0, 0, 0); }
+      }
+
+      @media (max-width: 48rem) {
+        .site-header__index {
+          display: none;
+        }
+
+        .channels {
+          padding-top: 5rem;
+        }
+
+        .channels__inner {
+          gap: 3.6rem;
+        }
+
+        .channels__heading-copy {
+          grid-column: 1 / -1;
+        }
+
+        .channels__heading h1 {
+          font-size: clamp(2.2rem, 10vw, 3rem);
+          line-height: 1.04;
+        }
+
+        .channels__heading p {
+          max-width: 20rem;
+          font-size: 0.78rem;
+          line-height: 1.6;
+        }
+
+        .marquee__track {
+          animation-duration: 52s;
+        }
+
+        .marquee--reverse .marquee__track {
+          animation-duration: 58s;
+        }
+
+        .channel {
+          font-size: clamp(0.9rem, 4.2vw, 1.325rem);
+        }
+
+        .channels__closing {
+          display: grid;
+        }
+
+        .channels__closing p {
+          max-width: 18rem;
+          justify-self: center;
+          font-size: 0.78rem;
+          line-height: 1.55;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .marquee {
+          overflow: visible;
+          mask-image: none;
+          -webkit-mask-image: none;
+        }
+
+        .marquee__track {
+          width: 100%;
+          min-width: 0;
+          animation: none;
+        }
+
+        .marquee__group {
+          width: 100%;
+          flex-wrap: wrap;
+          gap: 1.2rem 2rem;
+          padding: 0 var(--gutter);
+        }
+
+        .marquee__group[aria-hidden="true"] {
+          display: none;
+        }
+
+        .channel {
+          font-size: clamp(0.675rem, 1.5vw, 1.125rem);
+        }
+
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page" id="channels-page">
+      <header class="site-header" aria-label="ROTI prototype header">
+        <img class="site-header__logo" src="/images/logos/roti-logo.png" alt="ROTI" />
+        <span class="site-header__index">CHANNELS · 07</span>
+      </header>
+
+      <section class="channels" aria-labelledby="channels-title">
+        <div class="channels__inner">
+          <header class="channels__heading">
+            <div class="channels__heading-copy">
+              <h1 id="channels-title">어디서나 만나는 로티</h1>
+              <p>일상의 가까운 채널에서 로티의 제품을 만나보세요.</p>
+            </div>
+          </header>
+
+          <div class="marquees" aria-label="로티 판매 채널">
+            <div class="marquee" tabindex="0" aria-label="오픈마켓과 주요 종합몰 채널. 마우스를 올리거나 포커스하면 움직임이 멈춥니다.">
+              <div class="marquee__track">
+                <div class="marquee__group">
+                  <span class="channel">네이버</span>
+                  <span class="channel">쿠팡</span>
+                  <span class="channel">G마켓</span>
+                  <span class="channel">옥션</span>
+                  <span class="channel">11번가</span>
+                  <span class="channel">인터파크</span>
+                </div>
+                <div class="marquee__group" aria-hidden="true">
+                  <span class="channel">네이버</span>
+                  <span class="channel">쿠팡</span>
+                  <span class="channel">G마켓</span>
+                  <span class="channel">옥션</span>
+                  <span class="channel">11번가</span>
+                  <span class="channel">인터파크</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="marquee marquee--reverse" tabindex="0" aria-label="종합몰과 글로벌 채널. 마우스를 올리거나 포커스하면 움직임이 멈춥니다.">
+              <div class="marquee__track">
+                <div class="marquee__group">
+                  <span class="channel">신세계</span>
+                  <span class="channel">이마트몰</span>
+                  <span class="channel">롯데ON</span>
+                  <span class="channel">홈앤쇼핑</span>
+                  <span class="channel">CJmall</span>
+                  <span class="channel">GS SHOP</span>
+                  <span class="channel">현대홈쇼핑</span>
+                  <span class="channel">아마존</span>
+                  <span class="channel">큐텐</span>
+                </div>
+                <div class="marquee__group" aria-hidden="true">
+                  <span class="channel">신세계</span>
+                  <span class="channel">이마트몰</span>
+                  <span class="channel">롯데ON</span>
+                  <span class="channel">홈앤쇼핑</span>
+                  <span class="channel">CJmall</span>
+                  <span class="channel">GS SHOP</span>
+                  <span class="channel">현대홈쇼핑</span>
+                  <span class="channel">아마존</span>
+                  <span class="channel">큐텐</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="sr-only">오픈마켓: 네이버, 쿠팡, G마켓, 옥션, 11번가, 인터파크. 종합몰: 신세계, 이마트몰, 롯데ON, 홈앤쇼핑, CJmall, GS SHOP, 현대홈쇼핑. 글로벌: 아마존, 큐텐.</p>
+          </div>
+
+          <footer class="channels__closing">
+            <p>로티 제품은 이미 당신 가까이에 있습니다.</p>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const page = document.querySelector("#channels-page");
+
+      document.querySelectorAll(".marquee__track").forEach((track) => {
+        const originalGroups = Array.from(track.children);
+
+        originalGroups.forEach((group) => {
+          const clone = group.cloneNode(true);
+          clone.setAttribute("aria-hidden", "true");
+          track.appendChild(clone);
+        });
+      });
+
+      if ("IntersectionObserver" in window && page) {
+        const observer = new IntersectionObserver(
+          ([entry]) => page.classList.toggle("is-paused", !entry.isIntersecting),
+          { threshold: 0.08 }
+        );
+        observer.observe(page);
+      }
+    </script>
+  </body>
+</html>

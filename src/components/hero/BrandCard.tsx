@@ -11,7 +11,7 @@ type BrandCardProps = {
   isDisabled: boolean;
   slot: HeroCardSlot;
   motion?: HeroCardMotion;
-  onSelect: (sourceElement: HTMLButtonElement) => void;
+  onSelect: () => void;
 };
 
 type BrandCardStyle = CSSProperties & {
@@ -55,7 +55,7 @@ export function BrandCard({
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      onSelect(event.currentTarget);
+      onSelect();
     }
   };
 
@@ -63,7 +63,9 @@ export function BrandCard({
     <button
       className="brand-card"
       type="button"
-      aria-label={`${brand.name} 브랜드 전환 시작`}
+      aria-label={
+        isActive ? `${brand.name} 브랜드 섹션으로 이동` : `${brand.name} 카드를 메인으로 보기`
+      }
       aria-current={isActive ? "true" : undefined}
       data-brand={brand.id}
       data-slot={slot}
@@ -72,7 +74,7 @@ export function BrandCard({
       data-transition-selected={isTransitionSelected}
       disabled={isDisabled}
       style={cardStyle}
-      onClick={(event) => onSelect(event.currentTarget)}
+      onClick={onSelect}
       onKeyDown={handleKeyDown}
     >
       <span className="brand-card__backplate" aria-hidden="true" />
