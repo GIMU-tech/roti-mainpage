@@ -1,0 +1,19 @@
+.root {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+  background: var(--color-background-primary);
+}
+
+.root :global(.about-roti),
+.root :global(.roti-values) {
+  scroll-snap-align: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    scroll-behavior: auto !important;
+  }
+}

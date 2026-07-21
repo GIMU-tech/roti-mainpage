@@ -69,7 +69,7 @@ export const homeSections = [
   },
   {
     key: "standard",
-    label: "STANDARD",
+    label: "VISION",
     id: HOME_SECTION_IDS.standard,
     href: HOME_SECTION_HREFS.standard,
     snapSelector: HOME_SECTION_HREFS.standard,

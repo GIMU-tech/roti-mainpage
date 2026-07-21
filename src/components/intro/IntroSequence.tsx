@@ -360,7 +360,7 @@ export function IntroSequence() {
       className="intro-sequence"
       data-exiting={isExiting}
       role="dialog"
-      aria-label="ROTI intro"
+      aria-label="ROTI — Always alert for changes"
       aria-modal="true"
       tabIndex={-1}
       onKeyDown={handleKeyDown}

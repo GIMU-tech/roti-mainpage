@@ -60,4 +60,6 @@ export type Brand = {
   scene: BrandScene;
   about: BrandAbout;
   brandUrl: string;
+  brandCtaLabel?: string;
+  brandUrlAriaLabel?: string;
 };

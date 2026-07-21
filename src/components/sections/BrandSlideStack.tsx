@@ -676,9 +676,9 @@ export function BrandSlideStack({ brands }: BrandSlideStackProps) {
                   <a
                     className="brand-slide-stack__keywords-link"
                     href={brand.brandUrl}
-                    aria-label={`${brand.name} 섹션으로 이동`}
+                    aria-label={brand.brandUrlAriaLabel ?? `${brand.name} 섹션으로 이동`}
                   >
-                    <span>{brand.visualScene}</span>
+                    <span>{brand.brandCtaLabel ?? brand.visualScene}</span>
                     <span className="brand-slide-stack__keyword-arrow" aria-hidden="true" />
                   </a>
                 </div>

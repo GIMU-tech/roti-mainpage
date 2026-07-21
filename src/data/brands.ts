@@ -45,7 +45,9 @@ export const brands: Brand[] = [
       description: "누구나 캠핑을 시작하고 즐길 수 있도록 사용이 간편한 캠핑용품을 제안합니다.",
       image: "/images/sections/roti-camp-brand-section.webp"
     },
-    brandUrl: "#roti-camp"
+    brandUrl: "/roticamp-shop",
+    brandCtaLabel: "ROTI CAMP 쇼핑몰 보기",
+    brandUrlAriaLabel: "ROTI CAMP 임시 쇼핑몰 프론트 보기"
   },
   {
     id: "roti-homesys",
