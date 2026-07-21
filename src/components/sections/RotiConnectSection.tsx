@@ -1,14 +1,14 @@
 "use client";
 
 import { getImageProps } from "next/image";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { ArrowRight, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { SectionGrid } from "@/components/layout/SectionGrid";
 import { SectionShell } from "@/components/layout/SectionShell";
 import { rotiConnectContent, type RotiConnectItem } from "@/data/rotiConnect";
-import { HOME_SECTION_IDS } from "@/data/sections";
+import { HOME_SECTION_HREFS, HOME_SECTION_IDS } from "@/data/sections";
 
-const AUTOPLAY_DELAY_MS = 3000;
+const AUTOPLAY_DELAY_MS = 5000;
 
 type ConnectSlideSlot = "previous" | "active" | "next";
 
@@ -147,8 +147,7 @@ export function RotiConnectSection() {
                 }}
                 onKeyDown={(event) => handleTabKeyDown(event, index)}
               >
-                <span>{item.index}</span>
-                <strong>{item.category}</strong>
+                <strong>{item.tabLabel}</strong>
               </button>
             );
           })}
@@ -193,9 +192,6 @@ export function RotiConnectSection() {
             >
               <ConnectMediaImage item={item} />
               <span className="roti-connect__media-shade" aria-hidden="true" />
-              <span className="roti-connect__media-index" aria-hidden="true">
-                {item.index}
-              </span>
             </button>
           ))}
         </div>
@@ -225,25 +221,10 @@ export function RotiConnectSection() {
         >
           <div key={activeItem.id} className="roti-connect__detail-content">
             <h3>{activeItem.title}</h3>
-            <p>{activeItem.description}</p>
-            <ul aria-label={`${activeItem.title} 주요 문의`}>
-              {activeItem.keywords.map((keyword) => (
-                <li key={keyword}>{keyword}</li>
-              ))}
-            </ul>
-            {activeItem.href ? (
-              <a className="roti-connect__cta" href={activeItem.href}>
-                {activeItem.ctaLabel}
-              </a>
-            ) : (
-              <span
-                className="roti-connect__cta roti-connect__cta--disabled"
-                aria-disabled="true"
-                title="현재 문의처 확인이 필요합니다."
-              >
-                문의처 확인 중
-              </span>
-            )}
+            <a className="roti-connect__cta" href={activeItem.href ?? HOME_SECTION_HREFS.contact}>
+              <span>{activeItem.ctaLabel}</span>
+              <ArrowRight aria-hidden="true" size={18} weight="regular" />
+            </a>
           </div>
         </article>
         <div className="roti-connect__progress" aria-hidden="true">
