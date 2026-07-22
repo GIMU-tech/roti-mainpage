@@ -81,9 +81,9 @@
 
 현재 디자인 리뷰 캡처는 다음 폴더에 있다.
 
-```text
-.audit/2026-07-13-release-review/
-```
+The historical release-review captures were removed from the current tree on
+2026-07-22. They remain recoverable from Git history and the
+`backup/pre-cleanup-2026-07-22` tag.
 
 ---
 
@@ -790,4 +790,3 @@ Design.md 체크리스트:
 - 키보드 focus, live announcement, reduced motion 확인
 - lint, typecheck, build, diff check 통과
 - test route, debug log, 사용하지 않는 임시 이미지 제거
-

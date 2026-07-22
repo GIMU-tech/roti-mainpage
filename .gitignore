@@ -13,3 +13,18 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .DS_Store
+
+# Local design and browser audit outputs
+.audit/
+.codex-audit/
+.codex-audits/
+.codex-fable5/
+artifacts/
+audit/
+browser/
+qa-screenshots/
+tmp/
+
+# Disposable design studies
+design-qa.md
+design-system/

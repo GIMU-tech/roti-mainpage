@@ -224,7 +224,9 @@ The latest committed work includes the following substantial areas:
   spaced, right-edge image panels.
 - User-supplied CAMP/HOMESYS/LEEL scene images added and mapped into the brand
   stack.
-- Audit artifacts committed under `.codex-audits/2026-07-09-copy-ui-audit/`.
+- Historical audit artifacts were removed from the current tree during the
+  2026-07-22 repository cleanup. They remain recoverable from Git history and
+  the `backup/pre-cleanup-2026-07-22` tag.
 
 The most recent commit changed 110 files. The detailed file list is available
 through `git show --stat dd0dabe`; use it before assuming a file was untouched.
@@ -252,8 +254,9 @@ the brand image and header/rail changes:
   no horizontal overflow at those checkpoints.
 - Browser check validated Header dark mode over dark imagery and light mode
   over `#standard` (transparent header, dark logo/nav/menu).
-- The latest audit screenshots and JSON reports are in
-  `.codex-audits/2026-07-09-copy-ui-audit/`.
+- The audit screenshots and JSON reports referenced by this handoff were
+  removed from the current tree on 2026-07-22 and remain recoverable from the
+  `backup/pre-cleanup-2026-07-22` tag.
 
 These are prior-session results. Re-run the three pnpm checks and fresh visual
 QA after changing any motion, layout, asset, or responsive CSS.
